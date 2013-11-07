@@ -1,8 +1,24 @@
 
 var _ = require('lodash');
 
-module.exports = _.extend({
+module.exports = {
   flickrApiKey: '',
   blogFeedUrl:'http://tetk.blogspot.com/feeds/posts/default?alt=json',
-  cacheTimeout: 180000
-}, require('./config.private.json'));
+  cacheTimeout: 180000,
+  mongoConnectionUrl: 'mongodb://$OPENSHIFT_MONGODB_DB_HOST:$OPENSHIFT_MONGODB_DB_PORT/',
+  mongoRootUser: '',
+  mongoRootPassword: '',
+  mongoDbName: '',
+  mongoHost: '',
+  mongoPort: -1,
+  mongoOptions: {}
+};
+
+try
+{
+  _.extend(module.exports, require('./config.private.json'));
+}
+catch(e)
+{
+  // do nothing
+}

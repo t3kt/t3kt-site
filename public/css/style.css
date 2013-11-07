@@ -1,0 +1,191 @@
+html,
+button,
+input,
+select,
+textarea {
+    color: #222;
+}
+
+html {
+    font-size: 1em;
+    line-height: 1.4;
+}
+
+
+::-moz-selection {
+    background: #b3d4fc;
+    text-shadow: none;
+}
+
+::selection {
+    background: #b3d4fc;
+    text-shadow: none;
+}
+
+body
+{
+  background-color: #495074;
+  font-family: 'Oxygen Mono', sans-serif;
+  color: #226;
+}
+
+nav,
+header,
+main
+{
+  background-color: #a5b3cc;
+  border: 1px dashed #475074;
+  border-radius: .5em;
+  padding: 1em;
+  margin: 1em;
+}
+
+header
+{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  -webkit-box-shadow: 0px 0px .5em 1em #495074;
+  -moz-box-shadow: 0px 0px 14px 22px #495074;
+  box-shadow: 0px 0px .5em 1em #495074;
+}
+header:before
+{
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1em;
+  background-color: #495074;
+}
+nav
+{
+  width: 11em;
+  position: fixed;
+  top: 5em;
+  left: 0;
+}
+
+main
+{
+  line-height: 1.2em;
+  padding: 1em;
+  position: absolute;
+  top: 5em;
+  left: 14em;
+}
+
+h1
+{
+  font-size: 1.5em;
+  display: inline-block;
+}
+h1:after
+{
+  content: "|";
+  margin-left: .1em;
+  margin-right: .3em;
+  font-size: 1.1em;
+  color: #ccc;
+  font-weight: normal;
+}
+h2
+{
+  display: inline-block;
+  font-size: 1.2em;
+}
+
+a
+{
+  color: #0010a3;
+  text-decoration: none;
+  /*background-color: #a5b3cc;
+  border: 1px solid #a5b3cc;*/
+}
+a:hover
+{
+  background-color: #7b87cc;
+  /*outline: 2px solid #7b87cc;
+  border: 1px solid #7b87cc;
+  border-radius: .2em;*/
+}
+.fancybox-outer a:hover
+{
+  background-color: transparent;
+}
+
+nav a.current
+{
+  font-weight: bold;
+}
+nav li
+{
+  margin-top: 1em;
+  list-style-type: none;
+}
+nav
+{
+  padding-top: 0;
+  text-transform: lowercase;
+}
+nav li ul
+{
+  text-indent: 1em;
+}
+
+.item
+{
+  text-align: left;
+  min-width: 14em;
+  min-height: 5em;
+  max-width: 24em;
+  font-size: .9em;
+}
+.item, .item-batch
+{
+  display: inline-block;
+  padding: .5em;
+  border: 1px dotted #ccc;
+  margin: 1em .5em;
+  border-radius: .3em;
+  vertical-align: top;
+}
+.item-batch .item
+{
+  border: none;
+  margin: .25em;
+  padding: .25em;
+}
+.item-batch .item-commit
+{
+  margin-right: 2em;
+}
+.item-video
+{
+  max-width: 400px;
+}
+.item-title
+{
+  background: #a5b3cc;
+  padding: .2em .5em;
+  border: 1px dotted #ccc;
+  border-radius: .2em;
+  margin: 0 .2em;
+}
+.item time
+{
+  text-align: right;
+  font-size: .7em;
+  display: block;
+}
+.item-content
+{
+  font-size: .9em;
+}
+.item-batch
+{
+  display: inline-block;
+}
