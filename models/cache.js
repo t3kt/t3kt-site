@@ -19,9 +19,21 @@ exports.getOrLoadAsync = function(key, load)
   if(value != null)
     return Deferred.when(value);
   return Deferred.when(load(key))
-    .done(function(val){
+    .done(function(val)
+    {
       cache.set(key, val);
     });
+};
+
+exports.getAsync = function(key)
+{
+  var value = cache.get(key),
+    result = Deferred();
+  if(value == null)
+    result.reject(null);
+  else
+    result.resolve(value);
+  return result.promise();
 };
 
 exports.add = function(key, value)

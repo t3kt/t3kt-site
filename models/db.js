@@ -14,66 +14,106 @@ var mongoClient = new MongoClient( new Server( config.mongoHost, config.mongoPor
 
 mongoClient.addListener('close', function(){  mongoDb = null; });
 
-function connect(then)
+function connect()
 {
   if(mongoDb)
-    then(mongoDb);
+    return Deferred.when(mongoDb);
   else
-    mongoClient.open(function(err, client)
+    return Deferred(function(dfd)
     {
-      if(err)
-        throw err;
-      mongoDb = mongoClient.db(config.mongoDbName);
-      then(mongoDb);
+      mongoClient.open(function(err, client)
+      {
+        if(err)
+          dfd.reject(err);
+        else
+        {
+          mongoDb = mongoClient.db(config.mongoDbName);
+          dfd.resolve(mongoDb);
+        }
+      });
     });
 }
 
-function asyncCall(collection, method, var_args)
+function asyncCall(collection, method, args)
 {
-  var args = [].slice.call(arguments, 2);
-  return Deferred(function(dfd)
-  {
-    try
+  return connect()
+    .pipe(function(db)
     {
-      connect(function(db)
+      var coll = db.collection(collection);
+      return Deferred(function(dfd)
       {
-        var coll = db.collection(collection);
-        coll[method].apply(coll, args.concat(function(err, result)
+        coll[method].apply(coll, (args||[]).concat(function(err, result)
         {
           if(err)
             dfd.reject(err);
           else
-            dfd.resolve(err);
+            dfd.resolve(result);
         }));
       });
-    }
-    catch(e)
-    {
-      dfd.reject(e);
-    }
-  });
+    });
 }
 
-
-function loadProjects()
+function asyncFindToArray(collection, args)
 {
-  NOT_IMPLEMENTED();
+  return asyncCall(collection, 'find', args)
+    .pipe(function(cur)
+    {
+      return Deferred(function(dfd)
+      {
+        cur.toArray(function(err, docs)
+        {
+          if(err)
+            dfd.reject(err);
+          else
+            dfd.resolve(docs);
+        });
+      });
+    });
 }
+
+
 function getProjectList()
 {
   return cache.getOrLoadAsync('projects', function()
   {
-    NOT_IMPLEMENTED();
-  });
+    return asyncFindToArray('projects', [{}, {sort: [['order', 1], ['key', 2]]}]);
+  })
+    .done(function(list)
+    {
+      list.forEach(function(project)
+      {
+        cache.add('project:'+project.key, project);
+      });
+    });
 }
-function getProject()
+function getProject(key)
 {
+  return cache.getAsync('project:' + key)
+    .pipe(null, function()
+    {
+      return getProjectList()
+        .pipe(function()
+        {
+          return cache.get('project:'+ key);
+        });
+    })
+}
 
+function getItems(var_args)
+{
+  return asyncFindToArray('items', [].slice.call(arguments) );
 }
 
 exports.getProjectList = getProjectList;
 
-exports.getProject = function(id)
+exports.getProject = getProject;
+
+exports.getItems = getItems;
+
+exports.getProjectItems = function(projectKey, type)
 {
-  NOT_IMPLEMENTED();
+  var query = {project:projectKey};
+  if(type)
+    query.type = type;
+  return getItems(query);
 };
