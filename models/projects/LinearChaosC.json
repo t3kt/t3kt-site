@@ -1,0 +1,9 @@
+{
+  "id": "LinearChaosC",
+  "title": "LinearChaos C",
+  "blogCategories": ["linearchaos"],
+  "flickrSetId": "72157634142099007",
+  "vimeoAlbumId": "2388529",
+  "githubRepo": "linearchaos",
+  "descriptionHtml": "<p>LinearChaos is a series of performance systems made with <a href=\"http://www.derivative.ca/\" target=\"_blank\">TouchDesigner</a>.<br/>It has gone through several iterations and rewrites.</p>\n<p>This is the third (and most recent) rewrite.<br/>\nIt uses completely new geometry and rendering systems.<br/>\nI probably should have renamed it, but now I can't bring myself to do so.</p>\n<p>The system is based on spacial and temporal distortion of geometric primitives.<br/>\nIt represents the interplay of simplicity and complexity. And I think it looks neat.</p>\n<p>The code for this project is available here: <a href=\"https://github.com/t3kt/linearchaos\" target=\"_blank\">on github</a>.</p>"
+}

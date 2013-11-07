@@ -1,0 +1,6 @@
+{
+  "id": "LinearChaosB",
+  "title": "LinearChaos B",
+  "vimeoAlbumId": "2434449",
+  "descriptionHtml": "<p>LinearChaos is a series of performance systems made with <a href=\"http://www.derivative.ca/\" target=\"_blank\">TouchDesigner</a>.<br/>\nIt has gone through several iterations and rewrites.</p>\n<p>This is the second rewrite.<br/>\nIt is fairly similar to the first linearchaos system, with some rewritten back-end systems and     an enhanced control interface.</p>\n<p>The code for this project is available here: <a href=\"https://github.com/t3kt/linearchaos\" target=\"_blank\">on github</a>.</p>"
+}
