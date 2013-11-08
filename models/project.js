@@ -16,7 +16,7 @@ function Project(props)
   this.thumb = this.thumb && E.image.size(this.thumb);
 }
 Project.prototype = {
-  id:null,
+  key:null,
   title:null,
   descriptionHtml:null,
   summaryHtml:null,

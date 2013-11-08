@@ -21,7 +21,7 @@ function convertVideo(video)
 {
   var embedSize = util.limitSize(video, {width: 400 });
   return E.video({
-    id: video.id,
+    key: video.id,
     title: video.title,
     posted: moment(video.upload_date),
     detailUrl: video.url,

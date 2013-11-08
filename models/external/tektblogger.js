@@ -45,7 +45,7 @@ function filterEntries(entries, categories)
 function convertEntry(entry)
 {
   return E.blogEntry({
-    id: entry.id.$t,
+    key: entry.id.$t,
     posted: moment(entry.published.$t),
     categories: (entry.category||[]).map(function(c){return c.term;}),
     title:entry.title.$t,

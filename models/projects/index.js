@@ -15,7 +15,7 @@ exports.list = [];
 ].forEach(function (props)
   {
     var project = Project(props);
-    exports.projects[project.id.toLowerCase()] = Project(props);
+    exports.projects[project.key.toLowerCase()] = Project(props);
     exports.list.push(project);
   });
 exports.get = function(id){

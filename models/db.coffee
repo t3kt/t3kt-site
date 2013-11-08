@@ -1,32 +1,27 @@
 _ = require('lodash')
 Deferred = require('Deferred')
 mongo = require('mongodb')
-MongoClient = mongo.MongoClient
-Server = mongo.Server
 config = require('../config/config')
 E = require('./entities')
 util = require('./util')
 NOT_IMPLEMENTED = util.NOT_IMPLEMENTED
 cache = require('./cache')
 
-mongoClient = new MongoClient( new Server( config.mongoHost, config.mongoPort, config.mongoOptions))
+mongoClient = new mongo.MongoClient( new mongo.Server( config.mongoHost, config.mongoPort, config.mongoOptions))
 mongoDb = null
 
-mongoClient.addListener( (e) -> mongoDb = null )
+mongoClient.addListener( -> mongoDb = null )
 
-connect = () ->
+connect = ->
   if mongoDb
     return Deferred.when(mongoDb)
   else
     return Deferred((dfd)->
-      mongoClient.open((err, client)->
+      mongoClient.open((err)->
         if err
           dfd.reject(err)
-          return
         else
-          mongoDb = mongoClient.db(config.mongoDbName)
-          dfd.resolve(mongoDb)
-          return
+          dfd.resolve(mongoDb = mongoClient.db(config.mongoDbName))
       )
     )
 
@@ -38,10 +33,8 @@ asyncCall = (collection, method, args) ->
         coll[method].apply(coll, (args||[]).concat( (err, result)->
           if err
             dfd.reject(err)
-            return
           else
             dfd.resolve(result)
-            return
         ))
       )
     )
@@ -53,16 +46,14 @@ asyncFindToArray = (collection, args) ->
         cur.toArray( (err, docs) ->
           if err
             dfd.reject(err)
-            return
           else
             dfd.resolve(docs)
-            return
         )
       )
     )
 
-getProjectList = () ->
-  return cache.getOrLoadAsync('projects', ()->
+getProjectList = ->
+  cache.getOrLoadAsync('projects', ->
     asyncFindToArray('projects', [{}, {sort: [['order', 1],['key', 2]]}])
   )
   .done( (list)->
@@ -73,15 +64,15 @@ getProjectList = () ->
 
 getProject = (key) ->
   cache.getAsync('project:' + key)
-  .pipe(null, () ->
+  .pipe(null, ->
       getProjectList()
-        .pipe(() ->
+        .pipe( ->
           cache.get('project:' + key)
         )
     )
 
-getItems = (var_args) ->
-  asyncFindToArray('items', [].slice.call(arguments))
+getItems = (args...) ->
+  asyncFindToArray('items', args)
 
 exports.getProjectList = getProjectList
 exports.getProject = getProject

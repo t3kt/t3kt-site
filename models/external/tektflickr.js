@@ -29,7 +29,7 @@ exports.getPhotosetPhotos = function (setId)
           var images = result.photoset.photo.map(function (photo)
           {
             return E.image({
-              id: photo.id,
+              key: photo.id,
               title: photo.title,
               detailUrl: 'http://www.flickr.com/photos/' + (photo.path_alias || result.photoset.owner) + '/' + photo.id + '/',
               posted: moment(photo.datetaken),
