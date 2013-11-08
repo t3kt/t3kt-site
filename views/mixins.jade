@@ -1,0 +1,51 @@
+mixin time(t)
+  if t
+    time=t.format('YYYY.MM.DD HH:mm:ss')
+
+mixin video(vid)
+  figure.item.item-video(id=vid.id)
+    //figcaption.item-title
+      if vid.detailUrl
+        a(href=vid.detailUrl, target='_blank')=vid.title
+      else
+        span= vid.title
+    if vid.embedHtml
+      != vid.embedHtml
+    else
+      iframe(src=vid.embedUrl, width=vid.embedWidth, height=vid.embedHeight, frameborder=0, webkitAllowFullScreen, mozallowfullscreen, allowfullscreen)
+    mixin time(vid.posted)
+
+mixin commit(com)
+  div.item.item-commit(id=com.id)
+    div.item-content=com.title
+    a(href=com.detailUrl,target='_blank') browse code
+    mixin time(com.posted)
+
+mixin image(img)
+  figure.item.item-image(id=img.id)
+    //figcaption.item-title
+      a(href=img.detailUrl, target='_blank')=img.title
+    a(href=img.full.url, class='image-grid-link', rel='images', title=img.title)
+      img(src=img.thumb.url, alt=img.title, width=img.thumb.width, height=img.thumb.height)
+    mixin time(img.posted)
+
+mixin blogEntry(ent)
+  article.item.item-entry(id=ent.id)
+    h3.item-title
+      if ent.detailUrl
+        a(href=ent.detailUrl, target='_blank')=ent.title
+      else
+        span= ent.title
+    div.item-content
+      != ent.contentHtml
+    mixin time(ent.posted)
+
+mixin item(i)
+  if i.entityType == 'video'
+    mixin video(i)
+  else if i.entityType == 'commit'
+    mixin commit(i)
+  else if i.entityType == 'image'
+    mixin image(i)
+  else if i.entityType == 'blogEntry'
+    mixin blogEntry(i)

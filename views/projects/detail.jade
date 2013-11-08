@@ -1,0 +1,16 @@
+extends ../layout
+
+include ../mixins
+
+block content
+  article
+    div.project-description
+      != project.descriptionHtml || project.summaryHtml
+    div#project-items
+block scripts
+  script(defer).
+    var projectKey = "#{project.key}"
+    $(function()
+    {
+      $('#project-items').load('/items/'+projectKey);
+    });

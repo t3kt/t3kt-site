@@ -1,0 +1,9 @@
+extends ../layout
+
+block content
+  each project in projects
+    div.project-summary
+      h3
+        a(href='/Projects/'+project.id)=project.title
+      div.project-description
+        != project.summaryHtml || project.descriptionHtml
