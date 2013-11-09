@@ -1,27 +1,27 @@
 _ = require('lodash')
 Deferred = require('Deferred')
-mongo = require('mongodb')
+MongoClient = require('mongodb').MongoClient
 config = require('../config/config')
-E = require('./entities')
 util = require('./util')
 NOT_IMPLEMENTED = util.NOT_IMPLEMENTED
-cache = require('./cache')
 
-mongoClient = new mongo.MongoClient( new mongo.Server( config.mongoHost, config.mongoPort, config.mongoOptions))
 mongoDb = null
-
-mongoClient.addListener( -> mongoDb = null )
 
 connect = ->
   if mongoDb
     return Deferred.when(mongoDb)
   else
+    console.log 'connecting to mongo...'
     return Deferred((dfd)->
-      mongoClient.open((err)->
+      MongoClient.connect(config.mongoHqUri, config.mongoOptions, (err, db)->
         if err
+          console.log 'connect to mongo failed', err
           dfd.reject(err)
         else
-          dfd.resolve(mongoDb = mongoClient.db(config.mongoDbName))
+          console.log 'connect to mongo succeeded'
+          mongoDb = db
+          db.addListener('close', -> mongoDb = null )
+          dfd.resolve(db)
       )
     )
 
@@ -30,10 +30,13 @@ asyncCall = (collection, method, args) ->
     .pipe( (db) ->
       coll = db.collection(collection)
       return Deferred((dfd)->
+        console.log "calling mongo method #{method} on #{collection}", args
         coll[method].apply(coll, (args||[]).concat( (err, result)->
           if err
+            console.log "mongo call failed", err
             dfd.reject(err)
           else
+            console.log "mongo call succeeded"
             dfd.resolve(result)
         ))
       )
@@ -52,31 +55,26 @@ asyncFindToArray = (collection, args) ->
       )
     )
 
-getProjectList = ->
-  cache.getOrLoadAsync('projects', ->
-    asyncFindToArray('projects', [{}, {sort: [['order', 1],['key', 2]]}])
-  )
-  .done( (list)->
-      list.forEach((project)->
-        cache.add('project:'+project.key, project)
-      )
-    )
+asyncFindOne = (collection, args) ->
+  asyncCall(collection, 'findOne', args)
+
+
+getProjects = ->
+  asyncFindToArray('projects', [{}, {sort: [['order', 'ascending'],['key', 'ascending']]}])
 
 getProject = (key) ->
-  cache.getAsync('project:' + key)
-  .pipe(null, ->
-      getProjectList()
-        .pipe( ->
-          cache.get('project:' + key)
-        )
-    )
+  asyncFindOne('projects', [{ key: key }])
 
 getItems = (args...) ->
   asyncFindToArray('items', args)
 
-exports.getProjectList = getProjectList
+getItem = (key) ->
+  asyncFindOne('items', [{ key: key }])
+
+exports.getProjects = getProjects
 exports.getProject = getProject
 exports.getItems = getItems
+exports.getItem = getItem
 exports.getProjectItems = (projectKey, type) ->
   query = {project:projectKey}
   if(type)

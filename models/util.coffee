@@ -34,3 +34,6 @@ exports.limitSize = ( size, maxSize ) ->
     height = maxSize.height
     width = maxSize.height * aspect
   return {width, height}
+
+exports.throwError = (err) -> throw err
+

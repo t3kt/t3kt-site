@@ -8,7 +8,6 @@ var app = express();
 
 app.set('views', __dirname + '/views');
 app.set('view options', { layout: false });
-app.use(connect.bodyParser());
 app.use(connect.static( __dirname + '/public'));
 app.use(app.router);
 

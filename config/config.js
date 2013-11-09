@@ -11,7 +11,8 @@ module.exports = {
   mongoDbName: '',
   mongoHost: '',
   mongoPort: -1,
-  mongoOptions: {}
+  mongoOptions: {},
+  mongoHqUri: ''
 };
 
 try
@@ -22,3 +23,6 @@ catch(e)
 {
   // do nothing
 }
+var mongoUri = process.MONGOHQ_URI;
+if(mongoUri)
+  module.exports.mongoUri = process.MONGOHQ_URI;

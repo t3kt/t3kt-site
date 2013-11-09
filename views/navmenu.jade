@@ -10,7 +10,7 @@ nav
         ul
           each p in projects
             li
-              a(href='/projects/'+p.id, class=currentContext=='/projects/'+p.id?'current':'')=p.title
+              a(href='/projects/'+p.key, class=currentContext=='/projects/'+p.key?'current':'')=p.title
     li
       a(href='https://www.facebook.com/tetksys', target='_blank') facebook
     li

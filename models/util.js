@@ -60,4 +60,8 @@
     };
   };
 
+  exports.throwError = function(err) {
+    throw err;
+  };
+
 }).call(this);

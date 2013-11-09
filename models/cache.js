@@ -10,42 +10,44 @@
 
   cache = new Cache(config.cacheTimeout);
 
-  exports.getOrLoad = function(key, load) {
-    var value;
-    value = cache.get(key);
-    if (value !== null) {
+  module.exports = {
+    getOrLoad: function(key, load) {
+      var value;
+      value = cache.get(key);
+      if (value !== null) {
+        return value;
+      }
+      value = load(key);
+      cache.set(key, value);
       return value;
+    },
+    getOrLoadAsync: function(key, load) {
+      var value;
+      value = cache.get(key);
+      if (value !== null) {
+        return Deferred.when(value);
+      }
+      return Deferred.when(load(key)).done(function(val) {
+        cache.set(key, val);
+      });
+    },
+    getAsync: function(key) {
+      var result, value;
+      value = cache.get(key);
+      result = Deferred();
+      if (value === null) {
+        result.reject(null);
+      } else {
+        result.resolve(value);
+      }
+      return result.promise();
+    },
+    set: function(key, value) {
+      return cache.set(key, value);
+    },
+    get: function(key) {
+      return cache.get(key);
     }
-    value = load(key);
-    cache.set(key, value);
-    return value;
-  };
-
-  exports.getOrLoadAsync = function(key, load) {
-    var value;
-    value = cache.get(key);
-    if (value !== null) {
-      return Deferred.when(value);
-    }
-    return Deferred.when(load(key)).done(function(val) {
-      cache.set(key, val);
-    });
-  };
-
-  exports.getAsync = function(key) {
-    var result, value;
-    value = cache.get(key);
-    result = Deferred();
-    if (value === null) {
-      result.reject(null);
-    } else {
-      result.resolve(value);
-    }
-    return result.promise();
-  };
-
-  exports.add = function(key, value) {
-    return cache.add(key, value);
   };
 
 }).call(this);

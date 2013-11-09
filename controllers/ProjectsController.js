@@ -2,39 +2,48 @@
 var util = require("../models/util"),
   NOT_IMPLEMENTED = util.NOT_IMPLEMENTED,
   projects = require("../models/projects"),
+  db = require('../models/db'),
   ItemsController = require("./ItemsController");
 
 module.exports = {
 
   get_index: function(req, res)
   {
-    res.render('projects/index.jade', {
-      currentContext: '/projects',
-      title : 'Projects',
-      description: 'OMG PROJECTS!!!',
-      author: 'tekt',
-      analyticssiteid: 'XXXXXXX',
-      projects: projects.list
-    })
+    db.getProjects()
+      .done(function(projects)
+      {
+        res.render('projects/index.jade', {
+          currentContext: '/projects',
+          title : 'Projects',
+          description: 'OMG PROJECTS!!!',
+          author: 'tekt',
+          analyticssiteid: 'XXXXXXX',
+          projects: projects
+        })
+      })
+      .fail(util.throwError);
   },
 
   get_id : function(req, res, id)
   {
-    var project = projects.get(id);
-    project.getAllItemBatches()
-      .done(function(batches){
-        res.render('projects/detail.jade', {
-          currentContext: '/projects/' + id,
-          title: 'Project: ' + project.title,
-          author: 'tekt',
-          project: project,
-          projectItemBatches: batches,
-          projects: projects.list
-        });
-      })
-      .fail(function(err)
+    db.getProject(id)
+      .done(function(project)
       {
-        throw new Error('ERROR getting project items ' + err);
+        project.getAllItemBatches()
+          .done(function(batches){
+            res.render('projects/detail.jade', {
+              currentContext: '/projects/' + id,
+              title: 'Project: ' + project.title,
+              author: 'tekt',
+              project: project,
+              projectItemBatches: batches,
+              projects: projects.list
+            });
+          })
+          .fail(function(err)
+          {
+            throw new Error('ERROR getting project items ' + err);
+          });
       });
   },
 
