@@ -10,9 +10,9 @@ connect = ->
   if mongoDb
     return Deferred.when(mongoDb)
   else
-    console.log 'connecting to mongo... ' + config.mongoHqUri
+    console.log 'connecting to mongo... ' + config.mongoUri
     return Deferred((dfd)->
-      MongoClient.connect(config.mongoHqUri, config.mongoOptions, (err, db)->
+      MongoClient.connect(config.mongoUri, config.mongoOptions, (err, db)->
         if err
           console.log 'connect to mongo failed', err
           dfd.reject(err)

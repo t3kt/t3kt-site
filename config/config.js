@@ -12,7 +12,7 @@ module.exports = {
   mongoHost: '',
   mongoPort: -1,
   mongoOptions: {},
-  mongoHqUri: ''
+  mongoUri: ''
 };
 
 try

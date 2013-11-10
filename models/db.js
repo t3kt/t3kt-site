@@ -19,9 +19,9 @@
     if (mongoDb) {
       return Deferred.when(mongoDb);
     } else {
-      console.log('connecting to mongo... ' + config.mongoHqUri);
+      console.log('connecting to mongo... ' + config.mongoUri);
       return Deferred(function(dfd) {
-        return MongoClient.connect(config.mongoHqUri, config.mongoOptions, function(err, db) {
+        return MongoClient.connect(config.mongoUri, config.mongoOptions, function(err, db) {
           if (err) {
             console.log('connect to mongo failed', err);
             return dfd.reject(err);
