@@ -20,6 +20,7 @@
       return Deferred.when(mongoDb);
     } else {
       console.log('connecting to mongo... ' + config.mongoUri);
+      console.log('omg config is ' + JSON.stringify(config));
       return Deferred(function(dfd) {
         return MongoClient.connect(config.mongoUri, config.mongoOptions, function(err, db) {
           if (err) {

@@ -11,6 +11,7 @@ connect = ->
     return Deferred.when(mongoDb)
   else
     console.log 'connecting to mongo... ' + config.mongoUri
+    console.log 'omg config is ' + JSON.stringify(config)
     return Deferred((dfd)->
       MongoClient.connect(config.mongoUri, config.mongoOptions, (err, db)->
         if err
