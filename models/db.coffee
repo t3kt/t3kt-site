@@ -1,4 +1,3 @@
-_ = require('lodash')
 Deferred = require('Deferred')
 MongoClient = require('mongodb').MongoClient
 config = require('../config/config')
@@ -25,6 +24,7 @@ connect = ->
       )
     )
 
+exports.asyncCall =
 asyncCall = (collection, method, args) ->
   connect()
     .pipe( (db) ->
@@ -42,6 +42,7 @@ asyncCall = (collection, method, args) ->
       )
     )
 
+exports.asyncFindToArray =
 asyncFindToArray = (collection, args) ->
   asyncCall(collection, 'find', args)
     .pipe( (cur)->
@@ -55,28 +56,28 @@ asyncFindToArray = (collection, args) ->
       )
     )
 
+exports.asyncFindOne =
 asyncFindOne = (collection, args) ->
   asyncCall(collection, 'findOne', args)
 
-
-getProjects = ->
+exports.getProjects = ->
   asyncFindToArray('projects', [{}, {sort: [['order', 'ascending'],['key', 'ascending']]}])
 
-getProject = (key) ->
+exports.getProject = (key) ->
   asyncFindOne('projects', [{ key: key }])
 
-getItems = (args...) ->
+exports.getItems = (args...) ->
   asyncFindToArray('items', args)
 
-getItem = (key) ->
+exports.getItem = (key) ->
   asyncFindOne('items', [{ key: key }])
 
-exports.getProjects = getProjects
-exports.getProject = getProject
-exports.getItems = getItems
-exports.getItem = getItem
 exports.getProjectItems = (projectKey, type) ->
   query = {project:projectKey}
   if(type)
     query.type = type
-  getItems(query)
+  exports.getItems(query)
+
+exports.insertItem = (items) ->
+  asyncCall('items', 'insert', [items])
+
