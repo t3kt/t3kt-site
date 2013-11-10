@@ -12,6 +12,7 @@ connect = ->
   else
     console.log 'connecting to mongo... ' + config.mongoUri
     console.log 'omg config is ' + JSON.stringify(config)
+    console.log 'process keys: ' + Object.keys(process).join(', ')
     return Deferred((dfd)->
       MongoClient.connect(config.mongoUri, config.mongoOptions, (err, db)->
         if err
