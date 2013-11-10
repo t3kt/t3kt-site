@@ -23,6 +23,6 @@ catch(e)
 {
   // do nothing
 }
-//var mongoUri = process.MONGOHQ_URI;
-//if(mongoUri)
-//  module.exports.mongoUri = process.MONGOHQ_URI;
+var mongoUri = process.MONGOHQ_URL;
+if(mongoUri)
+  module.exports.mongoUri = process.MONGOHQ_URL;
