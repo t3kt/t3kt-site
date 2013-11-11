@@ -86,7 +86,7 @@
   exports.getProject = function(key) {
     return asyncFindOne('projects', [
       {
-        key: key
+        key: key.toLowerCase()
       }
     ]);
   };

@@ -64,7 +64,7 @@ exports.getProjects = ->
   asyncFindToArray('projects', [{}, {sort: [['order', 'ascending'],['key', 'ascending']]}])
 
 exports.getProject = (key) ->
-  asyncFindOne('projects', [{ key: key }])
+  asyncFindOne('projects', [{ key: key.toLowerCase() }])
 
 exports.getItems = (args...) ->
   asyncFindToArray('items', args)
