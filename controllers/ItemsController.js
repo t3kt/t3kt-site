@@ -18,7 +18,7 @@ function itemRouteByProjectHtml(method)
 {
   return itemRouteByProject(method, function (req, res, items)
   {
-    res.render('items/items.jade', {
+    res.render('items/itemsAjax.jade', {
       items: items
     });
   });

@@ -1,5 +1,6 @@
-include ../mixins
+extends ../layout
 
-if items
-  for item in items
-     mixin item(item)
+block content
+  if items
+    for item in items
+      mixin item(item)

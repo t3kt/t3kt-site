@@ -1,16 +1,16 @@
 nav
   ul
-    li
-      a(href='/about', class=currentContext=='/about'?'current':'') about
-    li
-      a(href='/', class=currentContext=='/about'?'current':'') news
-    li
-      a(href='/projects', class=currentContext&&currentContext.indexOf('/projects')==0?'current':'') projects
+    li(class=currentContext=='/about'?'current':'')
+      a(href='/about') about
+    li(class=currentContext=='/'?'current':'')
+      a(href='/') news
+    li(class=currentContext&&currentContext.indexOf('/projects')==0?'current':'')
+      a(href='/projects') projects
       if projects
         ul
           each p in projects
-            li
-              a(href='/projects/'+p.key, class=currentContext=='/projects/'+p.key?'current':'')=p.title
+            li(class=currentContext=='/projects/'+p.key?'current':'')
+              a(href='/projects/'+p.key)=p.title
     li
       a(href='https://www.facebook.com/tetksys', target='_blank') facebook
     li

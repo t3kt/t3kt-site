@@ -46,10 +46,14 @@ header
   top: 0;
   left: 0;
   right: 0;
+  height: 4.2em;
   z-index: 10;
-  -webkit-box-shadow: 0px 0px .5em 1em #495074;
-  -moz-box-shadow: 0px 0px 14px 22px #495074;
-  box-shadow: 0px 0px .5em 1em #495074;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-box-shadow: 0 0 .5em 1em #495074;
+  -moz-box-shadow: 0 0 .5em 1em #495074;
+  box-shadow: 0 0 .5em 1em #495074;
 }
 header:before
 {
@@ -65,7 +69,7 @@ nav
 {
   width: 11em;
   position: fixed;
-  top: 5em;
+  top: 5.3em;
   left: 0;
 }
 
@@ -74,7 +78,7 @@ main
   line-height: 1.2em;
   padding: 1em;
   position: absolute;
-  top: 5em;
+  top: 5.3em;
   left: 14em;
 }
 
@@ -82,6 +86,7 @@ h1
 {
   font-size: 1.5em;
   display: inline-block;
+  margin: 0;
 }
 h1:after
 {
@@ -96,6 +101,7 @@ h2
 {
   display: inline-block;
   font-size: 1.2em;
+  margin: 0;
 }
 
 a
@@ -117,14 +123,19 @@ a:hover
   background-color: transparent;
 }
 
-nav a.current
+nav li.current
 {
   font-weight: bold;
+}
+nav ul
+{
+  padding-left: 0;
 }
 nav li
 {
   margin-top: 1em;
-  list-style-type: none;
+  list-style-type: circle;
+  list-style-position: inside;
 }
 nav
 {

@@ -22,6 +22,11 @@ var tekt = (function()
 })();
 
 
-$(function(){
-  $('.image-grid-link').fancybox();
-});
+if(window.$)
+{
+  $(function()
+  {
+    if($.fn.fancybox)
+      $('.image-grid-link').fancybox();
+  });
+}

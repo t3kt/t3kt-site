@@ -2,10 +2,10 @@ config = require('../config/config')
 util = require('../models/util')
 NOT_IMPLEMENTED = util.NOT_IMPLEMENTED
 db = require('../models/db')
-request = require('request')
 moment = require('moment')
 Deferred = require('Deferred')
-TypeUpdater = require('./index').TypeUpdater
+SourceUpdater = require('./index').SourceUpdater
+createItem = require('./index').createItem
 parseLinkHeader = require('./linkheaders').parse
 
 
@@ -27,9 +27,17 @@ retrieveCommitBatch = (url, callback) ->
         )
     )
 
-class GithubUpdater extends TypeUpdater
-  @typeKey = 'commit'
-  constructor: () ->
+sourceKey = 'github'
+typeKey = 'commit'
+
+class GithubUpdater extends SourceUpdater
+  @typeKey = typeKey
+  @sourceKey = sourceKey
+
+  createDefinition: ->
+    key: sourceKey
+    types: [typeKey]
+    config: {}
 
   updateProject: (project) ->
     if not project.githubRepo
@@ -37,31 +45,27 @@ class GithubUpdater extends TypeUpdater
     else
       repoUrl = "https://api.github.com/repos/t3kt/#{project.githubRepo}"
       util.requestAsync(repoUrl)
-        .pipe((body) =>
+        .pipe((body) ->
           # need the unique numeric repo ID to be sure that commit keys don't change if the repo is renamed
           repo = JSON.parse(body)
-          retrieveCommitBatch(repoUrl + "/commits?per_page=50", (commits) =>
-            addedAny = false
+          retrieveCommitBatch(repoUrl + "/commits?per_page=50", (commits) ->
             results =
               for obj in commits
-                key = "commit:github:#{repo.id}:#{obj.sha}"
-                db.getItem(key)
-                  .done( (exists) =>
+                extId = "#{repo.id}:#{obj.sha}"
+                db.asyncFindOne('items', [{ type: typeKey, source: sourceKey, externalId: extId }])
+                  .pipe( (exists) ->
                     if exists
                       return
                     commit =
-                      key: key
-                      type: GithubUpdater.typeKey
-                      detailUrl: obj.html_url
-                      posted: moment(obj.commit.committer.date).toDate()
-                      title: obj.commit.message
-                      updated: new Date()
-                      external: true
+                      createItem( typeKey, sourceKey, extId,
+                        detailUrl: obj.html_url
+                        posted: moment(obj.commit.committer.date).toDate()
+                        title: obj.commit.message
+                        projects: [project.key]
+                      )
                     db.insertItem(commit)
                   )
-            util.whenAll(results, =>
-              NOT_IMPLEMENTED()
-            )
+            util.whenAll(results)
           )
         )
 
