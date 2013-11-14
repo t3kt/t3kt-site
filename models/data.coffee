@@ -14,12 +14,17 @@ DbFacade =
   getProjects: db.getProjects
   getProject: db.getProject
   getItems: db.getItems
+  getItemsByType: (type) ->
+    @getItems({type: type})
   getItem: db.getItem
   getProjectItems: (projectKey, type) ->
     query = {project: projectKey}
     if type
       query.type = type
     @getItems(query)
+  getPage: db.getPage
+  getProjectPage: (projectKey, pageKey) ->
+    @getPage("#{projectKey}:#{pageKey}")
 
 #CachedDbFacade =
 #  getProjects: ->

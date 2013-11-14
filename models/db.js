@@ -120,4 +120,12 @@
     return asyncCall('items', 'insert', [items]);
   };
 
+  exports.getPage = function(key) {
+    return asyncFindOne('pages', [
+      {
+        key: key
+      }
+    ]);
+  };
+
 }).call(this);

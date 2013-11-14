@@ -81,3 +81,6 @@ exports.getProjectItems = (projectKey, type) ->
 exports.insertItem = (items) ->
   asyncCall('items', 'insert', [items])
 
+exports.getPage = (key) ->
+  asyncFindOne('pages', [{key: key}])
+

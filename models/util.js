@@ -61,6 +61,17 @@
       throw err;
     },
     when: Deferred.when,
+    asArray: function(val) {
+      if (!(val != null)) {
+        return [];
+      } else {
+        if (Array.isArray(val)) {
+          return val;
+        } else {
+          return [val];
+        }
+      }
+    },
     whenAll: function() {
       return Deferred.when.apply(null, arguments);
     },

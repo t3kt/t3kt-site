@@ -11,7 +11,8 @@ app.set('view options', { layout: false });
 app.use(connect.static( __dirname + '/public'));
 app.use(app.router);
 
-function NotFound(msg){
+function NotFound(msg)
+{
   this.name = 'NotFound';
   Error.call(this, msg);
   Error.captureStackTrace(this, arguments.callee);

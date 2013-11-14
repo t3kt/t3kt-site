@@ -12,6 +12,11 @@
     getProjects: db.getProjects,
     getProject: db.getProject,
     getItems: db.getItems,
+    getItemsByType: function(type) {
+      return this.getItems({
+        type: type
+      });
+    },
     getItem: db.getItem,
     getProjectItems: function(projectKey, type) {
       var query;
@@ -22,6 +27,10 @@
         query.type = type;
       }
       return this.getItems(query);
+    },
+    getPage: db.getPage,
+    getProjectPage: function(projectKey, pageKey) {
+      return this.getPage("" + projectKey + ":" + pageKey);
     }
   };
 

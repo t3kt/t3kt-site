@@ -40,6 +40,12 @@ module.exports =
 
   when: Deferred.when
 
+  asArray: (val) ->
+    if !(val?)
+      []
+    else
+      if Array.isArray(val) then val else [val]
+
   whenAll: () ->
     Deferred.when.apply(null, arguments)
 
