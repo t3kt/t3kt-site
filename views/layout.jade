@@ -1,6 +1,41 @@
 doctype 5
 include ./mixins
 if isAjax
-  extends ./layoutAjax
+  div
+    h2#title
+      block title
+        = title
+    div#ajax-main
+      block content
+    footer
+      block footer
+    div#scripts
+      block scripts
 else
-  extends ./layoutPage
+  html
+    head
+      meta(charset='utf-8')
+      title='tekt| ' + title
+      meta(name="author", content='tekt')
+      link(rel='stylesheet', href='//reset5.googlecode.com/hg/reset.min.css')
+      link(rel='stylesheet', href='/css/style.css')
+      link(rel='shortcut icon', href='/images/favicon.png')
+      link(rel='stylesheet', href='//fonts.googleapis.com/css?family=Oxygen+Mono', type='text/css')
+      link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css')
+      block head
+    body
+      header
+        h1
+          a(href='/') tekt
+        h2=title
+      block navmenu
+        include navmenu
+      main
+        block content
+      footer
+        block footer
+      script(src='//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js')
+      script(src='//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.pack.js')
+      script(src='/js/script.js')
+      //include analytics
+      block scripts

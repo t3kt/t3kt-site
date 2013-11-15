@@ -1,0 +1,5 @@
+extends ../layout
+block content
+  if newsEntries
+    for item in newsEntries
+      mixin item(item)

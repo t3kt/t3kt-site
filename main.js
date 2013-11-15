@@ -20,9 +20,9 @@ function NotFound(msg)
   Error.captureStackTrace(this, arguments.callee);
 }
 
-controllers
-  .setDirectory( __dirname + '/controllers' )
-  .bind(app);
+//controllers
+//  .setDirectory( __dirname + '/controllers' )
+//  .bind(app);
 
 
 app.listen(port);

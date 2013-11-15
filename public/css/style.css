@@ -125,7 +125,7 @@ a:hover
   background-color: transparent;
 }
 
-nav li.current
+nav li.current > a
 {
   font-weight: bold;
 }

@@ -1,18 +1,18 @@
 nav
   ul
-    li(class=currentContext=='/about'?'current':'')
-      a(href='/about') about
-    li(class=currentContext=='/'?'current':'')
-      a(href='/') news
-    li(class=currentContext&&currentContext.indexOf('/projects')==0?'current':'')
+    li(class=routeId=='page'&& page && page.key == 'about' ? 'current':'')
+      a(href='/pages/about') about
+    li(class=routeId=='news'?'current':'')
+      a(href='/news') news
+    li(class=(routeId == 'projects'|| routeId == 'projectDetail')?'current':'')
       a(href='/projects') projects
       if projects
         ul
           each p in projects
-            li(class=currentContext=='/projects/'+p.key?'current':'')
+            li(class=(routeId=='projectDetail'&&project &&project.key==p.key)?'current':'')
               a(href='/projects/'+p.key)=p.title
     li
-      a(href='https://www.facebook.com/tetksys', target='_blank') facebook
+      a(href='https://www.facebook.com/int3kt', target='_blank') facebook
     li
       a(href='https://vimeo.com/tekt', target='_blank') vimeo
     li

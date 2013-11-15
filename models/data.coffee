@@ -22,6 +22,11 @@ DbFacade =
     if type
       query.type = type
     @getItems(query)
+  getProjectItemBatches: (projectKey) ->
+    @getProjectItems(projectKey)
+      .pipe((items)->
+        util.batchItems(items)
+      )
   getPage: db.getPage
   getProjectPage: (projectKey, pageKey) ->
     @getPage("#{projectKey}:#{pageKey}")

@@ -95,7 +95,7 @@ var needs = {
       data.getProjectItems(key, itemType)
         .done(function(items)
         {
-          req.data.projectItems = items;
+          req.data.items = items;
           next();
         })
         .fail(next);
@@ -111,8 +111,13 @@ var needs = {
       data.getProjectPage(projectKey, pageKey)
         .done(function(page)
         {
-          req.data.page = page;
-          next();
+          if(!page)
+            next(new Error('page not found in project ' + projectKey + ': ' + pageKey));
+          else
+          {
+            req.data.page = page;
+            next();
+          }
         })
         .fail(next);
     }
@@ -121,8 +126,13 @@ var needs = {
       data.getPage(pageKey)
         .done(function(page)
         {
-          req.data.page = page;
-          next();
+          if(!page)
+            next(new Error('page not found: ' + pageKey));
+          else
+          {
+            req.data.page = page;
+            next();
+          }
         })
         .fail(next);
     }
@@ -178,7 +188,8 @@ var routes =
     [needs.projectList, needs.project, needs.projectItems],
     function(req, res)
     {
-      NOT_IMPLEMENTED();
+      req.data.title = 'project: ' + req.data.project.title +' : items';
+      res.render('../views/items/items.jade', req.data);
     }),
   projectNews: route('get', '/projects/:projectkey/news',
     [needs.projectList, needs.project, needs.newsItems],
@@ -196,7 +207,8 @@ var routes =
     [needs.page],
     function(req, res)
     {
-      NOT_IMPLEMENTED();
+      req.data.title = req.data.page.title;
+      res.render('../views/page.jade', req.data);
     }),
   news: route('get',
     [
@@ -206,7 +218,8 @@ var routes =
     [needs.newsItems],
     function(req, res)
     {
-      NOT_IMPLEMENTED();
+      req.data.title = 'news';
+      res.render('../views/news/index.jade', req.data);
     }),
   newsCategory: route('get', '/news/category/:category',
     [needs.newsItems],
@@ -220,26 +233,15 @@ exports.route = route;
 exports.routes = routes;
 exports.needs = needs;
 
+function sharedInit(req, res, next)
+{
+  req.data = req.data || {};
+  req.data.isAjax = req.xhr || req.param('ajax') === '1';
+  next();
+}
+
 exports.register = function(app)
 {
-  function sharedInit(req, res, next)
-  {
-    req.data = req.data || {};
-    req.data.isAjax = req.xhr;
-    next();
-  };
-
-//  app.param('projectkey', function(req, res, next, key)
-//  {
-//    data.getProject(key)
-//      .done(function(project)
-//      {
-//        req.projectKey = key;
-//        req.project = project;
-//        next();
-//      })
-//      .fail(next);
-//  });
 
   Object.keys(routes).forEach(function(routeId)
   {
@@ -250,7 +252,17 @@ exports.register = function(app)
     {
       paths.forEach(function(path)
       {
-        app[verb](path, [sharedInit, route.middleware], route);
+        app[verb](path,
+          [
+            sharedInit,
+            function(req,res,next)
+            {
+              req.data.routePath = path;
+              req.data.routeId = routeId;
+              next();
+            },
+            route.middleware
+          ], route);
       });
     });
   });

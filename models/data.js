@@ -28,6 +28,11 @@
       }
       return this.getItems(query);
     },
+    getProjectItemBatches: function(projectKey) {
+      return this.getProjectItems(projectKey).pipe(function(items) {
+        return util.batchItems(items);
+      });
+    },
     getPage: db.getPage,
     getProjectPage: function(projectKey, pageKey) {
       return this.getPage("" + projectKey + ":" + pageKey);

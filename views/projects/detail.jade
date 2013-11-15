@@ -12,5 +12,5 @@ block scripts
     var projectKey = "#{project.key}"
     $(function()
     {
-      $('#project-items').load('/items/'+projectKey);
+      $('#project-items').load('/projects/'+projectKey+'/items?ajax=1 #ajax-main > *');
     });
