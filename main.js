@@ -2,7 +2,8 @@
 var connect = require('connect'),
   express = require('express'),
   controllers = require('express-controller'),
-  port = (process.env.PORT || 8081);
+  port = (process.env.PORT || 8081),
+  routes = require('./app/routes');
 
 var app = express();
 
@@ -10,6 +11,7 @@ app.set('views', __dirname + '/views');
 app.set('view options', { layout: false });
 app.use(connect.static( __dirname + '/public'));
 app.use(app.router);
+routes.register(app);
 
 function NotFound(msg)
 {

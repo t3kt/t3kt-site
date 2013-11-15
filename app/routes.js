@@ -55,7 +55,7 @@ var needs = {
   {
     var key = req.param('projectkey');
     if(!key)
-      next();
+      next(new Error('no project key'));
     else if (req.data.projects)
     {
       var project;
@@ -66,11 +66,13 @@ var needs = {
         if (project.key && project.key.toLowerCase() == key)
         {
           req.data.project = project;
-          next();
           break;
         }
       }
-      next();
+      if(!req.data.project)
+        next(new Error('project not found: ' + key));
+      else
+        next();
     }
     else
     {
@@ -162,13 +164,15 @@ var routes =
     [needs.projectList],
     function(req, res)
     {
-      NOT_IMPLEMENTED();
+      req.data.title = 'projects';
+      res.render('../views/projects/index.jade', req.data);
     }),
   projectDetail: route('get', '/projects/:projectkey',
     [needs.projectList, needs.project],
     function(req, res)
     {
-      NOT_IMPLEMENTED();
+      req.data.title = 'project: ' + req.data.project.title;
+      res.render('../views/projects/detail.jade', req.data);
     }),
   projectItems: route('get', '/projects/:projectkey/items',
     [needs.projectList, needs.project, needs.projectItems],
@@ -218,11 +222,12 @@ exports.needs = needs;
 
 exports.register = function(app)
 {
-  app.use(function(req, res, next)
+  function sharedInit(req, res, next)
   {
     req.data = req.data || {};
+    req.data.isAjax = req.xhr;
     next();
-  });
+  };
 
 //  app.param('projectkey', function(req, res, next, key)
 //  {
@@ -245,7 +250,7 @@ exports.register = function(app)
     {
       paths.forEach(function(path)
       {
-        app[verb](path, route.middleware, route.handler);
+        app[verb](path, [sharedInit, route.middleware], route);
       });
     });
   });

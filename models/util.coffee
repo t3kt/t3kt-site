@@ -52,4 +52,29 @@ module.exports =
   reject: (args...) ->
     Deferred( (dfd)-> dfd.rejectWith(dfd, args) )
 
+  Batcher: Batcher
+
+  batchItems: (items, overrides) ->
+    new Batcher(overrides).run(items)
+
+class Batcher
+  constructor: (overrides) ->
+    _.extend(this, overrides)
+  startsNewBatch: (item, batch) ->
+    return !(batch?) or batch.type == item.type
+  createBatch: (item) ->
+    return { type: item.type, items: [item] }
+  addItem: (item, batch) ->
+    batch.items.push(item)
+  run: (items) ->
+    batches = []
+    batch = null
+    for item in items
+      if @startsNewBatch(item, batch)
+        batches.push( batch = @createBatch(item) )
+      else
+        @addItem(item, batch)
+    return batches
+
+
 

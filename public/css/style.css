@@ -67,7 +67,7 @@ header:before
 }
 nav
 {
-  width: 11em;
+  width: 12em;
   position: fixed;
   top: 5.3em;
   left: 0;
@@ -79,7 +79,7 @@ main
   padding: 1em;
   position: absolute;
   top: 5.3em;
-  left: 14em;
+  left: 15em;
   right: 0;
   min-height: 13em;
 }
@@ -136,8 +136,7 @@ nav ul
 nav li
 {
   margin-top: 1em;
-  list-style-type: circle;
-  list-style-position: inside;
+  list-style: circle inside;
 }
 nav
 {
@@ -147,6 +146,11 @@ nav
 nav li ul
 {
   text-indent: 1em;
+}
+
+ul, ol
+{
+  list-style-position: inside;
 }
 
 .item
