@@ -1,6 +1,7 @@
 var util = require("../models/util"),
   NOT_IMPLEMENTED = util.NOT_IMPLEMENTED,
-  data = require('../models/data');
+  data = require('../models/data'),
+  config = require('../config/config');
 
 //function Route(verb, path, middleware, handler)
 //{
@@ -237,6 +238,8 @@ function sharedInit(req, res, next)
 {
   req.data = req.data || {};
   req.data.isAjax = req.xhr || req.param('ajax') === '1';
+  req.data.analyticsSiteId = config.analyticsSiteId;
+  req.data.analyticsDomain = config.analyticsDomain;
   next();
 }
 

@@ -12,7 +12,9 @@ module.exports = {
   mongoHost: '',
   mongoPort: -1,
   mongoOptions: {},
-  mongoUri: ''
+  mongoUri: '',
+  analyticsSiteId: 'UA-41056285-1',
+  analyticsDomain: 't3kt.net'
 };
 
 try
