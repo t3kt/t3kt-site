@@ -1,0 +1,9 @@
+extends ../layout
+block content
+  form#login(method='POST', action='/admin/login')
+    label(for='username') User Name
+    input#username(type='text', name='username')
+    label(for='password') Password
+    input#password(type='password', name='password')
+    button(type='submit') Log In
+  div#message!= message

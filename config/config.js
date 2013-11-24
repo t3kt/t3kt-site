@@ -14,7 +14,8 @@ module.exports = {
   mongoOptions: {},
   mongoUri: '',
   analyticsSiteId: 'UA-41056285-1',
-  analyticsDomain: 't3kt.net'
+  analyticsDomain: 't3kt.net',
+  registrationAllowed: false
 };
 
 try

@@ -1,6 +1,7 @@
 var util = require("../models/util"),
   NOT_IMPLEMENTED = util.NOT_IMPLEMENTED,
   data = require('../models/data'),
+  d = require('./models'),
   config = require('../config/config');
 
 //function Route(verb, path, middleware, handler)
@@ -44,18 +45,28 @@ function route(verb, path, middleware, handler)
 var needs = {
   projectList: function (req, res, next)
   {
-    data.getProjects()
-      .done(function(projects)
+    d.getProjects(function (err, projects)
+    {
+      if (err)
+        next(err);
+      else
       {
         req.data.projects = projects;
         next();
-      })
-      .fail(next);
+      }
+    });
+//    data.getProjects()
+//      .done(function (projects)
+//      {
+//        req.data.projects = projects;
+//        next();
+//      })
+//      .fail(next);
   },
   project: function (req, res, next)
   {
     var key = req.param('projectkey');
-    if(!key)
+    if (!key)
       next(new Error('no project key'));
     else if (req.data.projects)
     {
@@ -70,49 +81,54 @@ var needs = {
           break;
         }
       }
-      if(!req.data.project)
+      if (!req.data.project)
         next(new Error('project not found: ' + key));
       else
         next();
     }
     else
     {
-      data.getProject(key.toLowerCase())
-        .done(function(proj)
+      d.getProject(key, function (err, project)
+      {
+        if (err)
+          next(err);
+        else if (!project)
+          next(new Error('project not found: ' + key));
+        else
         {
-          req.data.project = proj;
+          req.data.project = project;
           next();
-        })
-        .fail(next);
+        }
+      });
     }
   },
-  projectItems: function(req, res, next)
+  projectItems: function (req, res, next)
   {
     var key = req.param('projectkey'),
       itemType = req.param('itemtype');
-    if(!key)
+    if (!key)
       next();
     else
       data.getProjectItems(key, itemType)
-        .done(function(items)
+        .done(function (items)
         {
           req.data.items = items;
           next();
         })
         .fail(next);
   },
-  page: function(req, res, next)
+  page: function (req, res, next)
   {
     var projectKey = req.param('projectkey'),
       pageKey = req.param('pagekey');
-    if(!pageKey)
+    if (!pageKey)
       next();
-    else if(projectKey)
+    else if (projectKey)
     {
       data.getProjectPage(projectKey, pageKey)
-        .done(function(page)
+        .done(function (page)
         {
-          if(!page)
+          if (!page)
             next(new Error('page not found in project ' + projectKey + ': ' + pageKey));
           else
           {
@@ -124,35 +140,35 @@ var needs = {
     }
     else
     {
-      data.getPage(pageKey)
-        .done(function(page)
+      d.getPage(pageKey, function (err, page)
+      {
+        if (err)
+          next(err);
+        else if (!page)
+          next(new Error('page not found: ' + pageKey));
+        else
         {
-          if(!page)
-            next(new Error('page not found: ' + pageKey));
-          else
-          {
-            req.data.page = page;
-            next();
-          }
-        })
-        .fail(next);
+          req.data.page = page;
+          next();
+        }
+      });
     }
   },
-  newsItems: function(req, res, next)
+  newsItems: function (req, res, next)
   {
     var projectKey = req.param('projectkey'),
       category = req.param('category');
-    if(projectKey)
+    if (projectKey)
       data.getProjectItems(projectKey, 'entry')
-        .done(function(entries)
+        .done(function (entries)
         {
           req.data.newsEntries = entries;
           next();
         })
         .fail(next);
-    else if(category)
+    else if (category)
       data.getItems({type: 'entry', categories: category})
-        .done(function(entries)
+        .done(function (entries)
         {
           req.data.newsEntries = entries;
           next();
@@ -160,7 +176,7 @@ var needs = {
         .fail(next);
     else
       data.getItemsByType('entry')
-        .done(function(entries)
+        .done(function (entries)
         {
           req.data.newsEntries = entries;
           next();
@@ -173,40 +189,46 @@ var routes =
 {
   projects: route('get', '/projects',
     [needs.projectList],
-    function(req, res)
+    function (req, res)
     {
       req.data.title = 'projects';
       res.render('../views/projects/index.jade', req.data);
     }),
+  projectsJson: route('get', '/projects.json',
+    [needs.projectList],
+    function (req, res)
+    {
+      res.json(req.data.projects);
+    }),
   projectDetail: route('get', '/projects/:projectkey',
     [needs.projectList, needs.project],
-    function(req, res)
+    function (req, res)
     {
       req.data.title = 'project: ' + req.data.project.title;
       res.render('../views/projects/detail.jade', req.data);
     }),
   projectItems: route('get', '/projects/:projectkey/items',
     [needs.projectList, needs.project, needs.projectItems],
-    function(req, res)
+    function (req, res)
     {
-      req.data.title = 'project: ' + req.data.project.title +' : items';
+      req.data.title = 'project: ' + req.data.project.title + ' : items';
       res.render('../views/items/items.jade', req.data);
     }),
   projectNews: route('get', '/projects/:projectkey/news',
     [needs.projectList, needs.project, needs.newsItems],
-    function(req, res)
+    function (req, res)
     {
       NOT_IMPLEMENTED();
     }),
   projectPage: route('get', '/projects/:projectkey/pages/:pagekey',
     [needs.projectList, needs.project, needs.page],
-    function(req, res)
+    function (req, res)
     {
       NOT_IMPLEMENTED();
     }),
   page: route('get', '/pages/:pagekey',
     [needs.page],
-    function(req, res)
+    function (req, res)
     {
       req.data.title = req.data.page.title;
       res.render('../views/page.jade', req.data);
@@ -217,14 +239,14 @@ var routes =
       '/'
     ],
     [needs.newsItems],
-    function(req, res)
+    function (req, res)
     {
       req.data.title = 'news';
       res.render('../views/news/index.jade', req.data);
     }),
   newsCategory: route('get', '/news/category/:category',
     [needs.newsItems],
-    function(req, res)
+    function (req, res)
     {
       NOT_IMPLEMENTED();
     })
@@ -243,22 +265,21 @@ function sharedInit(req, res, next)
   next();
 }
 
-exports.register = function(app)
+exports.registerRoutes = function (app, routes)
 {
-
-  Object.keys(routes).forEach(function(routeId)
+  Object.keys(routes).forEach(function (routeId)
   {
     var route = routes[routeId],
       verbs = util.asArray(route.verb),
       paths = util.asArray(route.path);
-    verbs.forEach(function(verb)
+    verbs.forEach(function (verb)
     {
-      paths.forEach(function(path)
+      paths.forEach(function (path)
       {
         app[verb](path,
           [
             sharedInit,
-            function(req,res,next)
+            function (req, res, next)
             {
               req.data.routePath = path;
               req.data.routeId = routeId;
@@ -269,4 +290,9 @@ exports.register = function(app)
       });
     });
   });
+};
+
+exports.register = function (app)
+{
+  exports.registerRoutes(app, routes);
 };

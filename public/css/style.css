@@ -25,6 +25,11 @@ html {
 body
 {
   background-color: #495074;
+/*  background-image: url('/images/linearchaos-c-output-2013.05.16-5.jpg');
+  background-repeat: no-repeat;
+  background-position: top left;
+  background-attachment: fixed;
+  background-size: 100% 300px;*/
   font-family: 'Oxygen Mono', sans-serif;
   color: #226;
 }
@@ -34,6 +39,7 @@ header,
 main
 {
   background-color: #a5b3cc;
+  background-color: rgba(165, 179, 204, 0.5);
   border: 1px dashed #475074;
   border-radius: .5em;
   padding: 1em;
@@ -45,15 +51,17 @@ header
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
+  width: initial;
+  min-width: 14em;
+  display: inline-block;
   height: 4.2em;
   z-index: 10;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  -webkit-box-shadow: 0 0 .5em 1em #495074;
+  /*-webkit-box-shadow: 0 0 .5em 1em #495074;
   -moz-box-shadow: 0 0 .5em 1em #495074;
-  box-shadow: 0 0 .5em 1em #495074;
+  box-shadow: 0 0 .5em 1em #495074;*/
 }
 header:before
 {
@@ -63,7 +71,18 @@ header:before
   left: 0;
   right: 0;
   height: 1em;
-  background-color: #495074;
+/*  background-color: #495074;*/
+}
+#banner
+{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 300px;
+  width: 100%;
+  z-index: -1;
+  box-shadow: inset 0 0 50px 50px rgb(73, 80, 116, 0.5);
 }
 nav
 {

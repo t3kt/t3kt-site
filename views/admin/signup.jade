@@ -1,0 +1,9 @@
+extends ../layout
+block content
+  form#signup(method='POST', action='/admin/signup')
+    label(for='username') User Name
+    input#username(type='text', name='username')
+    label(for='password') Password
+    input#password(type='password', name='password')
+    button(type='submit') Submit
+  div#message!= message
