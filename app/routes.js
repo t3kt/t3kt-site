@@ -1,6 +1,5 @@
 var util = require("../models/util"),
   NOT_IMPLEMENTED = util.NOT_IMPLEMENTED,
-  data = require('../models/data'),
   d = require('./models'),
   config = require('../config/config');
 
@@ -109,13 +108,16 @@ var needs = {
     if (!key)
       next();
     else
-      data.getProjectItems(key, itemType)
-        .done(function (items)
+      d.getProjectItems(key, itemType, function (err, items)
+      {
+        if (err)
+          next(err);
+        else
         {
           req.data.items = items;
           next();
-        })
-        .fail(next);
+        }
+      });
   },
   page: function (req, res, next)
   {
@@ -125,18 +127,18 @@ var needs = {
       next();
     else if (projectKey)
     {
-      data.getProjectPage(projectKey, pageKey)
-        .done(function (page)
+      d.getProjectPage(projectKey, pageKey, function (err, page)
+      {
+        if (err)
+          next(err);
+        else if (!page)
+          next(new Error('page not found in project ' + projectKey + ': ' + pageKey));
+        else
         {
-          if (!page)
-            next(new Error('page not found in project ' + projectKey + ': ' + pageKey));
-          else
-          {
-            req.data.page = page;
-            next();
-          }
-        })
-        .fail(next);
+          req.data.page = page;
+          next();
+        }
+      });
     }
     else
     {
@@ -157,31 +159,23 @@ var needs = {
   newsItems: function (req, res, next)
   {
     var projectKey = req.param('projectkey'),
-      category = req.param('category');
+      category = req.param('category'),
+      onResult = function (err, entries)
+      {
+        if (err)
+          next(err);
+        else
+        {
+          req.data.newsEntries = entries;
+          next();
+        }
+      };
     if (projectKey)
-      data.getProjectItems(projectKey, 'entry')
-        .done(function (entries)
-        {
-          req.data.newsEntries = entries;
-          next();
-        })
-        .fail(next);
+      d.getProjectItems(projectKey, 'entry', onResult);
     else if (category)
-      data.getItems({type: 'entry', categories: category})
-        .done(function (entries)
-        {
-          req.data.newsEntries = entries;
-          next();
-        })
-        .fail(next);
+      d.Item.find({entityType: 'entry', tags: category}, onResult);
     else
-      data.getItemsByType('entry')
-        .done(function (entries)
-        {
-          req.data.newsEntries = entries;
-          next();
-        })
-        .fail(next);
+      d.getItems('entry', onResult);
   }
 };
 
@@ -224,7 +218,8 @@ var routes =
     [needs.projectList, needs.project, needs.page],
     function (req, res)
     {
-      NOT_IMPLEMENTED();
+      req.data.title = req.data.project.title + ': ' + req.data.page.title;
+      res.render('../views/page.jade', req.data);
     }),
   page: route('get', '/pages/:pagekey',
     [needs.page],
@@ -248,7 +243,8 @@ var routes =
     [needs.newsItems],
     function (req, res)
     {
-      NOT_IMPLEMENTED();
+      req.data.title = 'news: ' + req.param('category');
+      res.render('../views/news/index.jade', req.data);
     })
 };
 

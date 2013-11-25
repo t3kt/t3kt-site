@@ -9,32 +9,28 @@ var util = require("../../models/util"),
   needs = routes.needs;
 
 
-function authenticate(name, pass, fn)
+function authenticate(name, pass, callback)
 {
   if (!module.parent) console.log('authenticating %s:%s', name, pass);
 
-  User.findOne({
-      username: name
-    },
-
+  models.getUser(name,
     function (err, user)
     {
       if (user)
       {
-        if (err) return fn(new Error('cannot find user'));
+        if (err) return callback(new Error('cannot find user'));
         hash(pass, user.salt, function (err, hash)
         {
-          if (err) return fn(err);
-          if (hash == user.hash) return fn(null, user);
-          fn(new Error('invalid password'));
+          if (err) return callback(err);
+          if (hash == user.hash) return callback(null, user);
+          callback(new Error('invalid password'));
         });
       }
       else
       {
-        return fn(new Error('cannot find user'));
+        return callback(new Error('cannot find user'));
       }
     });
-
 }
 
 var adminNeeds = exports.needs = {
@@ -60,19 +56,15 @@ var adminNeeds = exports.needs = {
   },
   userDoesNotExist: function (req, res, next)
   {
-    User.count({
-      username: req.body.username
-    }, function (err, count)
+    models.userExists(req.body.username, function (err, exists)
     {
-      if (count === 0)
-      {
-        next();
-      }
-      else
+      if (exists)
       {
         req.session.error = "User Exist";
         res.redirect("/admin/signup");
       }
+      else
+        next();
     });
   }
 }

@@ -1,5 +1,4 @@
-var connect = require('connect'),
-  express = require('express'),
+var express = require('express'),
   path = require('path'),
   port = (process.env.PORT || 8081),
   routes = require('./app/routes'),

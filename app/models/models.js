@@ -2,24 +2,23 @@ var mongoose = require('mongoose'),
   Schema = mongoose.Schema,
   _ = require('lodash');
 
-var UserSchema = new Schema({
-  username: String,
+var tokenField = {type: String, lowercase: true, trim: true},
+  dateField = {type: Date, default: Date.now},
+  contentField = {
+    dateType: tokenField,
+    data: Schema.Types.Mixed,
+    renderOptions: Schema.Types.Mixed
+  };
+
+var UserSchema = Schema({
+  username: _.extend({}, tokenField, {unique: true}),
   password: String,
   salt: String,
   hash: String
 });
 
-var keyField = {type: String, lowercase: true, trim: true},
-  dateField = {type: Date, default: Date.now};
-
-var contentField = {
-  dateType: keyField,
-  data: Schema.Types.Mixed,
-  renderOptions: Schema.Types.Mixed
-};
-
-var ProjectSchema = new Schema({
-  key: keyField,
+var ProjectSchema = Schema({
+  key: _.extend({}, tokenField, {unique: true}),
   title: String,
   blogCategories: [String],
   flickrSetId: String,
@@ -34,34 +33,58 @@ var ProjectSchema = new Schema({
 });
 
 var PageSchema = Schema({
-  key: keyField,
-  projectKey: keyField,
+  key: _.extend({}, tokenField, {index: true}),
+  project: tokenField,
   title: String,
   contentHtml: String,
   content: contentField,
   created: dateField,
   updated: dateField
 });
+PageSchema.index({key: 1, project: 1});
 
-function makeEntityType(type, fields)
-{
-  return new Schema(_.extend({
-    entityType: _.extend(keyField, {default: type}),
-    key: keyField,
-    projectKey: keyField,
-    created: dateField,
-    updated: dateField
-  }, fields));
-}
+var imageField = {
+  width: Number,
+  height: Number,
+  url: String
+};
+
+var ItemSchema = Schema({
+  entityType: tokenField,
+  key: tokenField,
+  project: [tokenField],
+  title: String,
+  created: dateField,
+  updated: dateField,
+  tags: [tokenField],
+
+  // external fields
+  external: {
+    source: tokenField,
+    id: tokenField,
+    url: String
+  },
+
+  // image / video fields
+  thumb: imageField,
+
+  // video fields
+  embed: _.extend({}, imageField, { content: contentField }),
+
+  // image fields
+  image: imageField
+});
 
 module.exports = {
   UserSchema: UserSchema,
   ProjectSchema: ProjectSchema,
   PageSchema: PageSchema,
+  ItemSchema: ItemSchema,
 
   User: mongoose.model('users', UserSchema),
   Project: mongoose.model('projects', ProjectSchema),
-  Page: mongoose.model('pages', PageSchema)
+  Page: mongoose.model('pages', PageSchema),
+  Item: mongoose.model('items', ItemSchema)
 };
 
 
