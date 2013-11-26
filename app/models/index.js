@@ -8,7 +8,15 @@ mongoose.connect(config.mongoUri);
 var User = exports.User = models.User,
   Project = exports.Project = models.Project,
   Page = exports.Page = models.Page,
-  Item = exports.Item = models.Item;
+  Item = exports.Item = models.Item,
+  Settings = exports.Settings = models.Settings;
+exports.models = {
+  User: User,
+  Project: Project,
+  Page: Page,
+  Item: Item,
+  Settings: Settings
+};
 
 exports.userExists = function (username, callback)
 {
@@ -46,12 +54,17 @@ exports.getProjectPage = function (projectKey, pageKey, callback)
 exports.getProjectItems = function (projectKey, itemType, callback)
 {
   var query = {project: projectKey.toLowerCase()};
-  if(itemType)
+  if (itemType)
     query.entityType = itemType;
   Item.find(query).exec(callback);
 };
 exports.getItems = function (itemType, callback)
 {
   Item.find({entityType: itemType}).exec(callback);
+};
+
+exports.getSettings = function (callback)
+{
+  Settings.findOne({}, callback);
 };
 

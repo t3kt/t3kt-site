@@ -4,6 +4,7 @@
   "author": "tekt <int3kt@gmail.com>",
   "version": "0.0.1",
   "dependencies": {
+    "async": "0.2.9",
     "connect": "2.11.0",
     "Deferred": "0.1.1",
     "express": "3.4.4",
@@ -19,8 +20,8 @@
   },
   "devDependencies": {
     "vows": "0.5.x",
-	"mocha": "*",
-	"should": "*"
+    "mocha": "*",
+    "should": "*"
   },
   "engines": {
     "node": "0.10.x",

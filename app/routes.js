@@ -1,7 +1,8 @@
 var util = require("../models/util"),
   NOT_IMPLEMENTED = util.NOT_IMPLEMENTED,
   d = require('./models'),
-  config = require('../config/config');
+  config = require('../config/config'),
+  async = require('async');
 
 //function Route(verb, path, middleware, handler)
 //{
@@ -42,6 +43,19 @@ function route(verb, path, middleware, handler)
 }
 
 var needs = {
+  settings: function (req, res, next)
+  {
+    d.getSettings(function (err, settings)
+    {
+      if (err)
+        next(err);
+      else
+      {
+        req.data.settings = settings;
+        next();
+      }
+    });
+  },
   projectList: function (req, res, next)
   {
     d.getProjects(function (err, projects)
@@ -182,11 +196,22 @@ var needs = {
 var routes =
 {
   projects: route('get', '/projects',
-    [needs.projectList],
-    function (req, res)
+    [needs.settings, needs.projectList],
+    function (req, res, next)
     {
-      req.data.title = 'projects';
-      res.render('../views/projects/index.jade', req.data);
+      async.map(req.data.projects,
+        function (project, done)
+        {
+          project.renderContent(['summary', 'description'], done);
+        },
+        function (err, projects)
+        {
+          if (err)
+            return next(err);
+          req.data.projects = projects;
+          req.data.title = 'projects';
+          res.render('../views/projects/index.jade', req.data);
+        });
     }),
   projectsJson: route('get', '/projects.json',
     [needs.projectList],
@@ -195,52 +220,68 @@ var routes =
       res.json(req.data.projects);
     }),
   projectDetail: route('get', '/projects/:projectkey',
-    [needs.projectList, needs.project],
-    function (req, res)
+    [needs.settings, needs.projectList, needs.project],
+    function (req, res, next)
     {
-      req.data.title = 'project: ' + req.data.project.title;
-      res.render('../views/projects/detail.jade', req.data);
+      req.data.project.renderContent(['summary', 'description'], function (err, project)
+      {
+        if (err)
+          return next(err);
+        req.data.project = project;
+        req.data.title = 'project: ' + req.data.project.title;
+        res.render('../views/projects/detail.jade', req.data);
+      });
     }),
   projectItems: route('get', '/projects/:projectkey/items',
-    [needs.projectList, needs.project, needs.projectItems],
+    [needs.settings, needs.projectList, needs.project, needs.projectItems],
     function (req, res)
     {
       req.data.title = 'project: ' + req.data.project.title + ' : items';
       res.render('../views/items/items.jade', req.data);
     }),
   projectNews: route('get', '/projects/:projectkey/news',
-    [needs.projectList, needs.project, needs.newsItems],
+    [needs.settings, needs.settings, needs.projectList, needs.project, needs.newsItems],
     function (req, res)
     {
       NOT_IMPLEMENTED();
     }),
   projectPage: route('get', '/projects/:projectkey/pages/:pagekey',
-    [needs.projectList, needs.project, needs.page],
+    [needs.settings, needs.projectList, needs.project, needs.page],
     function (req, res)
     {
-      req.data.title = req.data.project.title + ': ' + req.data.page.title;
-      res.render('../views/page.jade', req.data);
+      req.data.page.renderContent(['content'], function (err, page)
+      {
+        req.data.page = page;
+        req.data.title = req.data.project.title + ': ' + req.data.page.title;
+        res.render('../views/page.jade', req.data);
+      });
     }),
   page: route('get', '/pages/:pagekey',
-    [needs.page],
-    function (req, res)
+    [needs.settings, needs.page],
+    function (req, res, next)
     {
-      req.data.title = req.data.page.title;
-      res.render('../views/page.jade', req.data);
+      req.data.page.renderContent(['content'], function (err, page)
+      {
+        if (err)
+          return next(err);
+        req.data.page = page;
+        req.data.title = page.title;
+        res.render('../views/page.jade', req.data);
+      });
     }),
   news: route('get',
     [
       '/news',
       '/'
     ],
-    [needs.newsItems],
+    [needs.settings, needs.newsItems],
     function (req, res)
     {
       req.data.title = 'news';
       res.render('../views/news/index.jade', req.data);
     }),
   newsCategory: route('get', '/news/category/:category',
-    [needs.newsItems],
+    [needs.settings, needs.newsItems],
     function (req, res)
     {
       req.data.title = 'news: ' + req.param('category');

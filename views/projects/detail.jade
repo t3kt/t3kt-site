@@ -5,7 +5,7 @@ include ../mixins
 block content
   article
     div.project-description
-      != project.descriptionHtml || project.summaryHtml
+      != project.descriptionRendered || project.summaryRendered
     div#project-items
 block scripts
   script(defer).

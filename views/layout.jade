@@ -22,9 +22,10 @@ else
       link(rel='shortcut icon', href='/images/favicon.png')
       link(rel='stylesheet', href='//fonts.googleapis.com/css?family=Oxygen+Mono', type='text/css')
       link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css')
+      style= '#banner{background-image:linear-gradient(to bottom, rgba(73, 80, 116, 0), rgba(73, 80, 116, .9) 60%, rgba(73, 80, 116, 1)), url(\'' + (banner||(project&&project.bannerUrl)||settings.defaultBannerUrl) + '\');}'
       block head
     body
-      img#banner(src='/images/linearchaos-c-output-2013.05.16-5.jpg')
+      div#banner
       header
         h1
           a(href='/') tekt

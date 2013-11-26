@@ -1,31 +1,34 @@
-
 var _ = require('lodash');
 
-module.exports = {
+var config = {
   flickrApiKey: '',
-  blogFeedUrl:'http://tetk.blogspot.com/feeds/posts/default?alt=json',
+  blogFeedUrl: 'http://tetk.blogspot.com/feeds/posts/default?alt=json',
   cacheTimeout: 180000,
-  mongoConnectionUrl: 'mongodb://$OPENSHIFT_MONGODB_DB_HOST:$OPENSHIFT_MONGODB_DB_PORT/',
-  mongoRootUser: '',
-  mongoRootPassword: '',
-  mongoDbName: '',
-  mongoHost: '',
-  mongoPort: -1,
   mongoOptions: {},
   mongoUri: '',
   analyticsSiteId: 'UA-41056285-1',
   analyticsDomain: 't3kt.net',
-  registrationAllowed: false
+  registrationAllowed: false,
+  adminUser: null,
+  adminPass: null
 };
+
+_.merge(config, {
+  mongoUri: process.env.MONGOHQ_URL,
+  adminUser: process.env.FORMAGE_ADMIN_USER,
+  adminPass: process.env.FORMAGE_ADMIN_PASS,
+  analyticsSiteId: process.env.ANALYTICS_SITE_ID,
+  analyticsDomain: process.env.ANALYTICS_DOMAIN,
+  flickrApiKey: process.env.FLICKR_API_KEY
+})
 
 try
 {
-  _.extend(module.exports, require('./config.private.json'));
+  _.merge(config, require('./config.private.json'));
 }
-catch(e)
+catch (e)
 {
   // do nothing
 }
-var mongoUri = process.env.MONGOHQ_URL;
-if(mongoUri)
-  module.exports.mongoUri = process.env.MONGOHQ_URL;
+
+module.exports = config;

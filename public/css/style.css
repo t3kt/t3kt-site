@@ -25,11 +25,6 @@ html {
 body
 {
   background-color: #495074;
-/*  background-image: url('/images/linearchaos-c-output-2013.05.16-5.jpg');
-  background-repeat: no-repeat;
-  background-position: top left;
-  background-attachment: fixed;
-  background-size: 100% 300px;*/
   font-family: 'Oxygen Mono', sans-serif;
   color: #226;
 }
@@ -51,7 +46,6 @@ header
   position: fixed;
   top: 0;
   left: 0;
-  width: initial;
   min-width: 14em;
   display: inline-block;
   height: 4.2em;
@@ -82,7 +76,15 @@ header:before
   height: 300px;
   width: 100%;
   z-index: -1;
-  box-shadow: inset 0 0 50px 50px rgb(73, 80, 116, 0.5);
+  /*box-shadow: inset 0 0 50px 50px rgba(73, 80, 116, 0.5);*/
+  opacity: .5;
+  background-image:
+    linear-gradient(to bottom, rgba(73, 80, 116, 0), rgba(73, 80, 116, .9) 60%, rgba(73, 80, 116, 1)),
+    url('/images/linearchaos-c-output-2013.05.16-5.jpg');
+  background-repeat: no-repeat;
+  background-position: top left;
+  background-attachment: fixed;
+  background-size: 100% 300px;
 }
 nav
 {

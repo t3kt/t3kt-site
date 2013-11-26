@@ -3,11 +3,11 @@ var jade = require('jade'),
   renderers = exports.renderers = {},
   defaultType = 'raw';
 
-renderers['raw'] = function (content, callback)
+renderers['raw'] = renderers['html'] = function (content, callback)
 {
   callback(null, content.data || '');
 };
-renderers['jade'] = function(content, callback)
+renderers['jade'] = function (content, callback)
 {
   var opts = _.extend({
     pretty: true
@@ -23,10 +23,10 @@ function render(content, callback)
   }
   else
   {
-    var renderer = renderers[content.dateType || defaultType];
+    var renderer = renderers[content.dataType || defaultType];
     if (!renderer)
     {
-      callback(new Error('Content type not supported: ' + content.dateType));
+      callback(new Error('Content type not supported: ' + content.dataType));
     }
     else
     {

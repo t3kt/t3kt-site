@@ -6,4 +6,4 @@ block content
       h3
         a(href='/Projects/'+project.key)=project.title
       div.project-description
-        != project.summaryHtml || project.descriptionHtml
+        != project.summaryRendered || project.descriptionRendered
