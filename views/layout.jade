@@ -22,7 +22,6 @@ else
       link(rel='stylesheet', href='/css/main.css')
       link(rel='shortcut icon', href='/images/favicon.png')
       link(rel='stylesheet', href='//fonts.googleapis.com/css?family=Oxygen+Mono', type='text/css')
-      //link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css')
       link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.3/example1/colorbox.css')
       style#banner-style.
         #banner{
@@ -33,9 +32,10 @@ else
       block head
     body
       div#banner
-      header
+      header#site-header
         h1
           a(href='/') tekt
+      header#page-header
         h2=title
       block navmenu
         include navmenu

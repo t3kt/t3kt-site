@@ -1,27 +1,4 @@
-html,
-button,
-input,
-select,
-textarea {
-    color: #222;
-}
 
-header
-{
-  /*-webkit-box-shadow: 0 0 .5em 1em #495074;
-  -moz-box-shadow: 0 0 .5em 1em #495074;
-  box-shadow: 0 0 .5em 1em #495074;*/
-}
-/*header:before
-{
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1em;
-  background-color: #495074;
-}*/
 #banner
 {
   position: fixed;
@@ -32,12 +9,7 @@ header
   width: 100%;
   z-index: -1;
   opacity: .5;
-  background-image:
-    linear-gradient(to bottom, rgba(73, 80, 116, 0), rgba(73, 80, 116, .9) 60%, rgba(73, 80, 116, 1)),
-    url('/images/linearchaos-c-output-2013.05.16-5.jpg');
-  background-repeat: no-repeat;
-  background-position: top left;
-  background-attachment: fixed;
+  background: linear-gradient(to bottom, rgba(73, 80, 116, 0), rgba(73, 80, 116, .9) 60%, rgba(73, 80, 116, 1)), url('/images/linearchaos-c-output-2013.05.16-5.jpg') no-repeat fixed top left;
   background-size: 100% 300px;
 }
 
@@ -89,7 +61,8 @@ a:hover
 }
 .item-video
 {
-  max-width: 400px;
+  /*max-width: 400px;*/
+  max-width: none;
 }
 .item-title
 {

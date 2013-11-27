@@ -39,8 +39,6 @@ function renderFields(obj, fields, callback)
       function (field, done)
       {
         var c = obj[field];
-        if (!c && obj[field + 'Html'])
-          c = {dataType: 'html', data: obj[field + 'Html']};
         if (!c)
           done();
         else

@@ -36,9 +36,7 @@ var ProjectSchema = Schema({
   flickrSetId: String,
   vimeoAlbumId: String,
   githubRepo: String,
-  summaryHtml: {type: Schema.Types.Html},
   summary: contentField,
-  descriptionHtml: {type: Schema.Types.Html},
   description: contentField,
   created: dateField,
   updated: dateField,
@@ -50,7 +48,6 @@ var PageSchema = Schema({
   key: _.extend({}, tokenField, {index: true}),
   project: tokenField,
   title: {type: String, required: true},
-  contentHtml: {type: Schema.Types.Html},
   content: contentField,
   created: dateField,
   updated: dateField

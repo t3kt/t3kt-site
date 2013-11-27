@@ -14,7 +14,9 @@ app.set('mongo', config.mongoUri);
 
 app.configure(function ()
 {
-  app.use(express.bodyParser());
+  //app.use(express.bodyParser());
+  app.use(express.json());
+  app.use(express.urlencoded());
   app.use(express.methodOverride());
   app.use(express.cookieParser('t3ktauth'));
   app.use(express.cookieSession({cookie: {maxAge: 1000 * 60 * 60 * 24}}));

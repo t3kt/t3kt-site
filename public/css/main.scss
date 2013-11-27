@@ -2,12 +2,18 @@ $page-background-color: #495074;
 $main-text-color: #226;
 $panel-background-color: rgba(#a5b3cc, 0.5);
 $selection-highlight-color: #a5b3cc;
-$nav-width: 12em;
+$nav-width: 13em;
 $main-panel-margin: 1em;
 $main-panel-padding: 1em;
 $main-header-height: 2.2em;
 $main-header-min-width: 14em;
 $nav-min-height: 13em;
+$collapsed-side-width: 1em;
+$semi-hidden-opacity: .4;
+$collapse-duration: 1s;
+$expand-duration: .5s;
+$fade-out-duration: 1s;
+$fade-in-duration: .5s;
 
 @mixin safe-rgba-property($property, $rgba-color) {
   #{$property}: rgb(red($rgba-color), green($rgba-color), blue($rgba-color));
@@ -18,6 +24,13 @@ $nav-min-height: 13em;
   -webkit-box-sizing: $value;
   -moz-box-sizing: $value;
   box-sizing: $value;
+}
+
+@mixin transition($properties...) {
+  -moz-transition: $properties;
+  -webkit-transition: $properties;
+  -o-transition: $properties;
+  transition: $properties;
 }
 
 body {
@@ -50,61 +63,128 @@ body {
   position: fixed;
 }
 
-header {
+%main-header-panel {
   @extend %main-fixed-panel;
-  height: $main-header-height;
-  top: 0;
-  left: 0;
-  display: inline-block;
-  min-width: $nav-width;
   z-index: 10;
   text-transform: lowercase;
+  min-height: $main-header-height;
+  top: 0;
+}
 
-  h1,
-  h2 {
-    display: inline-block;
-  }
+#site-header {
+  @extend %main-header-panel;
+  left: 0;
+  width: $nav-width;
+  overflow: hidden;
+  opacity: 1;
+  @include transition(opacity $fade-out-duration, width $expand-duration);
 
   h1 {
+    display: inline-block;
     font-size: 1.5em;
-
-    &:after {
-      content: "|";
-      margin-left: .1em;
-      margin-right: .3em;
-      font-size: 1.1em;
-      color: $page-background-color;
-      font-weight: normal;
-    }
   }
 
-  h2 {
-    font-size: 1.2em;
+  .scrolled-down & {
+    width: $collapsed-side-width;
+    @include transition(opacity $fade-out-duration, width $collapse-duration);
+    opacity: $semi-hidden-opacity;
   }
 }
 
-nav {
+#page-header {
+  @extend %main-header-panel;
+  left: $nav-width + 3 * $main-panel-margin;
+  opacity: 1;
+  @include transition(opacity $fade-in-duration, left $expand-duration);
+
+  h2 {
+    display: inline-block;
+    font-size: 1.2em;
+  }
+
+  .scrolled-down & {
+    left: $collapsed-side-width + 3 * $main-panel-margin;
+  }
+
+  .scrolled-down &:not(:hover) {
+    opacity: $semi-hidden-opacity;
+    @include transition(opacity $fade-out-duration, left $collapse-duration);
+    box-shadow: 0 0 $main-panel-margin .5em rgba($page-background-color, .2);
+  }
+}
+
+#main-nav {
   @extend %main-fixed-panel;
   top: $main-header-height + 3 * $main-panel-margin;
   left: 0;
   width: $nav-width;
-  padding-top: 0;
   min-height: $nav-min-height;
+}
+
+nav {
   text-transform: lowercase;
 
   ul {
     padding-left: 0;
+    list-style: none;
   }
 
   li {
-    margin-top: 1em;
-    list-style: circle inside;
+    margin-top: .1em;
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+
+    a {
+      display: block;
+      padding: $main-panel-padding / 2;
+    }
+
+    a,
+    &.out-of-scope:hover > a {
+      border: 1px solid $page-background-color;
+    }
+
+    &.out-of-scope > a {
+      border-color: rgba($page-background-color, .2);
+      padding: $main-panel-padding / 4;
+    }
+
     &.current > a {
       font-weight: bold;
     }
     ul {
-      text-indent: 1em;
+      padding-left: $main-panel-padding;
     }
+  }
+}
+
+.icon-link {
+  @include box-sizing(border-box);
+  padding: 0;
+  text-indent: -999999px;
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+  overflow: hidden;
+  background-repeat: no-repeat;
+
+  nav & {
+    margin-right: .1em;
+    width: 24%;
+    width: calc(25% - .1em);
+    background-position: 50% 0;
+
+    &:last-child {
+      margin-right: 0;
+      width: 25%;
+    }
+  }
+}
+
+@each $icon in facebook, github, vimeo, flickr, blogger {
+  .icon-#{$icon} {
+    background-image: url('../images/' + $icon + '-32.png');
   }
 }
 

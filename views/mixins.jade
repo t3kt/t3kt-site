@@ -3,26 +3,28 @@ mixin time(t)
     time=t.format('YYYY.MM.DD HH:mm:ss')
 
 mixin video(vid)
-  figure.item.item-video(id=vid.id)
+  figure.item.item-video(data-key=vid.key)
     //figcaption.item-title
       if vid.detailUrl
         a(href=vid.detailUrl, target='_blank')=vid.title
       else
         span= vid.title
-    if vid.embedHtml
-      != vid.embedHtml
-    else
-      iframe(src=vid.embedUrl, width=vid.embedWidth, height=vid.embedHeight, frameborder=0, webkitAllowFullScreen, mozallowfullscreen, allowfullscreen)
+    img.load-video(src=vid.small.url, alt=vid.title, width=vid.small.width, height=vid.small.height)
+    //
+      if vid.embedHtml
+        != vid.embedHtml
+      else
+        iframe(src=vid.embedUrl, width=vid.embedWidth, height=vid.embedHeight, frameborder=0, webkitAllowFullScreen, mozallowfullscreen, allowfullscreen)
     mixin time(vid.posted)
 
 mixin commit(com)
-  div.item.item-commit(id=com.id)
+  div.item.item-commit(data-key=com.key)
     div.item-content=com.title
     a(href=com.detailUrl,target='_blank') browse code
     mixin time(com.posted)
 
 mixin image(img)
-  figure.item.item-image(id=img.id)
+  figure.item.item-image(data-key=img.key)
     //figcaption.item-title
       a(href=img.detailUrl, target='_blank')=img.title
     a(href=img.full.url, class='image-grid-link', rel='images', title=img.title)
@@ -30,7 +32,7 @@ mixin image(img)
     mixin time(img.posted)
 
 mixin blogEntry(ent)
-  article.item.item-entry(id=ent.id)
+  article.item.item-entry(data-key=ent.key)
     h3.item-title
       if ent.detailUrl
         a(href=ent.detailUrl, target='_blank')=ent.title

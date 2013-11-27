@@ -8,6 +8,16 @@ var tekt = (function ()
   {
     var group = 'box-group-' + ($(area).attr('id') || 'main');
     $('figure.item-image a', area).colorbox({rel: group});
+
+    $(area).off('click.loadvideo')
+      .on('click.loadvideo', '.load-video', function ()
+      {
+        var vidId = $(this).closest('[data-key]').attr('data-key');
+        if (vidId)
+        {
+          $(this).parent().load('/video/' + vidId + '/embed');
+        }
+      });
     //TODO...
   };
 
@@ -31,6 +41,9 @@ if (window.$)
   {
     var T = tekt;
     T.initItemViewers(window);
-
+    $(window).bind('scroll', function ()
+    {
+      $(document.body).toggleClass('scrolled-down', document.body.scrollTop > 5);
+    });
   });
 }
