@@ -41,9 +41,11 @@ if (window.$)
   {
     var T = tekt;
     T.initItemViewers(window);
-    $(window).bind('scroll', function ()
-    {
-      $(document.body).toggleClass('scrolled-down', document.body.scrollTop > 5);
-    });
+    $(window)
+      .bind('scroll', function ()
+      {
+        $(document.body).toggleClass('scrolled-down', (document.body.scrollTop || document.documentElement.scrollTop) > 5);
+      })
+      .trigger('scroll');
   });
 }
