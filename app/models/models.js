@@ -104,8 +104,16 @@ var imageField = {
   url: String
 };
 
+var itemTypes =
+{
+  video: 'video',
+  image: 'image',
+  commit: 'commit',
+  blogEntry: 'blogEntry'
+};
+
 var ItemSchema = Schema({
-  entityType: _.extend({}, tokenField, {required: true}),
+  entityType: _.extend({}, tokenField, {required: true, enum: Object.keys(itemTypes)}),
   key: _.extend({}, tokenField, {required: true}),
   project: [tokenField],
   title: {type: String, required: true},
@@ -117,7 +125,8 @@ var ItemSchema = Schema({
   external: {
     source: tokenField,
     id: tokenField,
-    url: String
+    url: String,
+    data: Schema.Types.Mixed
   },
 
   // image / video fields
@@ -127,7 +136,10 @@ var ItemSchema = Schema({
   embed: _.extend({}, imageField, { content: contentField }),
 
   // image fields
-  image: imageField
+  full: imageField,
+  small: imageField,
+  square: imageField,
+  medium: imageField
 });
 ItemSchema.methods.renderContent = renderContentFields;
 
@@ -136,6 +148,8 @@ var User = mongoose.model('users', UserSchema),
   Page = mongoose.model('pages', PageSchema),
   Item = mongoose.model('items', ItemSchema),
   Settings = mongoose.model('settings', SettingsSchema);
+
+Item.types = itemTypes;
 
 module.exports = exports = {
   SettingsSchema: SettingsSchema,

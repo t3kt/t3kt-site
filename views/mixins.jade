@@ -26,7 +26,7 @@ mixin image(img)
     //figcaption.item-title
       a(href=img.detailUrl, target='_blank')=img.title
     a(href=img.full.url, class='image-grid-link', rel='images', title=img.title)
-      img(src=img.thumb.url, alt=img.title, width=img.thumb.width, height=img.thumb.height)
+      img(src=img.small.url, alt=img.title, width=img.small.width, height=img.small.height)
     mixin time(img.posted)
 
 mixin blogEntry(ent)
