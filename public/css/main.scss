@@ -1,38 +1,127 @@
 $page-background-color: #495074;
 $main-text-color: #226;
-$panel-background-color-rgb: #a5b3cc;
-$panel-background-opacity: 0.5;
-$panel-background-color: rgba($panel-background-color-rgb, $panel-background-opacity);
+$panel-background-color: rgba(#a5b3cc, 0.5);
+$selection-highlight-color: #a5b3cc;
+$nav-width: 12em;
+$main-panel-margin: 1em;
+$main-panel-padding: 1em;
+$main-header-height: 2.2em;
+$main-header-min-width: 14em;
+$nav-min-height: 13em;
 
-@mixin safe-rgba-property($property, $rgba-color)
-{
+@mixin safe-rgba-property($property, $rgba-color) {
   #{$property}: rgb(red($rgba-color), green($rgba-color), blue($rgba-color));
   #{$property}: $rgba-color;
 }
 
-body
-{
+@mixin box-sizing($value) {
+  -webkit-box-sizing: $value;
+  -moz-box-sizing: $value;
+  box-sizing: $value;
+}
+
+body {
   background-color: $page-background-color;
   font-family: 'Oxygen Mono', sans-serif;
   color: $main-text-color;
+  line-height: normal;
 }
 
-%main-panel
-{
+::-moz-selection {
+  background: $selection-highlight-color;
+  text-shadow: none;
+}
+
+::selection {
+  background: $selection-highlight-color;
+  text-shadow: none;
+}
+
+%main-panel {
   @include safe-rgba-property(background-color, $panel-background-color);
+  border: 1px dashed $page-background-color;
+  border-radius: .5em;
+  padding: $main-panel-padding;
+  margin: $main-panel-margin;
 }
 
-nav
-{
+%main-fixed-panel {
   @extend %main-panel;
+  position: fixed;
 }
 
-header
-{
-  @extend %main-panel;
+header {
+  @extend %main-fixed-panel;
+  height: $main-header-height;
+  top: 0;
+  left: 0;
+  display: inline-block;
+  min-width: $nav-width;
+  z-index: 10;
+  text-transform: lowercase;
+
+  h1,
+  h2 {
+    display: inline-block;
+  }
+
+  h1 {
+    font-size: 1.5em;
+
+    &:after {
+      content: "|";
+      margin-left: .1em;
+      margin-right: .3em;
+      font-size: 1.1em;
+      color: $page-background-color;
+      font-weight: normal;
+    }
+  }
+
+  h2 {
+    font-size: 1.2em;
+  }
 }
 
-main
-{
+nav {
+  @extend %main-fixed-panel;
+  top: $main-header-height + 3 * $main-panel-margin;
+  left: 0;
+  width: $nav-width;
+  padding-top: 0;
+  min-height: $nav-min-height;
+  text-transform: lowercase;
+
+  ul {
+    padding-left: 0;
+  }
+
+  li {
+    margin-top: 1em;
+    list-style: circle inside;
+    &.current > a {
+      font-weight: bold;
+    }
+    ul {
+      text-indent: 1em;
+    }
+  }
+}
+
+main {
   @extend %main-panel;
+  position: absolute;
+  top: $main-header-height + 3 * $main-panel-margin;
+  left: $nav-width + 3 * $main-panel-margin;
+  right: 0;
+  min-height: $nav-min-height;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid $page-background-color;
+}
+
+ul, ol {
+  list-style-position: inside;
 }

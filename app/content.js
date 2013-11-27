@@ -2,19 +2,8 @@ var jade = require('jade'),
   _ = require('lodash'),
   async = require('async'),
   renderers = exports.renderers = {},
-  defaultType = 'raw';
-
-renderers['raw'] = renderers['html'] = function (content, callback)
-{
-  callback(null, content.data || '');
-};
-renderers['jade'] = function (content, callback)
-{
-  var opts = _.extend({
-    pretty: true
-  }, content.renderOptions);
-  jade.render(content.data, opts, callback);
-};
+  defaultType = 'raw',
+  marked = require('marked');
 
 function render(content, callback)
 {
@@ -80,3 +69,21 @@ function renderFields(obj, fields, callback)
 
 exports.render = render;
 exports.renderFields = renderFields;
+
+
+
+renderers['raw'] = renderers['html'] = function (content, callback)
+{
+  callback(null, content.data || '');
+};
+renderers['jade'] = function (content, callback)
+{
+  var opts = _.extend({
+    pretty: true
+  }, content.renderOptions);
+  jade.render(content.data, opts, callback);
+};
+renderers['md'] = function(content, callback)
+{
+  marked(content.data, {}, callback);
+};
