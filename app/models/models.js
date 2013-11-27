@@ -126,6 +126,7 @@ var ItemSchema = Schema({
     source: tokenField,
     id: tokenField,
     url: String,
+    pulled: dateField,
     data: Schema.Types.Mixed
   },
 

@@ -9,30 +9,13 @@ var models = require('../models'),
 var apiUrl = 'http://api.flickr.com/services/rest/',
   extras = 'date_upload,date_taken,last_update,tags,o_dims,path_alias,url_sq,url_t,url_s,url_m,url_o,owner_name';
 
-function log(message, etc)
+function pullFlickrImages(project, opts, callback)
 {
-  console.log.apply(console, ['(flickr pull): ' + message].concat([].slice.call(arguments, 1)));
-}
-
-function pullFlickrImages(project, callback)
-{
-  if (typeof(project) == 'string')
-  {
-    models.getProject(project, function (err, proj)
-    {
-      if (err)
-        callback(err);
-      else if (!proj)
-        callback(new Error('project not found: ', project));
-      else
-      {
-        pullFlickrImages(proj, callback);
-      }
-    });
-    return;
-  }
   if (!project.flickrSetId)
+  {
+    opts.log('project does not have a flickrSetId');
     callback();
+  }
   else
   {
     var reqUrl = url.format(_.merge(url.parse(apiUrl), {
@@ -45,7 +28,7 @@ function pullFlickrImages(project, callback)
         extras: extras
       }
     }));
-    log('pulling set: ', reqUrl);
+    opts.log('pulling set: ', reqUrl);
     request(reqUrl, function (error, response, body)
     {
       if (error)
@@ -61,12 +44,12 @@ function pullFlickrImages(project, callback)
         {
           var photos = responseData.photoset.photo,
             added = 0;
-          log('found ', photos.length, ' photos');
+          opts.log('found ', photos.length, ' photos');
           async.eachSeries(photos,
             function (photo, next)
             {
               var key = 'image:flickr:' + photo.id;
-              log('adding photo (key:', key, ')');
+              //opts.log('adding photo (key:', key, ')');
               models.Item.create(
                 {
                   entityType: models.Item.types.image,
@@ -80,6 +63,7 @@ function pullFlickrImages(project, callback)
                     source: 'flickr',
                     id: photo.id,
                     url: 'http://www.flickr.com/photos/' + (photo.path_alias || photo.ownername) + '/' + photo.id + '/',
+                    pulled: new Date(),
                     data: photo
                   },
 
@@ -113,13 +97,13 @@ function pullFlickrImages(project, callback)
                 {
                   if (err)
                   {
-                    log('error adding photo (key: ', key, '): ', err);
+                    opts.log('error adding photo (key:', key, '):', err);
                     next(err);
                   }
                   else
                   {
                     added++;
-                    log('added photo (key:', key, ')');
+                    opts.log('added photo (key:', key, ')');
                     next();
                   }
                 });
@@ -128,12 +112,12 @@ function pullFlickrImages(project, callback)
             {
               if (err)
               {
-                log('pull photos failed', err);
+                opts.log('pull photos failed', err);
                 callback(err);
               }
               else
               {
-                log('pull photos succeeded, added ', added);
+                opts.log('pull photos succeeded, added', added);
                 callback(null, added);
               }
             });
@@ -145,19 +129,3 @@ function pullFlickrImages(project, callback)
 
 module.exports = pullFlickrImages;
 
-if (!module.parent)
-{
-  (function ()
-  {
-    var projectKey = process.argv[2];
-    console.log('pulling flickr images for project', projectKey);
-    pullFlickrImages(projectKey, function (err, added)
-    {
-      if (err)
-        throw err;
-      else
-        console.log('PULL SUCCEEDED! added', added);
-      process.exit();
-    });
-  })();
-}
