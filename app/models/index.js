@@ -55,12 +55,16 @@ exports.getProjectItems = function (projectKey, itemType, callback)
 {
   var query = {project: projectKey.toLowerCase()};
   if (itemType)
-    query.entityType = itemType;
+    query.entityType = Item.resolveType(itemType);
   Item.find(query).exec(callback);
 };
 exports.getItems = function (itemType, callback)
 {
-  Item.find({entityType: itemType}).exec(callback);
+  Item.find({entityType: Item.resolveType(itemType)}).exec(callback);
+};
+exports.getItem = function (key, callback)
+{
+  Item.findOne({key: key.toLowerCase()}).exec(callback);
 };
 
 exports.getSettings = function (callback)

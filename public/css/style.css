@@ -22,19 +22,10 @@ html {
     text-shadow: none;
 }
 
-body
-{
-  background-color: #495074;
-  font-family: 'Oxygen Mono', sans-serif;
-  color: #226;
-}
-
 nav,
 header,
 main
 {
-  background-color: #a5b3cc;
-  background-color: rgba(165, 179, 204, 0.5);
   border: 1px dashed #475074;
   border-radius: .5em;
   padding: 1em;

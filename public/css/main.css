@@ -1,0 +1,8 @@
+body {
+  background-color: #495074;
+  font-family: 'Oxygen Mono', sans-serif;
+  color: #222266; }
+
+nav, header, main {
+  background-color: #a5b3cc;
+  background-color: rgba(165, 179, 204, 0.5); }

@@ -2,7 +2,8 @@ var util = require("../models/util"),
   NOT_IMPLEMENTED = util.NOT_IMPLEMENTED,
   d = require('./models'),
   config = require('../config/config'),
-  async = require('async');
+  async = require('async'),
+  getVimeoEmbed = require('./vimeoembed').getEmbed;
 
 //function Route(verb, path, middleware, handler)
 //{
@@ -128,6 +129,8 @@ var needs = {
           next(err);
         else
         {
+          if (itemType)
+            req.data.itemType = itemType;
           req.data.items = items;
           next();
         }
@@ -190,6 +193,27 @@ var needs = {
       d.Item.find({entityType: 'entry', tags: category}, onResult);
     else
       d.getItems('entry', onResult);
+  },
+  item: function (req, res, next)
+  {
+    var itemKey = req.param('itemkey');
+    if (!itemKey)
+      next();
+    else
+    {
+      d.getItem(itemKey, function (err, item)
+      {
+        if (err)
+          next(err);
+        else if (!item)
+          next(new Error('item not found: ' + itemKey));
+        else
+        {
+          req.data.item = item;
+          next();
+        }
+      })
+    }
   }
 };
 
@@ -239,11 +263,29 @@ var routes =
       req.data.title = 'project: ' + req.data.project.title + ' : items';
       res.render('../views/items/items.jade', req.data);
     }),
-  projectNews: route('get', '/projects/:projectkey/news',
-    [needs.settings, needs.settings, needs.projectList, needs.project, needs.newsItems],
+  projectItemsOfType: route('get', '/projects/:projectkey/:itemtype',
+    [needs.settings, needs.projectList, needs.project, needs.projectItems],
     function (req, res)
     {
-      NOT_IMPLEMENTED();
+      req.data.title = 'project: ' + req.data.project.title + ' : ' + req.data.itemType;
+      res.render('../views/items/items.jade', req.data);
+    }),
+  videoEmbed: route('get', '/video/:itemkey/embed',
+    [needs.settings, needs.item],
+    function (req, res, next)
+    {
+      var video = req.data.item,
+        params = req.query;
+      getVimeoEmbed(video, params, function (err, embed)
+      {
+        if (err)
+          next(err);
+        else
+        {
+          res.type('html');
+          res.send(embed.html);
+        }
+      });
     }),
   projectPage: route('get', '/projects/:projectkey/pages/:pagekey',
     [needs.settings, needs.projectList, needs.project, needs.page],

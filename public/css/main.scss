@@ -1,0 +1,38 @@
+$page-background-color: #495074;
+$main-text-color: #226;
+$panel-background-color-rgb: #a5b3cc;
+$panel-background-opacity: 0.5;
+$panel-background-color: rgba($panel-background-color-rgb, $panel-background-opacity);
+
+@mixin safe-rgba-property($property, $rgba-color)
+{
+  #{$property}: rgb(red($rgba-color), green($rgba-color), blue($rgba-color));
+  #{$property}: $rgba-color;
+}
+
+body
+{
+  background-color: $page-background-color;
+  font-family: 'Oxygen Mono', sans-serif;
+  color: $main-text-color;
+}
+
+%main-panel
+{
+  @include safe-rgba-property(background-color, $panel-background-color);
+}
+
+nav
+{
+  @extend %main-panel;
+}
+
+header
+{
+  @extend %main-panel;
+}
+
+main
+{
+  @extend %main-panel;
+}

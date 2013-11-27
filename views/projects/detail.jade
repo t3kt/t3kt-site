@@ -12,5 +12,8 @@ block scripts
     var projectKey = "#{project.key}"
     $(function()
     {
-      $('#project-items').load('/projects/'+projectKey+'/items?ajax=1 #ajax-main > *');
+      $('#project-items').load('/projects/'+projectKey+'/items?ajax=1 #ajax-main > *', function()
+      {
+        tekt.initItemViewers('#project-items');
+      });
     });

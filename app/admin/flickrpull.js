@@ -29,10 +29,10 @@ function pullFlickrImages(project, opts, callback)
       }
     }));
     opts.log('pulling set: ', reqUrl);
-    request(reqUrl, function (error, response, body)
+    request(reqUrl, function (err, response, body)
     {
-      if (error)
-        callback(error);
+      if (err)
+        callback(err);
       else if (response.statusCode != 200)
         callback(new Error('Error getting photos from flickr [' + response.statusCode + ']: ' + body));
       else

@@ -2,60 +2,20 @@ var mongoose = require('mongoose'),
   Schema = mongoose.Schema,
   _ = require('lodash'),
   formage = require('formage'),
-  content = require('../content'),
-  async = require('async');
+  content = require('../content');
 
 var tokenField = {type: String, lowercase: true, trim: true},
   dateField = {type: Date, default: Date.now, widget: formage.widgets.DateTimeWidget},
   requiredDateField = _.extend({}, dateField, {required: true}),
   contentField = {
-    dataType: _.extend({}, tokenField, {enum: [''].concat(Object.keys(content.renderers))}),
+    dataType: _.merge({}, tokenField, {enum: [''].concat(Object.keys(content.renderers))}),
     data: Schema.Types.Text,
     renderOptions: Schema.Types.Mixed
   };
 
 function renderContentFields(fields, callback)
 {
-  var count = fields.length,
-    obj = this;
-  if (obj.toObject)
-    obj = obj.toObject();
-  else
-    obj = _.extend({}, obj);
-  if (count == 0)
-    callback(null, obj);
-  else
-  {
-    async.each(fields,
-      function (field, done)
-      {
-        var c = obj[field];
-        if (!c && obj[field + 'Html'])
-          c = {dataType: 'html', data: obj[field + 'Html']};
-        if (!c)
-          done();
-        else
-        {
-          content.render(c, function (err, rendered)
-          {
-            if (err)
-              done(err);
-            else
-            {
-              obj[field + 'Rendered'] = rendered;
-              done();
-            }
-          });
-        }
-      },
-      function (err)
-      {
-        if (err)
-          callback(err);
-        else
-          callback(null, obj);
-      });
-  }
+  content.renderFields(this, fields, callback);
 }
 
 var SettingsSchema = Schema({
@@ -111,6 +71,15 @@ var itemTypes =
   commit: 'commit',
   blogEntry: 'blogEntry'
 };
+var itemTypeAliases =
+  _.merge({}, itemTypes,
+    {
+      videos: 'video',
+      images: 'image',
+      commits: 'commit',
+      blogEntries: 'blogEntry',
+      news: 'blogEntry'
+    });
 
 var ItemSchema = Schema({
   entityType: _.extend({}, tokenField, {required: true, enum: Object.keys(itemTypes)}),
@@ -151,6 +120,10 @@ var User = mongoose.model('users', UserSchema),
   Settings = mongoose.model('settings', SettingsSchema);
 
 Item.types = itemTypes;
+Item.resolveType = function (type)
+{
+  return type && (itemTypeAliases[type.toLowerCase()]);
+};
 
 module.exports = exports = {
   SettingsSchema: SettingsSchema,
