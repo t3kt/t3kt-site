@@ -31,6 +31,12 @@ var tekt = (function ()
     T.pageId = pageId;
     switch (pageId)
     {
+      case 'projectDetail':
+
+        $('#project-items').load('/projects/' + o.projectKey + '/items?ajax=1 #ajax-main > *', function ()
+        {
+          tekt.initItemViewers('#project-items');
+        });
     }
     // TODO: ...
   };

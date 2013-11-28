@@ -9,11 +9,7 @@ block content
     div#project-items
 block scripts
   script(defer).
-    var projectKey = "#{project.key}"
     $(function()
     {
-      $('#project-items').load('/projects/'+projectKey+'/items?ajax=1 #ajax-main > *', function()
-      {
-        tekt.initItemViewers('#project-items');
-      });
+      tekt.initPage('projectDetail', {projectKey:'#{project.key}'});
     });
