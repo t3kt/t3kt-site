@@ -3,37 +3,8 @@ var util = require("../models/util"),
   d = require('./models'),
   config = require('../config/config'),
   async = require('async'),
-  getVimeoEmbed = require('./vimeoembed').getEmbed;
-
-//function Route(verb, path, middleware, handler)
-//{
-//  this.verbs = Array.isArray(verb) ? verb : [verb];
-//  if(Array.isArray(path))
-//  {
-//    this.paths = path;
-//    this.path = path[0];
-//  }
-//  else
-//  {
-//    this.paths = [path];
-//    this.path = path;
-//  }
-//  this.middleware = middleware;
-//  this.handler = handler;
-//}
-//Route.prototype.register = function(app)
-//{
-//  var verbs = this.verbs,
-//    middleware = this.middleware,
-//    handler = this.handler;
-//  this.paths.forEach(function(path)
-//  {
-//    verbs.forEach(function(verb)
-//    {
-//      app[verb](path, middleware, handler);
-//    });
-//  });
-//};
+  getVimeoEmbed = require('./vimeoembed').getEmbed,
+  _ = require('lodash');
 
 function route(verb, path, middleware, handler)
 {
@@ -337,10 +308,11 @@ exports.needs = needs;
 
 function sharedInit(req, res, next)
 {
-  req.data = req.data || {};
-  req.data.isAjax = req.xhr || req.param('ajax') === '1';
-  req.data.analyticsSiteId = config.analyticsSiteId;
-  req.data.analyticsDomain = config.analyticsDomain;
+  req.data = _.merge({
+    isAjax: req.xhr || req.param('ajax') === '1' || !!req.header('X-PJAX'),
+    analyticsSiteId: config.analyticsSiteId,
+    analyticsDomain: config.analyticsDomain
+  }, req.data || {});
   next();
 }
 

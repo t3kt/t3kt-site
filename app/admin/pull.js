@@ -2,12 +2,13 @@ var models = require('../models'),
   _ = require('lodash'),
   async = require('async');
 
-var sources = exports.sources = {
+var sources = {
   flickr: require('./flickrpull'),
-  vimeo: require('./vimeopull')
+  vimeo: require('./vimeopull'),
+  github: require('./githubpull')
 };
 
-function pull(source, project, opts, callback)
+function pull(source, projects, opts, callback)
 {
   opts = _.merge({ log: _.noop }, opts);
   var handler = sources[source];
@@ -15,41 +16,29 @@ function pull(source, project, opts, callback)
   {
     callback(new Error('source not supported:', source));
   }
-  else if (project == 'all')
+  else if (!projects || projects == 'all')
   {
-    models.getProjects(function (err, projects)
+    models.getProjects(function (err, projs)
     {
       if (err)
         callback(err);
       else
-      {
-        async.eachSeries(projects,
-          function (proj, next)
-          {
-            pull(source, proj, opts, next);
-          },
-          callback);
-      }
+        pull(source, projs, opts, callback);
     })
   }
-  else if (typeof(project) == 'string')
+  else if (typeof(projects[0]) == 'string')
   {
-    models.getProject(project, function (err, proj)
+    models.Project.find({key: {$in: projects}}).exec(function (err, projs)
     {
       if (err)
         callback(err);
-      else if (!proj)
-        callback(new Error('project not found:', project));
       else
-      {
-        pull(source, proj, opts, callback);
-      }
+        pull(source, projs, opts, callback);
     });
   }
   else
   {
-    opts.log('Pulling from source', source, 'for project', (project && project.key) || project);
-    handler(project, opts, function (err, added)
+    handler(projects, opts, function (err, added)
     {
       if (!err)
       {
@@ -62,30 +51,6 @@ function pull(source, project, opts, callback)
     });
   }
 }
-exports.pull = pull;
 
-function run(source, project)
-{
-  pull(source, project,
-    {
-      log: function (message, etc)
-      {
-        console.log.apply(console, ['(' + source + ' pull): ' + message].concat([].slice.call(arguments, 1)));
-      }
-    },
-    function (err, added)
-    {
-      if (err)
-        throw err;
-      else
-        process.exit();
-    });
-}
-
-exports.run = run;
-
-
-if (!module.parent)
-{
-  run(process.argv[2], process.argv[3]);
-}
+module.exports = pull;
+pull.sources = sources;

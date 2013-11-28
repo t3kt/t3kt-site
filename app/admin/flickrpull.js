@@ -9,7 +9,7 @@ var models = require('../models'),
 var apiUrl = 'http://api.flickr.com/services/rest/',
   extras = 'date_upload,date_taken,last_update,tags,o_dims,path_alias,url_sq,url_t,url_s,url_m,url_o,owner_name';
 
-function pullFlickrImages(project, opts, callback)
+function pullFlickrImagesForProject(project, opts, callback)
 {
   if (!project.flickrSetId)
   {
@@ -18,6 +18,7 @@ function pullFlickrImages(project, opts, callback)
   }
   else
   {
+    opts.log('Pulling from source flickr for project', project.key);
     var reqUrl = url.format(_.merge(url.parse(apiUrl), {
       query: {
         method: 'flickr.photosets.getPhotos',
@@ -125,6 +126,16 @@ function pullFlickrImages(project, opts, callback)
       }
     });
   }
+}
+
+function pullFlickrImages(projects, opts, callback)
+{
+  async.eachSeries(projects,
+    function (project, nextProject)
+    {
+      pullFlickrImagesForProject(project, opts, nextProject);
+    },
+    callback);
 }
 
 module.exports = pullFlickrImages;

@@ -6,7 +6,7 @@ moment = require('moment')
 Deferred = require('Deferred')
 SourceUpdater = require('./index').SourceUpdater
 createItem = require('./index').createItem
-parseLinkHeader = require('./linkheaders').parse
+parseLinkHeader = require('../app/linkheaders').parse
 
 
 retrieveCommitBatch = (url, callback) ->

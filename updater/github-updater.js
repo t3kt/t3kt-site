@@ -20,7 +20,7 @@
 
   createItem = require('./index').createItem;
 
-  parseLinkHeader = require('./linkheaders').parse;
+  parseLinkHeader = require('../app/linkheaders').parse;
 
   retrieveCommitBatch = function(url, callback) {
     return util.requestAsync(url).pipe(function(body, response) {

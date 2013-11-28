@@ -34,9 +34,14 @@ exports.getUser = function (username, callback)
   User.findOne({username: username}, callback);
 }
 
-exports.getProjects = function (callback)
+exports.getProjects = function (projectKeys, callback)
 {
-  Project.find({}).sort('order key').exec(callback);
+  if (_.isFunction(projectKeys))
+  {
+    callback = projectKeys;
+    projectKeys = null;
+  }
+  Project.find(projectKeys ? {key: {$in: projectKeys}} : {}).sort('order key').exec(callback);
 };
 exports.getProject = function (key, callback)
 {

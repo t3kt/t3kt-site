@@ -9,7 +9,42 @@ var models = require('../models'),
 
 var albumUrlFormat = 'http://vimeo.com/api/v2/album/%s/videos.json?page=%d';
 
-function pullVimeoVideos(project, opts, callback)
+function prepareVideo(key, video, project)
+{
+  return {
+    entityType: models.Item.types.video,
+    key: key,
+    project: [project.key],
+    title: video.title,
+    created: moment(video.upload_date).toDate(),
+    updated: new Date(),
+    tags: video.tags ? video.tags.replace(/, /g, '').split(',') : [],
+    external: {
+      source: 'vimeo',
+      id: video.id,
+      url: video.url,
+      pulled: new Date(),
+      data: video
+    },
+    thumb: {
+      width: 100,
+      height: 75,
+      url: video.thumbnail_small
+    },
+    small: {
+      width: 200,
+      height: 150,
+      url: video.thumbnail_medium
+    },
+    medium: {
+      width: 640,
+      height: 640 * (video.height / video.width),
+      url: video.thumbnail_large
+    }
+  };
+}
+
+function pullVimeoVideosForProject(project, opts, callback)
 {
   if (!project.vimeoAlbumId)
   {
@@ -18,7 +53,13 @@ function pullVimeoVideos(project, opts, callback)
   }
   else
   {
-    var added = 0;
+    opts.log('Pulling from source vimeo for project', project.key);
+    var overwrite = opts.overwrite,
+      report = {
+        added: 0,
+        updated: 0,
+        skipped: 0
+      };
     async.eachSeries([1, 2, 3],
       function (page, nextPage)
       {
@@ -37,52 +78,58 @@ function pullVimeoVideos(project, opts, callback)
             async.eachSeries(videos,
               function (video, nextVideo)
               {
-                var key = 'video:vimeo:' + video.id;
-                //opts.log('adding video (key:', key, ')');
-                models.Item.create(
-                  {
-                    entityType: models.Item.types.video,
-                    key: key,
-                    project: [project.key],
-                    title: video.title,
-                    created: moment(video.upload_date).toDate(),
-                    updated: new Date(),
-                    tags: video.tags ? video.tags.replace(/, /g, '').split(',') : undefined,
-                    external: {
-                      source: 'vimeo',
-                      id: video.id,
-                      url: video.url,
-                      pulled: new Date(),
-                      data: video
-                    },
-                    thumb: {
-                      width: 100,
-                      height: 75,
-                      url: video.thumbnail_small
-                    },
-                    small: {
-                      width: 200,
-                      height: 150,
-                      url: video.thumbnail_medium
-                    },
-                    medium: {
-                      width: 640,
-                      height: 640 * (video.height / video.width),
-                      url: video.thumbnail_large
-                    }
-                  },
-                  function (err)
+                var key = 'video:vimeo:' + video.id,
+                  item = prepareVideo(key, video, project);
+                models.getItem(key,
+                  function (err, storedVideo)
                   {
                     if (err)
-                    {
-                      opts.log('error adding video (key:', key, '):', err);
                       nextVideo(err);
+                    else if (storedVideo)
+                    {
+                      if (!overwrite)
+                      {
+                        report.skipped++;
+                        opts.log('skipping video (key:', key, ')');
+                        nextVideo();
+                      }
+                      else
+                      {
+                        storedVideo.update(item, null,
+                          function (err)
+                          {
+                            if (err)
+                            {
+                              opts.log('error updating video (key:', key, '):', err);
+                              nextVideo(err);
+                            }
+                            else
+                            {
+                              report.updated++;
+                              opts.log('updated video (key:', key, ')');
+                              nextVideo();
+                            }
+                          });
+                      }
                     }
                     else
                     {
-                      added++;
-                      opts.log('added video (key:', key, ')');
-                      nextVideo();
+                      //opts.log('adding video (key:', key, ')');
+                      models.Item.create(item,
+                        function (err)
+                        {
+                          if (err)
+                          {
+                            opts.log('error adding video (key:', key, '):', err);
+                            nextVideo(err);
+                          }
+                          else
+                          {
+                            report.added++;
+                            opts.log('added video (key:', key, ')');
+                            nextVideo();
+                          }
+                        });
                     }
                   });
               }, nextPage);
@@ -91,8 +138,18 @@ function pullVimeoVideos(project, opts, callback)
       },
       function (err)
       {
-        callback(err, added);
+        callback(err, report);
       });
   }
+}
+
+function pullVimeoVideos(projects, opts, callback)
+{
+  async.eachSeries(projects,
+    function (project, nextProject)
+    {
+      pullVimeoVideosForProject(project, opts, nextProject);
+    },
+    callback);
 }
 module.exports = pullVimeoVideos;
