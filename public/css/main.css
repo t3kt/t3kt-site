@@ -88,10 +88,11 @@ nav {
     nav li a {
       display: block;
       padding: 0.5em; }
-    nav li a, nav li.out-of-scope:hover > a {
+    nav li a, nav li.out-of-scope > a:hover {
       border: 1px solid #495074; }
     nav li.out-of-scope > a {
-      border-color: rgba(73, 80, 116, 0.2);
+      border-color: rgba(73, 80, 116, 0.2); }
+    nav li.out-of-scope > a {
       padding: 0.25em; }
     nav li.current > a {
       font-weight: bold; }

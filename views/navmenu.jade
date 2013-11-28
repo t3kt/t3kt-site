@@ -1,17 +1,18 @@
+- var inProjectScope = routeId=='projectDetail';
 nav#main-nav
   ul
-    li(class=routeId=='page'&& page && page.key == 'about' ? 'current': (routeId == 'projectDetail'?'out-of-scope':''))
+    li(class=routeId=='page'&& page && page.key == 'about' ? 'current': (inProjectScope?'out-of-scope':''))
       a(href='/pages/about') about
-    li(class=routeId=='news'?'current': routeId == 'projectDetail'?'out-of-scope':'')
+    li(class=routeId=='news'?'current': (inProjectScope?'out-of-scope':''))
       a(href='/news') news
-    li(class=routeId == 'projects'?'current':'')
+    li(class=routeId == 'projects'?'current':(inProjectScope?'out-of-scope':''),rel='projects')
       a(href='/projects') projects
       if projects
         ul
           each p in projects
             li(class=(routeId=='projectDetail'&&project &&project.key==p.key)?'current':'')
               a(href='/projects/'+p.key)=p.title
-    li(class=routeId == 'projectDetail'?'out-of-scope':'')
+    li(class=inProjectScope?'out-of-scope':'')
       a.icon-link.icon-facebook(href='https://www.facebook.com/int3kt', target='_blank') facebook
       a.icon-link.icon-vimeo(href='https://vimeo.com/tekt', target='_blank') vimeo
       a.icon-link.icon-github(href='https://github.com/t3kt', target='_blank') github

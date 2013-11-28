@@ -141,14 +141,21 @@ nav {
     }
 
     a,
-    &.out-of-scope:hover > a {
+    &.out-of-scope > a:hover {
       border: 1px solid $page-background-color;
     }
 
     &.out-of-scope > a {
       border-color: rgba($page-background-color, .2);
+    }
+    //&.out-of-scope:not([rel='projects']) > a {
+    &.out-of-scope > a {
       padding: $main-panel-padding / 4;
     }
+    //    &.out-of-scope[rel='projects'] > a {
+    //      border-bottom-color: $page-background-color;
+    //      border-right-color: $page-background-color;
+    //    }
 
     &.current > a {
       font-weight: bold;
