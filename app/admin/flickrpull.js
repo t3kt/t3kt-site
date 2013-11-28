@@ -9,6 +9,52 @@ var models = require('../models'),
 var apiUrl = 'http://api.flickr.com/services/rest/',
   extras = 'date_upload,date_taken,last_update,tags,o_dims,path_alias,url_sq,url_t,url_s,url_m,url_o,owner_name';
 
+function prepareImage(key, project, photo)
+{
+  return {
+    entityType: models.Item.types.image,
+    key: key,
+    project: [project.key],
+    title: photo.title,
+    created: moment(photo.datetaken).toDate(),
+    updated: new Date(),
+    tags: photo.tags ? photo.tags.split(' ') : [],
+    external: {
+      source: 'flickr',
+      id: photo.id,
+      url: 'http://www.flickr.com/photos/' + (photo.path_alias || photo.ownername) + '/' + photo.id + '/',
+      pulled: new Date(),
+      data: photo
+    },
+
+    thumb: {
+      width: photo.width_t,
+      height: photo.height_t,
+      url: photo.url_t
+    },
+    full: {
+      width: photo.width_o,
+      height: photo.height_o,
+      url: photo.url_o
+    },
+    small: {
+      width: photo.width_s,
+      height: photo.height_s,
+      url: photo.url_s
+    },
+    square: {
+      width: photo.width_sq,
+      height: photo.height_sq,
+      url: photo.url_sq
+    },
+    medium: {
+      width: photo.width_m,
+      height: photo.height_m,
+      url: photo.url_m
+    }
+  };
+}
+
 function pullFlickrImagesForProject(project, opts, callback)
 {
   if (!project.flickrSetId)
@@ -45,67 +91,67 @@ function pullFlickrImagesForProject(project, opts, callback)
         {
           var photos = responseData.photoset.photo,
             added = 0;
+          var overwrite = opts.overwrite,
+            report = {
+              added: 0,
+              updated: 0,
+              skipped: 0
+            };
           opts.log('found ', photos.length, ' photos');
           async.eachSeries(photos,
             function (photo, next)
             {
-              var key = 'image:flickr:' + photo.id;
-              //opts.log('adding photo (key:', key, ')');
-              models.Item.create(
-                {
-                  entityType: models.Item.types.image,
-                  key: key,
-                  project: [project.key],
-                  title: photo.title,
-                  created: moment(photo.datetaken).toDate(),
-                  updated: new Date(),
-                  tags: photo.tags ? photo.tags.split(' ') : undefined,
-                  external: {
-                    source: 'flickr',
-                    id: photo.id,
-                    url: 'http://www.flickr.com/photos/' + (photo.path_alias || photo.ownername) + '/' + photo.id + '/',
-                    pulled: new Date(),
-                    data: photo
-                  },
-
-                  thumb: {
-                    width: photo.width_t,
-                    height: photo.height_t,
-                    url: photo.url_t
-                  },
-                  full: {
-                    width: photo.width_o,
-                    height: photo.height_o,
-                    url: photo.url_o
-                  },
-                  small: {
-                    width: photo.width_s,
-                    height: photo.height_s,
-                    url: photo.url_s
-                  },
-                  square: {
-                    width: photo.width_sq,
-                    height: photo.height_sq,
-                    url: photo.url_sq
-                  },
-                  medium: {
-                    width: photo.width_m,
-                    height: photo.height_m,
-                    url: photo.url_m
-                  }
-                },
-                function (err)
+              var key = 'image:flickr:' + photo.id,
+                image = prepareImage(key, project, photo);
+              models.getItem(key,
+                function (err, storedImage)
                 {
                   if (err)
-                  {
-                    opts.log('error adding photo (key:', key, '):', err);
                     next(err);
+                  else if (storedImage)
+                  {
+                    if (!opts.overwrite)
+                    {
+                      report.skipped++;
+                      opts.log('skipping image (key:', key, ')');
+                      next();
+                    }
+                    else
+                    {
+                      storedImage.update(image, null,
+                        function (err)
+                        {
+                          if (err)
+                          {
+                            opts.log('error updating image (key:', key, '):', err);
+                            next(err);
+                          }
+                          else
+                          {
+                            report.updated++;
+                            opts.log('updated image (key:', key, ')');
+                            next();
+                          }
+                        });
+                    }
                   }
                   else
                   {
-                    added++;
-                    opts.log('added photo (key:', key, ')');
-                    next();
+                    models.Item.create(image,
+                      function (err)
+                      {
+                        if (err)
+                        {
+                          opts.log('error adding image (key:', key, '):', err);
+                          next(err);
+                        }
+                        else
+                        {
+                          report.added++;
+                          opts.log('added image (key:', key, ')');
+                          next();
+                        }
+                      });
                   }
                 });
             },
