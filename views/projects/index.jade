@@ -2,7 +2,7 @@ extends ../layout
 
 block content
   each project in projects
-    article.project-summary
+    article.project-summary.item
       h3
         a(href='/Projects/'+project.key)=project.title
       div.project-description

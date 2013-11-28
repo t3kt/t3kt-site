@@ -1,4 +1,4 @@
-- var inProjectScope = routeId=='projectDetail';
+- var inProjectScope = routeId=='projectDetail'||routeId=='projects';
 nav#main-nav
   ul
     li(class=routeId=='page'&& page && page.key == 'about' ? 'current': (inProjectScope?'out-of-scope':''))

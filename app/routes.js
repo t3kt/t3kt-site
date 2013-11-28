@@ -94,7 +94,11 @@ var needs = {
     if (!key)
       next();
     else
-      d.getProjectItems(key, itemType, function (err, items)
+    {
+      var query = {project: key};
+      if (itemType)
+        query.entityType = itemType;
+      d.Item.find(query).sort('-created').exec(function (err, items)
       {
         if (err)
           next(err);
@@ -106,6 +110,7 @@ var needs = {
           next();
         }
       });
+    }
   },
   page: function (req, res, next)
   {
@@ -148,7 +153,13 @@ var needs = {
   {
     var projectKey = req.param('projectkey'),
       category = req.param('category'),
-      onResult = function (err, entries)
+      query = {entityType: 'entry'};
+    if (projectKey)
+      query.project = projectKey;
+    if (category)
+      query.tags = category;
+    d.Item.find(query).sort('-created').exec(
+      function (err, entries)
       {
         if (err)
           next(err);
@@ -157,13 +168,7 @@ var needs = {
           req.data.newsEntries = entries;
           next();
         }
-      };
-    if (projectKey)
-      d.getProjectItems(projectKey, 'entry', onResult);
-    else if (category)
-      d.Item.find({entityType: 'entry', tags: category}, onResult);
-    else
-      d.getItems('entry', onResult);
+      });
   },
   item: function (req, res, next)
   {

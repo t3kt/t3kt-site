@@ -9,46 +9,10 @@
   width: 100%;
   z-index: -1;
   opacity: .5;
-  background: linear-gradient(to bottom, rgba(73, 80, 116, 0), rgba(73, 80, 116, .9) 60%, rgba(73, 80, 116, 1)), url('/images/linearchaos-c-output-2013.05.16-5.jpg') no-repeat fixed top left;
+  background: linear-gradient(to bottom, rgba(73, 80, 116, 0), rgba(73, 80, 116, .9) 60%, rgba(73, 80, 116, 1)), url('../images/linearchaos-c-output-2013.05.16-5.jpg') no-repeat fixed top left;
   background-size: 100% 300px;
 }
 
-a
-{
-  color: #0010a3;
-  text-decoration: none;
-  /*background-color: #a5b3cc;
-  border: 1px solid #a5b3cc;*/
-}
-a:hover
-{
-  background-color: #7b87cc;
-  /*outline: 2px solid #7b87cc;
-  border: 1px solid #7b87cc;
-  border-radius: .2em;*/
-}
-.fancybox-outer a:hover
-{
-  background-color: transparent;
-}
-
-.item
-{
-  text-align: left;
-  min-width: 14em;
-  min-height: 5em;
-  max-width: 24em;
-  font-size: .9em;
-}
-.item, .item-batch
-{
-  display: inline-block;
-  padding: .5em;
-  border: 1px dotted #ccc;
-  margin: 1em .5em;
-  border-radius: .3em;
-  vertical-align: top;
-}
 .item-batch .item
 {
   border: none;
@@ -59,11 +23,6 @@ a:hover
 {
   margin-right: 2em;
 }
-.item-video
-{
-  /*max-width: 400px;*/
-  max-width: none;
-}
 .item-title
 {
   background: #a5b3cc;
@@ -71,12 +30,6 @@ a:hover
   border: 1px dotted #ccc;
   border-radius: .2em;
   margin: 0 .2em;
-}
-.item time
-{
-  text-align: right;
-  font-size: .7em;
-  display: block;
 }
 .item-content
 {

@@ -2,9 +2,12 @@ $page-background-color: #495074;
 $main-text-color: #226;
 $panel-background-color: rgba(#a5b3cc, 0.5);
 $selection-highlight-color: #a5b3cc;
+$item-border-color: lighten($panel-background-color, 50%);
+$link-color: #0010a3;
 $nav-width: 13em;
 $main-panel-margin: 1em;
 $main-panel-padding: 1em;
+$item-padding: $main-panel-padding / 2;
 $main-header-height: 2.2em;
 $main-header-min-width: 14em;
 $nav-min-height: 13em;
@@ -76,6 +79,7 @@ body {
   left: 0;
   width: $nav-width;
   overflow: hidden;
+  //box-shadow: inset $main-panel-padding/-2 0 $main-panel-padding rgba($panel-background-color, .4);
   opacity: 1;
   @include transition(opacity $fade-out-duration, width $expand-duration);
 
@@ -137,7 +141,12 @@ nav {
 
     a {
       display: block;
-      padding: $main-panel-padding / 2;
+      padding: $item-padding;
+      border-top-right-radius: $item-padding;
+    }
+
+    &.current[rel='projects'] > a {
+      border-bottom-left-radius: $item-padding;
     }
 
     a,
@@ -211,4 +220,54 @@ hr {
 
 ul, ol {
   list-style-position: inside;
+}
+
+.item {
+  display: inline-block;
+  padding: $item-padding;
+  margin: $item-padding;
+  border: 1px dashed $item-border-color;
+  border-radius: $item-padding;
+  vertical-align: top;
+  text-align: left;
+  min-width: 14em;
+  min-height: 5em;
+  font-size: .9em;
+  &:not(.video-loaded) {
+    max-width: 24em;
+    width: 22%;
+    width: calc(25% - (3*.2em));
+  }
+  time {
+    text-align: right;
+    font-size: .7em;
+    display: block;
+  }
+}
+
+.item-image,
+.item-video {
+  img {
+    width: 100%;
+    height: auto;
+  }
+}
+
+.item.project-summary {
+  min-height: 14em;
+}
+
+a
+{
+  color: $link-color;
+  text-decoration: none;
+  /*background-color: #a5b3cc;
+  border: 1px solid #a5b3cc;*/
+}
+a:hover
+{
+  background-color: #7b87cc;
+  /*outline: 2px solid #7b87cc;
+  border: 1px solid #7b87cc;
+  border-radius: .2em;*/
 }

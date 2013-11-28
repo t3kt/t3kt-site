@@ -1,4 +1,4 @@
-doctype 5
+doctype transitional
 include ./mixins
 if isAjax
   div
@@ -12,7 +12,7 @@ if isAjax
     div#scripts
       block scripts
 else
-  html
+  html(xmlns='http://www.w3.org/1999/xhtml')
     head
       meta(charset='utf-8')
       title='tekt| ' + title

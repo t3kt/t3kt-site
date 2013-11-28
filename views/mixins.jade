@@ -9,7 +9,8 @@ mixin video(vid)
         a(href=vid.detailUrl, target='_blank')=vid.title
       else
         span= vid.title
-    img.load-video(src=vid.small.url, alt=vid.title, width=vid.small.width, height=vid.small.height)
+    a.load-video(href='#', title='click to load video')
+      img(src=vid.small.url, alt=vid.title, width=vid.small.width, height=vid.small.height)
     //
       if vid.embedHtml
         != vid.embedHtml

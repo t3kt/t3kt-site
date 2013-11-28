@@ -15,7 +15,11 @@ var tekt = (function ()
         var vidId = $(this).closest('[data-key]').attr('data-key');
         if (vidId)
         {
-          $(this).parent().load('/video/' + vidId + '/embed');
+          $(this).parent().load('/video/' + vidId + '/embed', function ()
+          {
+            $(this).closest('.item-video').addClass('video-loaded');
+          });
+          return false;
         }
       });
     //TODO...
