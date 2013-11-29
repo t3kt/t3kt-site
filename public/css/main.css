@@ -73,7 +73,18 @@ body {
   top: 5.2em;
   left: 0;
   width: 13em;
-  min-height: 13em; }
+  min-height: 13em;
+  opacity: 1;
+  -moz-transition: opacity 0.5s;
+  -webkit-transition: opacity 0.5s;
+  -o-transition: opacity 0.5s;
+  transition: opacity 0.5s; }
+  .scrolled-down #main-nav:not(:hover) {
+    opacity: 0.4;
+    -moz-transition: opacity 1s;
+    -webkit-transition: opacity 1s;
+    -o-transition: opacity 1s;
+    transition: opacity 1s; }
 
 nav {
   text-transform: lowercase; }
@@ -101,6 +112,13 @@ nav {
       font-weight: bold; }
     nav li ul {
       padding-left: 1em; }
+
+#sub-nav {
+  float: right; }
+  #sub-nav li {
+    display: inline-block;
+    margin-top: 0;
+    margin-left: .1em; }
 
 .icon-link {
   -webkit-box-sizing: border-box;
@@ -177,7 +195,26 @@ ul, ol {
   height: auto; }
 
 .item.project-summary {
-  min-height: 14em; }
+  min-height: 14em;
+  background-repeat: no-repeat;
+  background-size: cover;
+  cursor: pointer; }
+  .item.project-summary h3,
+  .item.project-summary .project-description {
+    padding: 0.25em;
+    opacity: .2;
+    -moz-transition: opacity 1s;
+    -webkit-transition: opacity 1s;
+    -o-transition: opacity 1s;
+    transition: opacity 1s; }
+  .item.project-summary:hover h3,
+  .item.project-summary:hover .project-description {
+    background-color: #a5b3cc;
+    opacity: .9;
+    -moz-transition: opacity 0.5s;
+    -webkit-transition: opacity 0.5s;
+    -o-transition: opacity 0.5s;
+    transition: opacity 0.5s; }
 
 a {
   color: #0010a3;

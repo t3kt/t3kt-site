@@ -52,3 +52,19 @@ mixin item(i)
     mixin image(i)
   else if i.entityType == 'blogEntry'
     mixin blogEntry(i)
+
+mixin projectSubNav(projectKey, pages, currentPage, navItems)
+  nav#sub-nav
+    ul
+      li(class=currentPage?'':'current')
+        a(href='/projects/'+projectKey) summary
+      if navItems
+        each item in navItems
+          li
+            if item.external
+              a(href=item.url, target='_blank')= item.text
+            else
+              a(href=item.url)= item.text
+      each pg in pages
+        li(class=currentPage==pg.key?'current':'')
+          a(href='/projects/'+projectKey+'/pages/'+pg.key)= pg.title

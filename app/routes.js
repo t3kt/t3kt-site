@@ -30,16 +30,17 @@ var needs = {
   },
   projectList: function (req, res, next)
   {
-    d.getProjects(function (err, projects)
-    {
-      if (err)
-        next(err);
-      else
+    d.Project.find().sort('-posted').exec(
+      function (err, projects)
       {
-        req.data.projects = projects;
-        next();
-      }
-    });
+        if (err)
+          next(err);
+        else
+        {
+          req.data.projects = projects;
+          next();
+        }
+      });
 //    data.getProjects()
 //      .done(function (projects)
 //      {
@@ -190,6 +191,21 @@ var needs = {
         }
       })
     }
+  },
+  projectPages: function (req, res, next)
+  {
+    var projectKey = req.param('projectkey');
+    d.Page.find({project: projectKey}).sort('key').exec(
+      function (err, pages)
+      {
+        if (err)
+          next(err);
+        else
+        {
+          req.data.projectPages = pages;
+          next();
+        }
+      });
   }
 };
 
@@ -220,7 +236,7 @@ var routes =
       res.json(req.data.projects);
     }),
   projectDetail: route('get', '/projects/:projectkey',
-    [needs.settings, needs.projectList, needs.project],
+    [needs.settings, needs.projectList, needs.project, needs.projectPages],
     function (req, res, next)
     {
       req.data.project.renderContent(['summary', 'description'], function (err, project)

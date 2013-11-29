@@ -45,31 +45,31 @@ exports.getProjects = function (projectKeys, callback)
 };
 exports.getProject = function (key, callback)
 {
-  return Project.findOne({key: key.toLowerCase()}).exec(callback);
+  return Project.findOne({key: key}, callback);
 };
 exports.getPage = function (key, callback)
 {
-  return Page.findOne({key: key.toLowerCase(), project: {$exists: false}}).exec(callback);
+  return Page.findOne({key: key, project: {$exists: false}}, callback);
 };
 exports.getProjectPage = function (projectKey, pageKey, callback)
 {
-  return Page.findOne({key: pageKey.toLowerCase(), project: projectKey.toLowerCase()}).exec(callback);
+  return Page.findOne({key: pageKey, project: projectKey}, callback);
 };
 
 exports.getProjectItems = function (projectKey, itemType, callback)
 {
-  var query = {project: projectKey.toLowerCase()};
+  var query = {project: projectKey};
   if (itemType)
     query.entityType = Item.resolveType(itemType);
-  return Item.find(query).exec(callback);
+  return Item.find(query, callback);
 };
 exports.getItems = function (itemType, callback)
 {
-  return Item.find({entityType: Item.resolveType(itemType)}).exec(callback);
+  return Item.find({entityType: Item.resolveType(itemType)}, callback);
 };
 exports.getItem = function (key, callback)
 {
-  return Item.findOne({key: key.toLowerCase()}).exec(callback);
+  return Item.findOne({key: key}, callback);
 };
 
 exports.getSettings = function (callback)

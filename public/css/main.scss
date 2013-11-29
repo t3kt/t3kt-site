@@ -114,6 +114,7 @@ body {
     opacity: $semi-hidden-opacity;
     @include transition(opacity $fade-out-duration, left $collapse-duration);
     box-shadow: 0 0 $main-panel-margin .5em rgba($page-background-color, .2);
+    //    z-index: -1;
   }
 }
 
@@ -123,6 +124,13 @@ body {
   left: 0;
   width: $nav-width;
   min-height: $nav-min-height;
+  opacity: 1;
+  @include transition(opacity $fade-in-duration);
+
+  .scrolled-down &:not(:hover) {
+    opacity: $semi-hidden-opacity;
+    @include transition(opacity $fade-out-duration);
+  }
 }
 
 nav {
@@ -172,6 +180,15 @@ nav {
     ul {
       padding-left: $main-panel-padding;
     }
+  }
+}
+
+#sub-nav {
+  float: right;
+  li {
+    display: inline-block;
+    margin-top: 0;
+    margin-left: .1em;
   }
 }
 
@@ -255,6 +272,26 @@ ul, ol {
 
 .item.project-summary {
   min-height: 14em;
+  background-repeat: no-repeat;
+  background-size: cover;
+  cursor: pointer;
+
+  h3,
+  .project-description {
+    padding: $item-padding / 2;
+    opacity: .2;
+    @include transition(opacity $fade-out-duration);
+  }
+
+  &:hover {
+    h3,
+    .project-description {
+      //@include safe-rgba-property(background-color, rgba($panel-background-color, 1));
+      background-color: rgba($panel-background-color, 1);
+      opacity: .9;
+      @include transition(opacity $fade-in-duration);
+    }
+  }
 }
 
 a {

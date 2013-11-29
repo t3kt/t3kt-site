@@ -6,11 +6,15 @@ var mongoose = require('mongoose'),
 
 var tokenField = {type: String, lowercase: true, trim: true},
   dateField = {type: Date, default: Date.now, widget: formage.widgets.DateTimeWidget},
-  requiredDateField = _.extend({}, dateField, {required: true}),
   contentField = {
     dataType: _.merge({}, tokenField, {enum: [''].concat(Object.keys(content.renderers))}),
     data: Schema.Types.Text,
     renderOptions: Schema.Types.Mixed
+  },
+  navItemField = {
+    url: String,
+    text: String,
+    external: Boolean
   };
 
 function renderContentFields(fields, callback)
@@ -40,7 +44,8 @@ var ProjectSchema = Schema({
   description: contentField,
   created: dateField,
   updated: dateField,
-  bannerUrl: String
+  bannerUrl: String,
+  navItems: [navItemField]
 });
 ProjectSchema.methods.renderContent = renderContentFields;
 
@@ -61,22 +66,20 @@ var imageField = {
   url: String
 };
 
-var itemTypes =
-{
+var itemTypes = {
   video: 'video',
   image: 'image',
   commit: 'commit',
   blogEntry: 'blogEntry'
 };
 var itemTypeAliases =
-  _.merge({}, itemTypes,
-    {
-      videos: 'video',
-      images: 'image',
-      commits: 'commit',
-      blogEntries: 'blogEntry',
-      news: 'blogEntry'
-    });
+  _.merge({}, itemTypes, {
+    videos: 'video',
+    images: 'image',
+    commits: 'commit',
+    blogEntries: 'blogEntry',
+    news: 'blogEntry'
+  });
 
 var ItemSchema = Schema({
   entityType: _.extend({}, tokenField, {required: true, enum: Object.keys(itemTypes)}),

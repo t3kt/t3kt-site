@@ -3,6 +3,8 @@ extends ../layout
 include ../mixins
 
 block content
+  if (projectPages && projectPages.length) || project.navItems
+    mixin projectSubNav(project.key, projectPages, null, project.navItems)
   article
     div.project-description
       != project.descriptionRendered || project.summaryRendered
