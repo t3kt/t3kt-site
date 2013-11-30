@@ -46,6 +46,9 @@ body {
   font-family: 'Oxygen Mono', sans-serif;
   color: $main-text-color;
   line-height: normal;
+  @media (max-width: $window-width-tiny) {
+    overflow-x: hidden;
+  }
 }
 
 ::-moz-selection {
@@ -89,47 +92,56 @@ body {
   overflow: hidden;
   //box-shadow: inset $main-panel-padding/-2 0 $main-panel-padding rgba($panel-background-color, .4);
   opacity: 1;
-  @include transition(opacity $fade-out-duration, width $expand-duration);
 
   h1 {
     display: inline-block;
     font-size: 1.5em;
   }
 
-  .scrolled-down & {
-    width: $collapsed-side-width;
-    @include transition(opacity $fade-out-duration, width $collapse-duration);
-    opacity: $semi-hidden-opacity;
-  }
   @media (max-width: $window-width-tiny) {
     display: none;
+  }
+  @media (min-width: $window-width-tiny) {
+    @include transition(opacity $fade-out-duration, width $expand-duration);
+    .scrolled-down & {
+      width: $collapsed-side-width;
+      @include transition(opacity $fade-out-duration, width $collapse-duration);
+      opacity: $semi-hidden-opacity;
+    }
   }
 }
 
 #page-header {
   @extend %main-header-panel;
   left: $nav-width + 3 * $main-panel-margin;
-  opacity: 1;
-  @include transition(opacity $fade-in-duration, left $expand-duration);
 
   h2 {
     display: inline-block;
     font-size: 1.2em;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  .scrolled-down & {
-    left: $collapsed-side-width + 3 * $main-panel-margin;
-  }
-
-  .scrolled-down &:not(:hover) {
-    opacity: $semi-hidden-opacity;
-    @include transition(opacity $fade-out-duration, left $collapse-duration);
-    box-shadow: 0 0 $main-panel-margin .5em rgba($page-background-color, .2);
-    //    z-index: -1;
-  }
   @media (max-width: $window-width-tiny) {
     position: static;
     width: auto;
+  }
+  @media (min-width: $window-width-tiny) {
+    opacity: 1;
+    @include transition(opacity $fade-in-duration, left $expand-duration);
+
+    .scrolled-down & {
+      left: $collapsed-side-width + 3 * $main-panel-margin;
+    }
+
+    .scrolled-down &:not(:hover) {
+      opacity: $semi-hidden-opacity;
+      @include transition(opacity $fade-out-duration, left $collapse-duration);
+      box-shadow: 0 0 $main-panel-margin .5em rgba($page-background-color, .2);
+      //    z-index: -1;
+    }
   }
 }
 
@@ -139,16 +151,19 @@ body {
   left: 0;
   width: $nav-width;
   min-height: $nav-min-height;
-  opacity: 1;
-  @include transition(opacity $fade-in-duration);
 
-  .scrolled-down &:not(:hover) {
-    opacity: $semi-hidden-opacity;
-    @include transition(opacity $fade-out-duration);
-  }
   @media (max-width: $window-width-tiny) {
     position: static;
     width: auto;
+  }
+  @media (min-width: $window-width-tiny) {
+    opacity: 1;
+    @include transition(opacity $fade-in-duration);
+
+    .scrolled-down &:not(:hover) {
+      opacity: $semi-hidden-opacity;
+      @include transition(opacity $fade-out-duration);
+    }
   }
 }
 
@@ -164,12 +179,13 @@ nav {
     margin-top: .1em;
     white-space: nowrap;
     overflow-x: hidden;
-    text-overflow: ellipsis;
 
     a {
       display: block;
       padding: $item-padding;
       border-top-right-radius: $item-padding;
+      overflow-x: hidden;
+      text-overflow: ellipsis;
     }
 
     &.current[rel='projects'] > a {
@@ -208,6 +224,14 @@ nav {
     display: inline-block;
     margin-top: 0;
     margin-left: .1em;
+  }
+  @media (max-width: $window-width-small) {
+    float: none;
+    margin-bottom: $main-panel-margin;
+    li {
+      display: block;
+      margin-bottom: .1em;
+    }
   }
 }
 

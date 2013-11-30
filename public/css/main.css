@@ -3,6 +3,9 @@ body {
   font-family: 'Oxygen Mono', sans-serif;
   color: #222266;
   line-height: normal; }
+  @media (max-width: 700px) {
+    body {
+      overflow-x: hidden; } }
 
 ::-moz-selection {
   background: #a5b3cc;
@@ -36,69 +39,79 @@ body {
   left: 0;
   width: 13em;
   overflow: hidden;
-  opacity: 1;
-  -moz-transition: opacity 1s, width 0.5s;
-  -webkit-transition: opacity 1s, width 0.5s;
-  -o-transition: opacity 1s, width 0.5s;
-  transition: opacity 1s, width 0.5s; }
+  opacity: 1; }
   #site-header h1 {
     display: inline-block;
     font-size: 1.5em; }
-  .scrolled-down #site-header {
-    width: 1em;
-    -moz-transition: opacity 1s, width 1s;
-    -webkit-transition: opacity 1s, width 1s;
-    -o-transition: opacity 1s, width 1s;
-    transition: opacity 1s, width 1s;
-    opacity: 0.4; }
   @media (max-width: 700px) {
     #site-header {
       display: none; } }
+  @media (min-width: 700px) {
+    #site-header {
+      -moz-transition: opacity 1s, width 0.5s;
+      -webkit-transition: opacity 1s, width 0.5s;
+      -o-transition: opacity 1s, width 0.5s;
+      transition: opacity 1s, width 0.5s; }
+      .scrolled-down #site-header {
+        width: 1em;
+        -moz-transition: opacity 1s, width 1s;
+        -webkit-transition: opacity 1s, width 1s;
+        -o-transition: opacity 1s, width 1s;
+        transition: opacity 1s, width 1s;
+        opacity: 0.4; } }
 
 #page-header {
-  left: 16em;
-  opacity: 1;
-  -moz-transition: opacity 0.5s, left 0.5s;
-  -webkit-transition: opacity 0.5s, left 0.5s;
-  -o-transition: opacity 0.5s, left 0.5s;
-  transition: opacity 0.5s, left 0.5s; }
+  left: 16em; }
   #page-header h2 {
     display: inline-block;
-    font-size: 1.2em; }
-  .scrolled-down #page-header {
-    left: 4em; }
-  .scrolled-down #page-header:not(:hover) {
-    opacity: 0.4;
-    -moz-transition: opacity 1s, left 1s;
-    -webkit-transition: opacity 1s, left 1s;
-    -o-transition: opacity 1s, left 1s;
-    transition: opacity 1s, left 1s;
-    box-shadow: 0 0 1em 0.5em rgba(73, 80, 116, 0.2); }
+    font-size: 1.2em;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; }
   @media (max-width: 700px) {
     #page-header {
       position: static;
       width: auto; } }
+  @media (min-width: 700px) {
+    #page-header {
+      opacity: 1;
+      -moz-transition: opacity 0.5s, left 0.5s;
+      -webkit-transition: opacity 0.5s, left 0.5s;
+      -o-transition: opacity 0.5s, left 0.5s;
+      transition: opacity 0.5s, left 0.5s; }
+      .scrolled-down #page-header {
+        left: 4em; }
+      .scrolled-down #page-header:not(:hover) {
+        opacity: 0.4;
+        -moz-transition: opacity 1s, left 1s;
+        -webkit-transition: opacity 1s, left 1s;
+        -o-transition: opacity 1s, left 1s;
+        transition: opacity 1s, left 1s;
+        box-shadow: 0 0 1em 0.5em rgba(73, 80, 116, 0.2); } }
 
 #main-nav {
   top: 5.2em;
   left: 0;
   width: 13em;
-  min-height: 13em;
-  opacity: 1;
-  -moz-transition: opacity 0.5s;
-  -webkit-transition: opacity 0.5s;
-  -o-transition: opacity 0.5s;
-  transition: opacity 0.5s; }
-  .scrolled-down #main-nav:not(:hover) {
-    opacity: 0.4;
-    -moz-transition: opacity 1s;
-    -webkit-transition: opacity 1s;
-    -o-transition: opacity 1s;
-    transition: opacity 1s; }
+  min-height: 13em; }
   @media (max-width: 700px) {
     #main-nav {
       position: static;
       width: auto; } }
+  @media (min-width: 700px) {
+    #main-nav {
+      opacity: 1;
+      -moz-transition: opacity 0.5s;
+      -webkit-transition: opacity 0.5s;
+      -o-transition: opacity 0.5s;
+      transition: opacity 0.5s; }
+      .scrolled-down #main-nav:not(:hover) {
+        opacity: 0.4;
+        -moz-transition: opacity 1s;
+        -webkit-transition: opacity 1s;
+        -o-transition: opacity 1s;
+        transition: opacity 1s; } }
 
 nav {
   text-transform: lowercase; }
@@ -108,12 +121,13 @@ nav {
   nav li {
     margin-top: .1em;
     white-space: nowrap;
-    overflow-x: hidden;
-    text-overflow: ellipsis; }
+    overflow-x: hidden; }
     nav li a {
       display: block;
       padding: 0.5em;
-      border-top-right-radius: 0.5em; }
+      border-top-right-radius: 0.5em;
+      overflow-x: hidden;
+      text-overflow: ellipsis; }
     nav li.current[rel='projects'] > a {
       border-bottom-left-radius: 0.5em; }
     nav li a, nav li.out-of-scope > a:hover {
@@ -133,6 +147,13 @@ nav {
     display: inline-block;
     margin-top: 0;
     margin-left: .1em; }
+  @media (max-width: 900px) {
+    #sub-nav {
+      float: none;
+      margin-bottom: 1em; }
+      #sub-nav li {
+        display: block;
+        margin-bottom: .1em; } }
 
 .icon-link {
   -webkit-box-sizing: border-box;

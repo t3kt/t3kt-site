@@ -1,4 +1,4 @@
-- var inProjectScope = routeId=='projectDetail'||routeId=='projects';
+- var inProjectScope = routeId=='projectDetail'||routeId=='projects'||routeId=='projectPage';
 nav#main-nav
   ul
     li(class=routeId=='page'&& page && page.key == 'about' ? 'current': (inProjectScope?'out-of-scope':''))
@@ -10,7 +10,7 @@ nav#main-nav
       if projects
         ul
           each p in projects
-            li(class=(routeId=='projectDetail'&&project &&project.key==p.key)?'current':'')
+            li(class=((routeId=='projectDetail'||routeId=='projectPage')&&(projectKey==p.key||(project&&project.key==p.key)))?'current':'')
               a(href='/projects/'+p.key)=p.title
     li(class=inProjectScope?'out-of-scope':'')
       a.icon-link.icon-facebook(href='https://www.facebook.com/int3kt', target='_blank') facebook

@@ -61,10 +61,7 @@ mixin projectSubNav(projectKey, pages, currentPage, navItems)
       if navItems
         each item in navItems
           li
-            if item.external
-              a(href=item.url, target='_blank')= item.text
-            else
-              a(href=item.url)= item.text
+            a(href=item.url, target=item.external?'_blank':undefined)= item.text
       each pg in pages
         li(class=currentPage==pg.key?'current':'')
           a(href='/projects/'+projectKey+'/pages/'+pg.key)= pg.title
