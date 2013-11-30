@@ -22,7 +22,7 @@ body {
 
 #site-header, #page-header, #main-nav {
   position: fixed; }
-  @media (max-width: 800px) {
+  @media (max-width: 700px) {
     #site-header, #page-header, #main-nav {
       position: static; } }
 
@@ -51,7 +51,7 @@ body {
     -o-transition: opacity 1s, width 1s;
     transition: opacity 1s, width 1s;
     opacity: 0.4; }
-  @media (max-width: 800px) {
+  @media (max-width: 700px) {
     #site-header {
       display: none; } }
 
@@ -74,8 +74,9 @@ body {
     -o-transition: opacity 1s, left 1s;
     transition: opacity 1s, left 1s;
     box-shadow: 0 0 1em 0.5em rgba(73, 80, 116, 0.2); }
-  @media (max-width: 800px) {
+  @media (max-width: 700px) {
     #page-header {
+      position: static;
       width: auto; } }
 
 #main-nav {
@@ -94,7 +95,7 @@ body {
     -webkit-transition: opacity 1s;
     -o-transition: opacity 1s;
     transition: opacity 1s; }
-  @media (max-width: 800px) {
+  @media (max-width: 700px) {
     #main-nav {
       position: static;
       width: auto; } }
@@ -174,7 +175,7 @@ main {
   left: 16em;
   right: 0;
   min-height: 13em; }
-  @media (max-width: 800px) {
+  @media (max-width: 700px) {
     main {
       position: static; } }
 
@@ -202,15 +203,15 @@ ul, ol {
   .item:not(.video-loaded) {
     width: 22%;
     width: calc(25% - 1em); }
-    @media (max-width: 800px) {
+    @media (max-width: 900px) {
       .item:not(.video-loaded) {
         width: 98%;
         width: calc(100% - 1em); } }
-    @media (min-width: 800px) and (max-width: 1200px) {
+    @media (min-width: 900px) and (max-width: 1200px) {
       .item:not(.video-loaded) {
         width: 49%;
         width: calc(50% - 1em); } }
-    @media (min-width: 1200px) and (max-width: 1400px) {
+    @media (min-width: 1200px) and (max-width: 1500px) {
       .item:not(.video-loaded) {
         width: 33.2%;
         width: calc(33.2% - 1em); } }
