@@ -21,7 +21,7 @@ mixin video(vid)
 mixin commit(com)
   div.item.item-commit(data-key=com.key)
     div.item-content=com.title
-    a(href=com.detailUrl,target='_blank') browse code
+    a(href=com.external.url,target='_blank') browse code
     mixin time(com.posted)
 
 mixin image(img)

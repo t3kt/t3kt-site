@@ -211,7 +211,7 @@ var needs = {
 
 var routes =
 {
-  projects: route('get', '/projects',
+  projects: route('get', ['/projects', '/'],
     [needs.settings, needs.projectList],
     function (req, res, next)
     {
@@ -305,8 +305,8 @@ var routes =
     }),
   news: route('get',
     [
-      '/news',
-      '/'
+      '/news'
+      //, '/'
     ],
     [needs.settings, needs.newsItems],
     function (req, res)

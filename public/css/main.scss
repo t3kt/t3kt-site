@@ -18,6 +18,10 @@ $expand-duration: .5s;
 $fade-out-duration: 1s;
 $fade-in-duration: .5s;
 
+$window-width-small: 800px;
+$window-width-medium: 1200px;
+$window-width-large: 1400px;
+
 @mixin safe-rgba-property($property, $rgba-color) {
   #{$property}: rgb(red($rgba-color), green($rgba-color), blue($rgba-color));
   #{$property}: $rgba-color;
@@ -59,11 +63,18 @@ body {
   border-radius: .5em;
   padding: $main-panel-padding;
   margin: $main-panel-margin;
+  @media (min-width: $window-width-small) and (max-width: $window-width-medium) {
+  }
+  @media (min-width: $window-width-medium) and (max-width: $window-width-large) {
+  }
 }
 
 %main-fixed-panel {
   @extend %main-panel;
   position: fixed;
+  @media (max-width: $window-width-small) {
+    position: static;
+  }
 }
 
 %main-header-panel {
@@ -93,6 +104,9 @@ body {
     @include transition(opacity $fade-out-duration, width $collapse-duration);
     opacity: $semi-hidden-opacity;
   }
+  @media (max-width: $window-width-small) {
+    display: none;
+  }
 }
 
 #page-header {
@@ -116,6 +130,9 @@ body {
     box-shadow: 0 0 $main-panel-margin .5em rgba($page-background-color, .2);
     //    z-index: -1;
   }
+  @media (max-width: $window-width-small) {
+    width: auto;
+  }
 }
 
 #main-nav {
@@ -130,6 +147,10 @@ body {
   .scrolled-down &:not(:hover) {
     opacity: $semi-hidden-opacity;
     @include transition(opacity $fade-out-duration);
+  }
+  @media (max-width: $window-width-small) {
+    position: static;
+    width: auto;
   }
 }
 
@@ -228,6 +249,9 @@ main {
   left: $nav-width + 3 * $main-panel-margin;
   right: 0;
   min-height: $nav-min-height;
+  @media (max-width: $window-width-small) {
+    position: static;
+  }
 }
 
 hr {
@@ -250,10 +274,22 @@ ul, ol {
   min-width: 14em;
   min-height: 5em;
   font-size: .9em;
+  @include box-sizing(border-box);
   &:not(.video-loaded) {
-    max-width: 24em;
     width: 22%;
-    width: calc(25% - (3*.2em));
+    width: calc(25% - #{$item-padding*2});
+    @media (max-width: $window-width-small) {
+      width: 98%;
+      width: calc(100% - #{$item-padding*2});
+    }
+    @media (min-width: $window-width-small) and (max-width: $window-width-medium) {
+      width: 49%;
+      width: calc(50% - #{$item-padding*2});
+    }
+    @media (min-width: $window-width-medium) and (max-width: $window-width-large) {
+      width: 33.2%;
+      width: calc(33.2% - #{$item-padding*2});
+    }
   }
   time {
     text-align: right;
