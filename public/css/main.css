@@ -43,7 +43,7 @@ body {
   #site-header h1 {
     display: inline-block;
     font-size: 1.5em; }
-  @media (max-width: 700px) {
+  @media (max-width: 700px), (max-device-width: 700px) {
     #site-header {
       display: none; } }
   @media (min-width: 700px) {
@@ -69,33 +69,35 @@ body {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis; }
-  @media (max-width: 700px) {
+  @media (max-width: 700px), (max-device-width: 700px) {
     #page-header {
       position: static;
       width: auto; } }
   @media (min-width: 700px) {
     #page-header {
       opacity: 1;
-      -moz-transition: opacity 0.5s, left 0.5s;
-      -webkit-transition: opacity 0.5s, left 0.5s;
-      -o-transition: opacity 0.5s, left 0.5s;
-      transition: opacity 0.5s, left 0.5s; }
+      max-width: 40em;
+      -moz-transition: opacity 0.5s, left 0.5s, max-width 0.5s;
+      -webkit-transition: opacity 0.5s, left 0.5s, max-width 0.5s;
+      -o-transition: opacity 0.5s, left 0.5s, max-width 0.5s;
+      transition: opacity 0.5s, left 0.5s, max-width 0.5s; }
       .scrolled-down #page-header {
         left: 4em; }
       .scrolled-down #page-header:not(:hover) {
         opacity: 0.4;
-        -moz-transition: opacity 1s, left 1s;
-        -webkit-transition: opacity 1s, left 1s;
-        -o-transition: opacity 1s, left 1s;
-        transition: opacity 1s, left 1s;
-        box-shadow: 0 0 1em 0.5em rgba(73, 80, 116, 0.2); } }
+        -moz-transition: opacity 1s, left 1s, max-width 1s;
+        -webkit-transition: opacity 1s, left 1s, max-width 1s;
+        -o-transition: opacity 1s, left 1s, max-width 1s;
+        transition: opacity 1s, left 1s, max-width 1s;
+        box-shadow: 0 0 1em 0.5em rgba(73, 80, 116, 0.2);
+        max-width: 9em; } }
 
 #main-nav {
   top: 5.2em;
   left: 0;
   width: 13em;
   min-height: 13em; }
-  @media (max-width: 700px) {
+  @media (max-width: 700px), (max-device-width: 700px) {
     #main-nav {
       position: static;
       width: auto; } }

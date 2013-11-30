@@ -98,7 +98,7 @@ body {
     font-size: 1.5em;
   }
 
-  @media (max-width: $window-width-tiny) {
+  @media (max-width: $window-width-tiny), (max-device-width: $window-width-tiny) {
     display: none;
   }
   @media (min-width: $window-width-tiny) {
@@ -124,13 +124,14 @@ body {
     text-overflow: ellipsis;
   }
 
-  @media (max-width: $window-width-tiny) {
+  @media (max-width: $window-width-tiny), (max-device-width: $window-width-tiny) {
     position: static;
     width: auto;
   }
   @media (min-width: $window-width-tiny) {
     opacity: 1;
-    @include transition(opacity $fade-in-duration, left $expand-duration);
+    max-width: 40em;
+    @include transition(opacity $fade-in-duration, left $expand-duration, max-width $expand-duration);
 
     .scrolled-down & {
       left: $collapsed-side-width + 3 * $main-panel-margin;
@@ -138,8 +139,9 @@ body {
 
     .scrolled-down &:not(:hover) {
       opacity: $semi-hidden-opacity;
-      @include transition(opacity $fade-out-duration, left $collapse-duration);
+      @include transition(opacity $fade-out-duration, left $collapse-duration, max-width $collapse-duration);
       box-shadow: 0 0 $main-panel-margin .5em rgba($page-background-color, .2);
+      max-width: $nav-width - (4*$main-panel-margin);
       //    z-index: -1;
     }
   }
@@ -152,7 +154,7 @@ body {
   width: $nav-width;
   min-height: $nav-min-height;
 
-  @media (max-width: $window-width-tiny) {
+  @media (max-width: $window-width-tiny), (max-device-width: $window-width-tiny) {
     position: static;
     width: auto;
   }
