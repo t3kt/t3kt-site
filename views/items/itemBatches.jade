@@ -1,0 +1,8 @@
+extends ../layout
+block content
+  if itemBatches
+    for batch in itemBatches
+      if batch.items.length == 1
+        mixin item(batch.items[0])
+      else
+        mixin batch(batch)

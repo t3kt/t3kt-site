@@ -255,6 +255,14 @@ var routes =
       req.data.title = 'project: ' + req.data.project.title + ' : items';
       res.render('../views/items/items.jade', req.data);
     }),
+  projectItemBatches: route('get', '/projects/:projectkey/itembatches',
+    [needs.settings, needs.projectList, needs.project, needs.projectItems],
+    function (req, res)
+    {
+      req.data.title = 'project ' + req.data.project.title + ' : items';
+      req.data.itemBatches = util.batchItems(req.data.items);
+      res.render('../views/items/itemBatches.jade', req.data);
+    }),
   projectItemsOfType: route('get', '/projects/:projectkey/:itemtype',
     [needs.settings, needs.projectList, needs.project, needs.projectItems],
     function (req, res)

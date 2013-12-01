@@ -1,4 +1,4 @@
-- var inProjectScope = routeId=='projectDetail'||routeId=='projects'||routeId=='projectPage';
+- var inProjectScope = routeId=='projectDetail'||routeId=='projectPage';
 nav#main-nav
   ul
     li(class=routeId=='page'&& page && page.key == 'about' ? 'current': (inProjectScope?'out-of-scope':''))
@@ -7,7 +7,7 @@ nav#main-nav
       a(href='/news') news
     li(class=routeId == 'projects'?'current':(inProjectScope?'out-of-scope':''),rel='projects')
       a(href='/projects') projects
-      if projects
+      if routeId != 'projects' && projects
         ul
           each p in projects
             li(class=((routeId=='projectDetail'||routeId=='projectPage')&&(projectKey==p.key||(project&&project.key==p.key)))?'current':'')

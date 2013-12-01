@@ -20,8 +20,8 @@ $fade-in-duration: .5s;
 
 $window-width-tiny: 800px;
 $window-width-small: 1000px;
-$window-width-medium: 1200px;
-$window-width-large: 1500px;
+$window-width-medium: 1300px;
+$window-width-large: 1600px;
 
 @mixin safe-rgba-property($property, $rgba-color) {
   #{$property}: rgb(red($rgba-color), green($rgba-color), blue($rgba-color));
@@ -100,9 +100,10 @@ body {
   }
 
   @media (max-width: $window-width-tiny), (max-device-width: $window-width-tiny) {
-    display: none;
+    position: static;
+    width: inherit;
   }
-  @media (min-width: $window-width-tiny) {
+  @media (min-width: $window-width-tiny) and (min-device-width: $window-width-tiny) {
     @include transition(opacity $fade-out-duration, width $expand-duration);
     .scrolled-down & {
       width: $collapsed-side-width;
@@ -115,6 +116,7 @@ body {
 #page-header {
   @extend %main-header-panel;
   left: $nav-width + 3 * $main-panel-margin;
+  min-width: $nav-width - (4*$main-panel-margin);
 
   h2 {
     display: inline-block;
@@ -134,7 +136,7 @@ body {
       max-width: inherit;
     }
   }
-  @media (min-width: $window-width-tiny), (min-device-width: $window-width-tiny) {
+  @media (min-width: $window-width-tiny) and (min-device-width: $window-width-tiny) {
     opacity: 1;
     max-width: 40em;
     @include transition(opacity $fade-in-duration, left $expand-duration, max-width $expand-duration);
@@ -163,8 +165,9 @@ body {
   @media (max-width: $window-width-tiny), (max-device-width: $window-width-tiny) {
     position: static;
     width: auto;
+    min-height: inherit;
   }
-  @media (min-width: $window-width-tiny), (min-device-width: $window-width-tiny) {
+  @media (min-width: $window-width-tiny) and (min-device-width: $window-width-tiny) {
     opacity: 1;
     @include transition(opacity $fade-in-duration);
 
@@ -284,13 +287,13 @@ nav {
   background-repeat: no-repeat;
   .item-commit &,
   .item-blogentry & {
-    float: left;
+    float: right;
   }
   .item-video &,
   .item-image & {
     position: absolute;
     top: 0;
-    left: 0;
+    right: 0;
     opacity: .7;
     margin: $item-padding;
   }
@@ -354,6 +357,45 @@ ul, ol {
     font-size: .7em;
     display: block;
   }
+  &.item-blogentry,
+  &.item-batch {
+    width: 96%;
+    width: calc(100 % - #{$item-padding});
+  }
+
+  &.item-batch {
+    padding: 0;
+    .item {
+      border: none;
+      &:not(.video-loaded) {
+        width: 22%;
+        width: calc(25% - #{$item-padding*2});
+        @media (max-width: $window-width-small) {
+          width: 98%;
+          width: calc(100% - #{$item-padding*2});
+        }
+        @media (min-width: $window-width-small) and (max-width: $window-width-medium) {
+          width: 49%;
+          width: calc(50% - #{$item-padding*2});
+        }
+        @media (min-width: $window-width-medium) and (max-width: $window-width-large) {
+          width: 33.2%;
+          width: calc(33.2% - #{$item-padding*2});
+        }
+      }
+    }
+  }
+}
+
+.item-batch {
+  position: relative;
+}
+
+.item,
+.item-content,
+.item-batch {
+  overflow-x: hidden;
+  text-overflow: ellipsis;
 }
 
 .item-image,

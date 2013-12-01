@@ -33,7 +33,7 @@ var tekt = (function ()
     {
       case 'projectDetail':
 
-        $('#project-items').load('/projects/' + o.projectKey + '/items?ajax=1 #ajax-main > *', function ()
+        $('#project-items').load('/projects/' + o.projectKey + '/itembatches?ajax=1 #ajax-main > *', function ()
         {
           tekt.initItemViewers('#project-items');
         });

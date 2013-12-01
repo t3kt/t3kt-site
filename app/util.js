@@ -1,4 +1,6 @@
-module.exports = {
+var _ = require('lodash');
+
+module.exports = exports = {
   NOT_IMPLEMENTED: function (msg)
   {
     throw new Error("Not implemented: " + (msg || '') + "...");
@@ -35,13 +37,13 @@ function Batcher(overrides)
 
 Batcher.prototype.startsNewBatch = function (item, batch)
 {
-  return !(batch != null) || batch.type === item.type;
+  return batch == null || batch.type !== item.entityType;
 };
 
 Batcher.prototype.createBatch = function (item)
 {
   return {
-    type: item.type,
+    type: item.entityType,
     items: [item]
   };
 };
@@ -56,6 +58,8 @@ Batcher.prototype.run = function (items)
   var batch, batches, item, _i, _len;
   batches = [];
   batch = null;
+  if (!items)
+    return batches;
   for (_i = 0, _len = items.length; _i < _len; _i++)
   {
     item = items[_i];
@@ -70,3 +74,15 @@ Batcher.prototype.run = function (items)
   }
   return batches;
 };
+
+
+var batchItemDefaults = {
+  startsNewBatch:function(item, batch)
+  {
+    return !(batch != null) || batch.type !== item.entityType;
+  }
+}
+function batchItems(items, opts)
+{
+
+}

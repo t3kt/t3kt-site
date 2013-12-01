@@ -57,6 +57,11 @@ mixin item(i)
   else if i.entityType == 'blogentry'
     mixin blogEntry(i)
 
+mixin batch(batch)
+  article.item.item-batch
+    each item in batch.items
+      mixin item(item)
+
 mixin projectSubNav(projectKey, pages, currentPage, navItems)
   nav#sub-nav
     ul
