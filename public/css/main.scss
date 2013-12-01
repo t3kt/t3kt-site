@@ -11,6 +11,7 @@ $item-padding: $main-panel-padding / 2;
 $main-header-height: 2.2em;
 $main-header-min-width: 14em;
 $nav-min-height: 13em;
+$banner-height: 300px;
 $collapsed-side-width: 1em;
 $semi-hidden-opacity: .4;
 $collapse-duration: 1s;
@@ -50,6 +51,18 @@ body {
     overflow-x: hidden;
     font-size: 1.5em;
   }
+}
+
+#banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: $banner-height;
+  width: 100%;
+  z-index: -1;
+  opacity: .5;
+  background-size: 100% $banner-height;
 }
 
 ::-moz-selection {
@@ -364,9 +377,12 @@ ul, ol {
   }
 
   &.item-batch {
+    position: relative;
     padding: 0;
     .item {
       border: none;
+      padding: $item-padding/2;
+      margin: $item-padding/2;
       &:not(.video-loaded) {
         width: 22%;
         width: calc(25% - #{$item-padding*2});
@@ -387,10 +403,6 @@ ul, ol {
   }
 }
 
-.item-batch {
-  position: relative;
-}
-
 .item,
 .item-content,
 .item-batch {
@@ -403,6 +415,7 @@ ul, ol {
   img {
     width: 100%;
     height: auto;
+    border-radius: $item-padding;
   }
 }
 
@@ -428,6 +441,12 @@ ul, ol {
       @include transition(opacity $fade-in-duration);
     }
   }
+}
+
+.item-title
+{
+  padding: 0 $item-padding/2;
+  margin: 0 $item-padding/2;
 }
 
 a {
