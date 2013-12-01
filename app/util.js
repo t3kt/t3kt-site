@@ -3,8 +3,27 @@ module.exports = {
   {
     throw new Error("Not implemented: " + (msg || '') + "...");
   },
+  asArray: function (val)
+  {
+    if (!(val != null))
+    {
+      return [];
+    }
+    else
+    {
+      if (Array.isArray(val))
+      {
+        return val;
+      }
+      else
+      {
+        return [val];
+      }
+    }
+  },
   Batcher: Batcher,
-  batchItems: function(items, overrides) {
+  batchItems: function (items, overrides)
+  {
     return new Batcher(overrides).run(items);
   }
 };

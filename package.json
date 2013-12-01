@@ -6,7 +6,6 @@
   "dependencies": {
     "async": "0.2.9",
     "connect": "2.11.1",
-    "Deferred": "0.1.1",
     "express": "3.4.5",
     "formage": "2.2.14",
     "http-signature": "0.10.0",
@@ -17,7 +16,6 @@
     "moment": "2.4.0",
     "mongodb": "1.3.20",
     "mongoose": "3.8.1",
-    "node-flickr": "0.0.1",
     "request": "2.27.0"
   },
   "devDependencies": {
