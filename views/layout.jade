@@ -46,5 +46,6 @@ else
       script(src='//cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.3/jquery.colorbox.js')
       script(src='//cdnjs.cloudflare.com/ajax/libs/jquery.pjax/1.7.0/jquery.pjax.min.js')
       script(src='/js/script.js')
-      //include analytics
+      if analyticsEnabled
+        include analytics
       block scripts

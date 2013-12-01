@@ -11,7 +11,8 @@ var config = {
   registrationAllowed: false,
   adminUser: null,
   adminPass: null,
-  blogSharedCategories: null
+  blogSharedCategories: null,
+  analyticsEnabled: true
 };
 
 _.merge(config, {

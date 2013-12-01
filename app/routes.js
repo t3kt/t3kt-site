@@ -344,7 +344,8 @@ function sharedInit(req, res, next)
   req.data = _.merge({
     isAjax: req.xhr || req.param('ajax') === '1' || !!req.header('X-PJAX'),
     analyticsSiteId: config.analyticsSiteId,
-    analyticsDomain: config.analyticsDomain
+    analyticsDomain: config.analyticsDomain,
+    analyticsEnabled: config.analyticsEnabled
   }, req.data || {});
   next();
 }
