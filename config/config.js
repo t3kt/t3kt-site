@@ -6,7 +6,7 @@ var config = {
   cacheTimeout: 180000,
   mongoOptions: {},
   mongoUri: '',
-  analyticsSiteId: 'UA-41056285-1',
+  analyticsSiteId: 'UA-46134708-1',
   analyticsDomain: 't3kt.net',
   registrationAllowed: false,
   adminUser: null,
