@@ -2,7 +2,7 @@ var _ = require('lodash');
 
 var config = {
   flickrApiKey: '',
-  blogFeedUrl: 'http://tetk.blogspot.com/feeds/posts/default?alt=json',
+  blogFeedUrl: '',
   cacheTimeout: 180000,
   mongoOptions: {},
   mongoUri: '',
@@ -21,7 +21,8 @@ _.merge(config, {
   adminPass: process.env.FORMAGE_ADMIN_PASS,
   analyticsSiteId: process.env.ANALYTICS_SITE_ID,
   analyticsDomain: process.env.ANALYTICS_DOMAIN,
-  flickrApiKey: process.env.FLICKR_API_KEY
+  flickrApiKey: process.env.FLICKR_API_KEY,
+  blogFeedUrl: process.env.BLOG_FEED_URL
 })
 
 try
