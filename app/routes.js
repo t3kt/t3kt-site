@@ -1,4 +1,4 @@
-var util = require("../models/util"),
+var util = require("./util"),
   NOT_IMPLEMENTED = util.NOT_IMPLEMENTED,
   d = require('./models'),
   config = require('../config/config'),

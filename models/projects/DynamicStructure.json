@@ -1,9 +1,0 @@
-{
-  "key": "DynamicStructure",
-  "title": "DynamicStructure",
-  "blogCategories": ["dynamicstructure"],
-  "flickrSetId": "72157634701474384",
-  "vimeoAlbumId": "2463700",
-  "githubRepo": "dynamicstructure",
-  "descriptionHtml": "<p>DynamicStructure is a visual performance systems made with <a href=\"http://www.derivative.ca/\" target=\"_blank\">TouchDesigner</a>.<br/>It spawned off of LinearChaosC.</p>\n<p>The system focuses on order and change. Like most of my other works, it will be based on spacial and temporal distortion of geometric primitives.</p>\n<p>The code for this project is available here: <a href=\"https://github.com/t3kt/dynamicstructure\" target=\"_blank\">on github</a>.</p>"
-}

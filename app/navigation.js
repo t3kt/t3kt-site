@@ -1,7 +1,6 @@
 var _ = require('lodash'),
-  util = require('../models/util'),
-  NOT_IMPLEMENTED = util.NOT_IMPLEMENTED,
-  data = require('../models/data');
+  util = require('./util'),
+  NOT_IMPLEMENTED = util.NOT_IMPLEMENTED;
 
 var topLevelItems = [
   new NavEntry('about', 'about', '/pages/about'),

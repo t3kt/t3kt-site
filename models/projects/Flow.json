@@ -1,9 +1,0 @@
-{
-  "key": "Flow",
-  "title": "Flow",
-  "blogCategories": ["flow"],
-  "flickrSetId": "72157635260604129",
-  "vimeoAlbumId": "2507048",
-  "githubRepo": "Flow",
-  "descriptionHtml": "<p>Flow is a visual performance systems made with <a href=\"http://www.derivative.ca/\" target=\"_blank\">TouchDesigner</a>.<br/>\nIt explores the interplay of forces on a particle system.</p>\n<p>The code for this project is available here: <a href=\"https://github.com/t3kt/flow\" target=\"_blank\">on github</a>.</p>"
-}
