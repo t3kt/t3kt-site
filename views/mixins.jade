@@ -4,14 +4,15 @@ mixin time(t)
 
 mixin video(vid)
   figure.item.item-video(data-key=vid.key)
-    //figcaption.item-title
+    span(class='item-type-icon icon-#{vid.external && vid.external.source}', title='video#{vid.external && vid.external.source?(" from "+vid.external.source):""}') video
+    //-figcaption.item-title
       if vid.detailUrl
         a(href=vid.detailUrl, target='_blank')=vid.title
       else
         span= vid.title
     a.load-video(href='#', title='click to load video')
       img(src=vid.small.url, alt=vid.title, width=vid.small.width, height=vid.small.height)
-    //
+    //-
       if vid.embedHtml
         != vid.embedHtml
       else
@@ -20,27 +21,30 @@ mixin video(vid)
 
 mixin commit(com)
   div.item.item-commit(data-key=com.key)
+    span(class='item-type-icon icon-#{com.external && com.external.source}', title='commit#{com.external && com.external.source?(" from "+com.external.source):""}') commit
     div.item-content=com.title
     a(href=com.external.url,target='_blank') browse code
     mixin time(com.posted)
 
 mixin image(img)
   figure.item.item-image(data-key=img.key)
-    //figcaption.item-title
+    span(class='item-type-icon icon-#{img.external && img.external.source}', title='image#{img.external && img.external.source?(" from "+img.external.source):""}') image
+    //-figcaption.item-title
       a(href=img.detailUrl, target='_blank')=img.title
     a(href=img.full.url, class='image-grid-link', rel='images', title=img.title)
       img(src=img.small.url, alt=img.title, width=img.small.width, height=img.small.height)
     mixin time(img.posted)
 
 mixin blogEntry(ent)
-  article.item.item-entry(data-key=ent.key)
+  article.item.item-blogentry(data-key=ent.key)
+    span(class='item-type-icon icon-#{ent.external && ent.external.source}', title='news entry#{ent.external && ent.external.source?(" from "+ent.external.source):""}') entry
     h3.item-title
       if ent.detailUrl
         a(href=ent.detailUrl, target='_blank')=ent.title
       else
         span= ent.title
     div.item-content
-      != ent.contentHtml
+      != ent.content.data
     mixin time(ent.posted)
 
 mixin item(i)
@@ -50,7 +54,7 @@ mixin item(i)
     mixin commit(i)
   else if i.entityType == 'image'
     mixin image(i)
-  else if i.entityType == 'blogEntry'
+  else if i.entityType == 'blogentry'
     mixin blogEntry(i)
 
 mixin projectSubNav(projectKey, pages, currentPage, navItems)

@@ -154,7 +154,7 @@ var needs = {
   {
     var projectKey = req.param('projectkey'),
       category = req.param('category'),
-      query = {entityType: 'entry'};
+      query = {entityType: d.Item.types.blogentry};
     if (projectKey)
       query.project = projectKey;
     if (category)
@@ -211,7 +211,7 @@ var needs = {
 
 var routes =
 {
-  projects: route('get', ['/projects', '/'],
+  projects: route('get', ['/projects'],
     [needs.settings, needs.projectList],
     function (req, res, next)
     {
@@ -305,13 +305,17 @@ var routes =
     }),
   news: route('get',
     [
-      '/news'
-      //, '/'
+      '/news', '/'
     ],
     [needs.settings, needs.newsItems],
     function (req, res)
     {
       req.data.title = 'news';
+//      async.eachSeries(req.data.newsEntries,
+//      function(entry, next))
+//      {
+//        entry.renderContent(['content'],next);
+//      }
       res.render('../views/news/index.jade', req.data);
     }),
   newsCategory: route('get', '/news/category/:category',

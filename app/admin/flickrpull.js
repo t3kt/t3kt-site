@@ -91,12 +91,11 @@ function pullFlickrImagesForProject(project, opts, callback)
         {
           var photos = responseData.photoset.photo,
             added = 0;
-          var overwrite = opts.overwrite,
-            report = {
-              added: 0,
-              updated: 0,
-              skipped: 0
-            };
+          var report = {
+            added: 0,
+            updated: 0,
+            skipped: 0
+          };
           opts.log('found ', photos.length, ' photos');
           async.eachSeries(photos,
             function (photo, next)

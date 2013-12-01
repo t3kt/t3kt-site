@@ -3,9 +3,10 @@ body {
   font-family: 'Oxygen Mono', sans-serif;
   color: #222266;
   line-height: normal; }
-  @media (max-width: 700px) {
+  @media (max-device-width: 800px) {
     body {
-      overflow-x: hidden; } }
+      overflow-x: hidden;
+      font-size: 1.5em; } }
 
 ::-moz-selection {
   background: #a5b3cc;
@@ -25,7 +26,7 @@ body {
 
 #site-header, #page-header, #main-nav {
   position: fixed; }
-  @media (max-width: 700px) {
+  @media (max-width: 800px) {
     #site-header, #page-header, #main-nav {
       position: static; } }
 
@@ -43,10 +44,10 @@ body {
   #site-header h1 {
     display: inline-block;
     font-size: 1.5em; }
-  @media (max-width: 700px), (max-device-width: 700px) {
+  @media (max-width: 800px), (max-device-width: 800px) {
     #site-header {
       display: none; } }
-  @media (min-width: 700px) {
+  @media (min-width: 800px) {
     #site-header {
       -moz-transition: opacity 1s, width 0.5s;
       -webkit-transition: opacity 1s, width 0.5s;
@@ -69,11 +70,15 @@ body {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis; }
-  @media (max-width: 700px), (max-device-width: 700px) {
+  @media (max-width: 800px), (max-device-width: 800px) {
     #page-header {
       position: static;
-      width: auto; } }
-  @media (min-width: 700px) {
+      width: inherit;
+      max-width: inherit;
+      display: block; }
+      #page-header h2 {
+        max-width: inherit; } }
+  @media (min-width: 800px), (min-device-width: 800px) {
     #page-header {
       opacity: 1;
       max-width: 40em;
@@ -97,11 +102,11 @@ body {
   left: 0;
   width: 13em;
   min-height: 13em; }
-  @media (max-width: 700px), (max-device-width: 700px) {
+  @media (max-width: 800px), (max-device-width: 800px) {
     #main-nav {
       position: static;
       width: auto; } }
-  @media (min-width: 700px) {
+  @media (min-width: 800px), (min-device-width: 800px) {
     #main-nav {
       opacity: 1;
       -moz-transition: opacity 0.5s;
@@ -142,6 +147,9 @@ nav {
       font-weight: bold; }
     nav li ul {
       padding-left: 1em; }
+  @media (max-device-width: 800px) {
+    nav {
+      font-size: 1.5em; } }
 
 #sub-nav {
   float: right; }
@@ -149,7 +157,7 @@ nav {
     display: inline-block;
     margin-top: 0;
     margin-left: .1em; }
-  @media (max-width: 900px) {
+  @media (max-width: 1000px), (max-device-width: 800px) {
     #sub-nav {
       float: none;
       margin-bottom: 1em; }
@@ -192,13 +200,29 @@ nav {
 .icon-blogger {
   background-image: url("../images/blogger-32.png"); }
 
+.item-type-icon {
+  text-indent: -99999px;
+  overflow: hidden;
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  background-repeat: no-repeat; }
+  .item-commit .item-type-icon, .item-blogentry .item-type-icon {
+    float: left; }
+  .item-video .item-type-icon, .item-image .item-type-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: .7;
+    margin: 0.5em; }
+
 main {
   position: absolute;
   top: 5.2em;
   left: 16em;
   right: 0;
   min-height: 13em; }
-  @media (max-width: 700px) {
+  @media (max-width: 800px), (max-device-width: 800px) {
     main {
       position: static; } }
 
@@ -219,18 +243,18 @@ ul, ol {
   text-align: left;
   min-width: 14em;
   min-height: 5em;
-  font-size: .9em;
+  position: relative;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
   .item:not(.video-loaded) {
     width: 22%;
     width: calc(25% - 1em); }
-    @media (max-width: 900px) {
+    @media (max-width: 1000px) {
       .item:not(.video-loaded) {
         width: 98%;
         width: calc(100% - 1em); } }
-    @media (min-width: 900px) and (max-width: 1200px) {
+    @media (min-width: 1000px) and (max-width: 1200px) {
       .item:not(.video-loaded) {
         width: 49%;
         width: calc(50% - 1em); } }
@@ -238,6 +262,9 @@ ul, ol {
       .item:not(.video-loaded) {
         width: 33.2%;
         width: calc(33.2% - 1em); } }
+  @media (max-device-width: 800px) {
+    .item {
+      font-size: 1.5em; } }
   .item time {
     text-align: right;
     font-size: .7em;

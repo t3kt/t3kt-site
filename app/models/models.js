@@ -70,22 +70,22 @@ var itemTypes = {
   video: 'video',
   image: 'image',
   commit: 'commit',
-  blogEntry: 'blogEntry'
+  blogentry: 'blogentry'
 };
 var itemTypeAliases =
   _.merge({}, itemTypes, {
     videos: 'video',
     images: 'image',
     commits: 'commit',
-    blogEntries: 'blogEntry',
-    news: 'blogEntry'
+    blogentries: 'blogentry',
+    news: 'blogentry'
   });
 
 var ItemSchema = Schema({
   entityType: _.extend({}, tokenField, {required: true, enum: Object.keys(itemTypes)}),
   key: _.extend({}, tokenField, {required: true}),
   project: [tokenField],
-  title: {type: String, required: true},
+  title: {type: String},
   created: dateField,
   updated: dateField,
   tags: [tokenField],
@@ -109,7 +109,10 @@ var ItemSchema = Schema({
   full: imageField,
   small: imageField,
   square: imageField,
-  medium: imageField
+  medium: imageField,
+
+  // blog/news entry fields
+  content: contentField
 });
 ItemSchema.methods.renderContent = renderContentFields;
 

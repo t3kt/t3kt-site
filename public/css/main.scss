@@ -18,8 +18,8 @@ $expand-duration: .5s;
 $fade-out-duration: 1s;
 $fade-in-duration: .5s;
 
-$window-width-tiny: 700px;
-$window-width-small: 900px;
+$window-width-tiny: 800px;
+$window-width-small: 1000px;
 $window-width-medium: 1200px;
 $window-width-large: 1500px;
 
@@ -46,8 +46,9 @@ body {
   font-family: 'Oxygen Mono', sans-serif;
   color: $main-text-color;
   line-height: normal;
-  @media (max-width: $window-width-tiny) {
+  @media (max-device-width: $window-width-tiny) {
     overflow-x: hidden;
+    font-size: 1.5em;
   }
 }
 
@@ -126,9 +127,14 @@ body {
 
   @media (max-width: $window-width-tiny), (max-device-width: $window-width-tiny) {
     position: static;
-    width: auto;
+    width: inherit;
+    max-width: inherit;
+    display: block;
+    h2 {
+      max-width: inherit;
+    }
   }
-  @media (min-width: $window-width-tiny) {
+  @media (min-width: $window-width-tiny), (min-device-width: $window-width-tiny) {
     opacity: 1;
     max-width: 40em;
     @include transition(opacity $fade-in-duration, left $expand-duration, max-width $expand-duration);
@@ -158,7 +164,7 @@ body {
     position: static;
     width: auto;
   }
-  @media (min-width: $window-width-tiny) {
+  @media (min-width: $window-width-tiny), (min-device-width: $window-width-tiny) {
     opacity: 1;
     @include transition(opacity $fade-in-duration);
 
@@ -218,6 +224,9 @@ nav {
       padding-left: $main-panel-padding;
     }
   }
+  @media (max-device-width: $window-width-tiny) {
+    font-size: 1.5em;
+  }
 }
 
 #sub-nav {
@@ -227,7 +236,7 @@ nav {
     margin-top: 0;
     margin-left: .1em;
   }
-  @media (max-width: $window-width-small) {
+  @media (max-width: $window-width-small), (max-device-width: $window-width-tiny) {
     float: none;
     margin-bottom: $main-panel-margin;
     li {
@@ -262,7 +271,28 @@ nav {
 
 @each $icon in facebook, github, vimeo, flickr, blogger {
   .icon-#{$icon} {
-    background-image: url('../images/' + $icon + '-32.png');
+    background-image: url('../images/#{$icon}-32.png');
+  }
+}
+
+.item-type-icon {
+  text-indent: -99999px;
+  overflow: hidden;
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  background-repeat: no-repeat;
+  .item-commit &,
+  .item-blogentry & {
+    float: left;
+  }
+  .item-video &,
+  .item-image & {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: .7;
+    margin: $item-padding;
   }
 }
 
@@ -273,7 +303,7 @@ main {
   left: $nav-width + 3 * $main-panel-margin;
   right: 0;
   min-height: $nav-min-height;
-  @media (max-width: $window-width-tiny) {
+  @media (max-width: $window-width-tiny), (max-device-width: $window-width-tiny) {
     position: static;
   }
 }
@@ -297,7 +327,8 @@ ul, ol {
   text-align: left;
   min-width: 14em;
   min-height: 5em;
-  font-size: .9em;
+  position: relative;
+  //font-size: .9em;
   @include box-sizing(border-box);
   &:not(.video-loaded) {
     width: 22%;
@@ -314,6 +345,9 @@ ul, ol {
       width: 33.2%;
       width: calc(33.2% - #{$item-padding*2});
     }
+  }
+  @media (max-device-width: $window-width-tiny) {
+    font-size: 1.5em;
   }
   time {
     text-align: right;

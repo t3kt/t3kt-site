@@ -10,7 +10,8 @@ var config = {
   analyticsDomain: 't3kt.net',
   registrationAllowed: false,
   adminUser: null,
-  adminPass: null
+  adminPass: null,
+  blogSharedCategories: null
 };
 
 _.merge(config, {

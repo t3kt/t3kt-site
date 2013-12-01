@@ -5,7 +5,8 @@ var models = require('../models'),
 var sources = {
   flickr: require('./flickrpull'),
   vimeo: require('./vimeopull'),
-  github: require('./githubpull')
+  github: require('./githubpull'),
+  blogger: require('./bloggerpull')
 };
 
 function pull(source, projects, opts, callback)
@@ -24,7 +25,7 @@ function pull(source, projects, opts, callback)
         callback(err);
       else
         pull(source, projs, opts, callback);
-    })
+    });
   }
   else if (typeof(projects[0]) == 'string')
   {
