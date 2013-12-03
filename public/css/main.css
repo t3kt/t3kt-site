@@ -285,14 +285,22 @@ ul, ol {
     display: block; }
   .item.item-blogentry, .item.item-batch {
     width: 96%;
-    width: calc(100 % - 0.5em); }
+    width: calc(100% - 0.5em); }
   .item.item-batch {
     position: relative;
-    padding: 0; }
+    padding: 0 0.25em;
+    white-space: nowrap;
+    overflow-x: auto; }
+    .item.item-batch.item-batch-commit {
+      white-space: normal;
+      overflow-x: inherit; }
     .item.item-batch .item {
       border: none;
       padding: 0.25em;
-      margin: 0.25em; }
+      margin: 0.25em;
+      margin-right: 0.5em; }
+      .item.item-batch .item:last-child {
+        margin-right: 0.75em; }
       .item.item-batch .item:not(.video-loaded) {
         width: 22%;
         width: calc(25% - 1em); }

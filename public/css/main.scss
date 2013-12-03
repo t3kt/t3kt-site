@@ -373,16 +373,26 @@ ul, ol {
   &.item-blogentry,
   &.item-batch {
     width: 96%;
-    width: calc(100 % - #{$item-padding});
+    width: calc(100% - #{$item-padding});
   }
 
   &.item-batch {
     position: relative;
-    padding: 0;
+    padding: 0 $item-padding/2;
+    white-space: nowrap;
+    overflow-x: auto;
+    &.item-batch-commit {
+      white-space: normal;
+      overflow-x: inherit;
+    }
     .item {
       border: none;
       padding: $item-padding/2;
       margin: $item-padding/2;
+      margin-right: $item-padding;
+      &:last-child {
+        margin-right: $item-padding*1.5;
+      }
       &:not(.video-loaded) {
         width: 22%;
         width: calc(25% - #{$item-padding*2});
