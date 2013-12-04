@@ -9,8 +9,7 @@ if isAjax
       block content
     footer
       block footer
-    div#scripts
-      block scripts
+    block scripts
 else
   html
     head
@@ -37,7 +36,7 @@ else
         include navmenu
       header#page-header
         h2=title
-      main
+      main(data-routeid=routeId, data-page-params=pageParams?JSON.stringify(pageParams):undefined)
         block content
       footer
         block footer

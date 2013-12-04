@@ -1,0 +1,28 @@
+{%- extends "shared/layout.html" -%}
+
+{%- block doc_title -%}
+  {%- if project %}
+    {{ project.title }}: {{ page.title }}
+  {%- else -%}
+    {{ page.title }}
+  {%- endif -%}
+{%- endblock -%}
+
+{%- block page_title -%}
+  {%- if project %}
+    {{ project.title }}: {{ page.title }}
+  {%- else -%}
+    {{ page.title }}
+  {%- endif -%}
+{%- endblock -%}
+
+{%- block content -%}
+{%- if not isAjax -%}
+  {%- if project -%}
+    {{ common.project_sub_nav( project, [page], page.key ) }}
+  {%- endif -%}
+{%- endif -%}
+  <article>
+    {{ page.contentRendered|safe }}
+  </article>
+{%- endblock -%}

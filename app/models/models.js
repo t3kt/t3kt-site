@@ -2,7 +2,8 @@ var mongoose = require('mongoose'),
   Schema = mongoose.Schema,
   _ = require('lodash'),
   formage = require('formage'),
-  content = require('../content');
+  content = require('../content'),
+  moment = require('moment');
 
 var tokenField = {type: String, lowercase: true, trim: true},
   dateField = {type: Date, default: Date.now, widget: formage.widgets.DateTimeWidget},
@@ -20,6 +21,11 @@ var tokenField = {type: String, lowercase: true, trim: true},
 function renderContentFields(fields, callback)
 {
   content.renderFields(this, fields, callback);
+}
+
+function renderDateField(field)
+{
+  return (this[field] && moment(this[field]).format('YYYY.MM.DD HH:mm:ss')) || '';
 }
 
 var SettingsSchema = Schema({
@@ -48,6 +54,7 @@ var ProjectSchema = Schema({
   navItems: [navItemField]
 });
 ProjectSchema.methods.renderContent = renderContentFields;
+ProjectSchema.methods.renderDate = renderDateField;
 
 var PageSchema = Schema({
   key: _.extend({}, tokenField, {index: true}),
@@ -59,6 +66,7 @@ var PageSchema = Schema({
 });
 PageSchema.index({key: 1, project: 1});
 PageSchema.methods.renderContent = renderContentFields;
+PageSchema.methods.renderDate = renderDateField;
 
 var imageField = {
   width: Number,
@@ -115,6 +123,7 @@ var ItemSchema = Schema({
   content: contentField
 });
 ItemSchema.methods.renderContent = renderContentFields;
+ItemSchema.methods.renderDate = renderDateField;
 
 var User = mongoose.model('users', UserSchema),
   Project = mongoose.model('projects', ProjectSchema),

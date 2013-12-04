@@ -3,7 +3,10 @@ var jade = require('jade'),
   async = require('async'),
   renderers = exports.renderers = {},
   defaultType = 'raw',
-  marked = require('marked');
+  marked = require('marked'),
+  swig = require('swig'),
+  swigExtras = require('swig-extras'),
+  format = require('util').format;
 
 function render(content, callback)
 {
@@ -69,7 +72,6 @@ exports.render = render;
 exports.renderFields = renderFields;
 
 
-
 renderers['raw'] = renderers['html'] = function (content, callback)
 {
   callback(null, content.data || '');
@@ -81,7 +83,45 @@ renderers['jade'] = function (content, callback)
   }, content.renderOptions);
   jade.render(content.data, opts, callback);
 };
-renderers['md'] = function(content, callback)
+renderers['md'] = function (content, callback)
 {
   marked(content.data, {}, callback);
+};
+
+var swigFilters = _.merge(
+  _.pick(swigExtras.filters, ['batch', 'groupby', 'markdown', 'nl2br', 'pluck', 'split', 'trim', 'truncate']),
+  {
+    prefix: function (input, str)
+    {
+      return input ? (str + input) : '';
+    },
+    suffix: function (input, str)
+    {
+      return input ? (input + str) : '';
+    },
+    format: function (input, var_args)
+    {
+      var args = _.toArray(arguments);
+      args[0] = input.replace(/\$/g, '%');
+      return format.apply(null, args);
+    }
+  });
+var swigTags = _.merge(_.pick(swigExtras.tags, ['markdown', 'switch', 'case']),
+  {
+
+  });
+
+exports.registerSwigFilters = function ()
+{
+  _.forOwn(swigFilters, function (f, key)
+  {
+    swig.setFilter(key, f);
+  });
+  _.forOwn(swigTags, function (t, key)
+  {
+    swig.setTag(key, t.parse, t.compile, t.ends, t.blockLevel);
+    if (t.ext) {
+      swig.setExtension(t.ext.name, t.ext.obj);
+    }
+  });
 };

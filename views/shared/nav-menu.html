@@ -1,0 +1,47 @@
+{%- set inProjectScope = routeId=='projectDetail'||routeId=='projectPage' -%}
+{%- set navClass = '' -%}
+<nav id="main-nav">
+  <ul>
+    {#
+    {% set navClass = routeId=='page'&& page && page.key == 'about' ? 'current': (inProjectScope?'out-of-scope':'') %}
+    #}
+    <li class="{{ navClass }}">
+      <a href="/pages/about">about</a>
+    </li>
+    {#
+    {% set navClass = routeId=='news'?'current': (inProjectScope?'out-of-scope':'') %}
+    #}
+    <li class="{{ navClass }}">
+      <a href="/news">news</a>
+    </li>
+    {#
+    {% set navClass = routeId == 'projects'?'current':(inProjectScope?'out-of-scope':'') %}
+    #}
+    <li class="{{ navClass }}" rel="projects">
+      <a href="/projects">projects</a>
+      {% if routeId != 'projects' && projects %}
+        <ul>
+          {% for p in projects %}
+            {#
+            {% set navClass = ((routeId=='projectDetail'||routeId=='projectPage')&&(projectKey==p.key||(project&&project.key==p.key)))?'current':'' %}
+            #}
+            <li class="{{ navClass }}">
+              <a href="/projects/{{ p.key }}">{{ p.title }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </li>
+    {#
+    {% set navClass = inProjectScope?'out-of-scope':'' %}
+    #}
+    <li class="{{ navClass }}">
+      {% spaceless %}
+      <a class="icon-link icon-facebook" href="https://www.facebook.com/int3kt" target="_blank">facebook</a>
+      <a class="icon-link icon-vimeo" href="https://vimeo.com/tekt" target="_blank">vimeo</a>
+      <a class="icon-link icon-github" href="https://github.com/t3kt" target="_blank">github</a>
+      <a class="icon-link icon-flickr" href="https://www.flickr.com/photos/t3kt/" target="_blank">flickr</a>
+      {% endspaceless %}
+    </li>
+  </ul>
+</nav>

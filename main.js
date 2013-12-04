@@ -6,11 +6,16 @@ var express = require('express'),
   formage = require('formage'),
   config = require('./config/config'),
   models = require('./app/models'),
+//blade = require('blade'),
+  swig = require('swig'),
+  content = require('./app/content'),
   adminEnabled = !!config.adminUser;
 
 var app = express();
 app.set('port', port);
 app.set('mongo', config.mongoUri);
+swig.setDefaults({cache: false});
+content.registerSwigFilters();
 
 app.configure(function ()
 {
@@ -24,24 +29,34 @@ app.configure(function ()
   app.use(express.static(path.join(__dirname, 'public')));
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
+//  app.use(blade.middleware(path.join(__dirname, 'views'),
+//    {
+//      compileOptions: {
+//        minify:false
+//      }
+//    }));
+//  app.set('view engine', 'blade');
+  app.engine('html', swig.renderFile);
+  app.set('view engine', 'html');
+  app.set('view cache', false);
   routes.register(app);
 //  admin.register(app);
   if (adminEnabled)
     formage.serve_static(app, express);
   app.use(app.router);
-});
 
-if (adminEnabled)
-{
-  var fAdmin = formage.init(app, express, models.models, {
-    title: 'formage admin',
-    default_section: 'Main',
-    admin_users_gui: true,
-    root: '/admin',
-    username: config.adminUser,
-    password: config.adminPass
-  })
-}
+  if (adminEnabled)
+  {
+    var fAdmin = formage.init(app, express, models.models, {
+      title: 'formage admin',
+      default_section: 'Main',
+      admin_users_gui: true,
+      root: '/admin',
+      username: config.adminUser,
+      password: config.adminPass
+    })
+  }
+});
 
 //app.use(function (req, res, next)
 //{

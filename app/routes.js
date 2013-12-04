@@ -24,6 +24,7 @@ var needs = {
       else
       {
         req.data.settings = settings;
+        req.data.bannerUrl = settings.defaultBannerUrl;
         next();
       }
     });
@@ -64,6 +65,8 @@ var needs = {
         if (project.key && project.key.toLowerCase() == key)
         {
           req.data.project = project;
+          if (project.bannerUrl)
+            req.data.bannerUrl = project.bannerUrl;
           break;
         }
       }
@@ -83,6 +86,8 @@ var needs = {
         else
         {
           req.data.project = project;
+          if (project.bannerUrl)
+            req.data.bannerUrl = project.bannerUrl;
           next();
         }
       });
@@ -166,7 +171,7 @@ var needs = {
           next(err);
         else
         {
-          req.data.newsEntries = entries;
+          req.data.items = entries;
           next();
         }
       });
@@ -226,7 +231,7 @@ var routes =
             return next(err);
           req.data.projects = projects;
           req.data.title = 'projects';
-          res.render('../views/projects/index.jade', req.data);
+          res.render('projects/index.html', req.data);
         });
     }),
   projectsJson: route('get', '/projects.json',
@@ -245,30 +250,57 @@ var routes =
           return next(err);
         req.data.project = project;
         req.data.title = 'project: ' + req.data.project.title;
-        res.render('../views/projects/detail.jade', req.data);
+        req.data.pageParams = {projectKey: project.key};
+        //req.data.pageParamsJson = JSON.stringify(req.data.pageParams);
+        res.render('projects/detail.html', req.data);
       });
     }),
-  projectItems: route('get', '/projects/:projectkey/items',
+  projectItems: route('get',
+    [
+      '/projects/:projectkey/items'
+    ]
+      .concat(Object.keys(d.Item.types).map(function (t)
+      {
+        return '/projects/:projectkey/' + t;
+      }))
+    ,
     [needs.settings, needs.projectList, needs.project, needs.projectItems],
     function (req, res)
     {
-      req.data.title = 'project: ' + req.data.project.title + ' : items';
-      res.render('../views/items/items.jade', req.data);
+      req.data.isContentOnly = req.data.isAjax;
+      res.render('items/items.html', req.data);
     }),
   projectItemBatches: route('get', '/projects/:projectkey/itembatches',
     [needs.settings, needs.projectList, needs.project, needs.projectItems],
     function (req, res)
     {
-      req.data.title = 'project ' + req.data.project.title + ' : items';
-      req.data.itemBatches = util.batchItems(req.data.items);
-      res.render('../views/items/itemBatches.jade', req.data);
+      req.data.isContentOnly = req.data.isAjax;
+      req.data.items = util.batchItems(req.data.items,
+        {
+          postProcessBatch: function (b)
+          {
+            if (b.items.length == 1)
+              return b.items[0];
+            b.items = b.items.map(function(i){return i.toObject();});
+            return b;
+          }
+        });
+      res.render('items/items.html', req.data);
     }),
-  projectItemsOfType: route('get', '/projects/:projectkey/:itemtype',
-    [needs.settings, needs.projectList, needs.project, needs.projectItems],
+  projectItemBatchesJson: route('get', '/projects/:projectkey/itembatches.json',
+    [needs.projectItems],
     function (req, res)
     {
-      req.data.title = 'project: ' + req.data.project.title + ' : ' + req.data.itemType;
-      res.render('../views/items/items.jade', req.data);
+      req.data.items = util.batchItems(req.data.items,
+        {
+          postProcessBatch: function (b)
+          {
+            if (b.items.length == 1)
+              return b.items[0];
+            return b;
+          }
+        });
+      res.json(req.data.items);
     }),
   videoEmbed: route('get', '/video/:itemkey/embed',
     [needs.settings, needs.item],
@@ -294,8 +326,7 @@ var routes =
       req.data.page.renderContent(['content'], function (err, page)
       {
         req.data.page = page;
-        req.data.title = req.data.project.title + ': ' + req.data.page.title;
-        res.render('../views/page.jade', req.data);
+        res.render('page.html', req.data);
       });
     }),
   page: route('get', '/pages/:pagekey',
@@ -307,8 +338,7 @@ var routes =
         if (err)
           return next(err);
         req.data.page = page;
-        req.data.title = page.title;
-        res.render('../views/page.jade', req.data);
+        res.render('page.html', req.data);
       });
     }),
   news: route('get',
@@ -324,14 +354,20 @@ var routes =
 //      {
 //        entry.renderContent(['content'],next);
 //      }
-      res.render('../views/news/index.jade', req.data);
+      res.render('news/index.html', req.data);
     }),
   newsCategory: route('get', '/news/category/:category',
     [needs.settings, needs.newsItems],
     function (req, res)
     {
       req.data.title = 'news: ' + req.param('category');
-      res.render('../views/news/index.jade', req.data);
+      res.render('news/index.html', req.data);
+    }),
+  itemJson: route('get', '/item/:itemkey.json',
+    [needs.item],
+    function (req, res)
+    {
+      res.json(req.data.item);
     })
 };
 
@@ -345,7 +381,9 @@ function sharedInit(req, res, next)
     isAjax: req.xhr || req.param('ajax') === '1' || !!req.header('X-PJAX'),
     analyticsSiteId: config.analyticsSiteId,
     analyticsDomain: config.analyticsDomain,
-    analyticsEnabled: config.analyticsEnabled
+    analyticsEnabled: config.analyticsEnabled,
+    siteTitle: config.siteTitle,
+    siteAuthor: config.siteAuthor
   }, req.data || {});
   next();
 }
@@ -368,6 +406,8 @@ exports.registerRoutes = function (app, routes)
             {
               req.data.routePath = path;
               req.data.routeId = routeId;
+              res.set('X-ROUTE-ID', routeId);
+              res.set('X-ROUTE-PATH', path);
               next();
             },
             route.middleware

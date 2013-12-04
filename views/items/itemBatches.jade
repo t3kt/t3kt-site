@@ -4,5 +4,8 @@ block content
     for batch in itemBatches
       if batch.items.length == 1
         mixin item(batch.items[0])
+      else if batch.batchType == 'video'
+        for vid in batch.items
+          mixin item(vid)
       else
         mixin batch(batch)

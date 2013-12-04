@@ -1,0 +1,19 @@
+{% extends "../shared/layout.html" %}
+
+{% block doc_title %}project: {{ project.title }}{% endblock %}
+
+{% block page_title %}project: {{ project.title }}{% endblock %}
+
+{% block content %}
+  {{ common.project_sub_nav( project, projectPages, null ) }}
+  <article>
+    <div class="project-description">
+      {% if project.descriptionRendered %}
+        {% autoescape false %}{{ project.descriptionRendered }}{% endautoescape %}
+      {% else %}
+        {% autoescape false %}{{ project.summaryRendered }}{% endautoescape %}
+      {% endif %}
+    </div>
+    <div id="project-items"> </div>
+  </article>
+{% endblock %}

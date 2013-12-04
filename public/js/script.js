@@ -4,10 +4,22 @@ var tekt = (function ()
     opts: null
   };
 
+  var pageInitializers = {
+    projectDetail: function (o)
+    {
+      $('#project-items').load('/projects/' + o.projectKey + '/itembatches?ajax=1', function ()
+      {
+        tekt.initItemViewers('#project-items');
+      });
+    }
+  };
+
   T.initItemViewers = function (area)
   {
-    var group = 'box-group-' + ($(area).attr('id') || 'main');
-    $('figure.item-image a', area).colorbox({rel: group});
+    if ($.fn.colorbox)
+    {
+      $('.item-image a', area).colorbox({rel: 'box-group-' + ($(area).attr('id') || 'main')});
+    }
 
     $(area).off('click.loadvideo')
       .on('click.loadvideo', '.load-video', function ()
@@ -27,18 +39,24 @@ var tekt = (function ()
 
   T.initPage = function (pageId, o)
   {
-    T.opts = o || {};
-    T.pageId = pageId;
-    switch (pageId)
+    if (!pageId)
     {
-      case 'projectDetail':
-
-        $('#project-items').load('/projects/' + o.projectKey + '/itembatches?ajax=1 #ajax-main > *', function ()
-        {
-          tekt.initItemViewers('#project-items');
-        });
+      pageId = $('main').data('routeid');
+      o = $('main').data('page-params')
     }
-    // TODO: ...
+    T.opts = o = o || {};
+    T.pageId = pageId;
+    T.initItemViewers(window);
+    $(window)
+      .unbind('scroll.updatestate')
+      .bind('scroll.updatestate', function ()
+      {
+        $(document.body).toggleClass('scrolled-down', (document.body.scrollTop || document.documentElement.scrollTop) > 5);
+      })
+      .triggerHandler('scroll.updatestate');
+    var init = pageInitializers[pageId];
+    if (init)
+      init(o);
   };
 
   return T;
@@ -49,13 +67,6 @@ if (window.$)
 {
   $(function ()
   {
-    var T = tekt;
-    T.initItemViewers(window);
-    $(window)
-      .bind('scroll', function ()
-      {
-        $(document.body).toggleClass('scrolled-down', (document.body.scrollTop || document.documentElement.scrollTop) > 5);
-      })
-      .trigger('scroll');
+    tekt.initPage();
   });
 }

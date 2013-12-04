@@ -395,18 +395,18 @@ ul, ol {
       }
       &:not(.video-loaded) {
         width: 22%;
-        width: calc(25% - #{$item-padding*4});
+        width: calc(25% - #{$item-padding*2});
         @media (max-width: $window-width-small) {
           width: 98%;
-          width: calc(100% - #{$item-padding*4});
+          width: calc(100% - #{$item-padding*2});
         }
         @media (min-width: $window-width-small) and (max-width: $window-width-medium) {
           width: 49%;
-          width: calc(50% - #{$item-padding*4});
+          width: calc(50% - #{$item-padding*2});
         }
         @media (min-width: $window-width-medium) and (max-width: $window-width-large) {
           width: 33.2%;
-          width: calc(33.2% - #{$item-padding*4});
+          width: calc(33.2% - #{$item-padding*2});
         }
       }
     }

@@ -48,7 +48,9 @@ mixin blogEntry(ent)
     mixin time(ent.posted)
 
 mixin item(i)
-  if i.entityType == 'video'
+  if i.batchType
+    mixin batch(i)
+  else if i.entityType == 'video'
     mixin video(i)
   else if i.entityType == 'commit'
     mixin commit(i)
@@ -58,7 +60,7 @@ mixin item(i)
     mixin blogEntry(i)
 
 mixin batch(batch)
-  article.item.item-batch
+  article(class='item item-batch item-batch-#{batch.batchType}')
     each item in batch.items
       mixin item(item)
 

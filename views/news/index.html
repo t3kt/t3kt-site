@@ -1,0 +1,29 @@
+{%- extends "../shared/layout.html" -%}
+
+{%- block doc_title -%}
+  {%- if category -%}
+    news: {{ category }}
+  {%- else -%}
+    news
+  {%- endif -%}
+{%- endblock -%}
+
+{%- block page_title -%}
+  {%- if category -%}
+    news: {{ category }}
+  {%- else -%}
+    news
+  {%- endif -%}
+{%- endblock -%}
+
+{%- block content -%}
+{%- if not isAjax -%}
+  <div>
+{%- endif -%}
+    {%- for item in items -%}
+    {{ common.renderItem(item) }}
+    {%- endfor -%}
+{%- if not isAjax -%}
+  </div>
+{%- endif -%}
+{%- endblock -%}

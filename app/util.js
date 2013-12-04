@@ -32,12 +32,12 @@ module.exports = exports = {
 var batchItemDefaults = {
   startsNewBatch: function (item, batch)
   {
-    return batch == null || batch.type !== item.entityType;
+    return batch == null || batch.batchType !== item.entityType;
   },
   createBatch: function (item)
   {
     return {
-      type: item.entityType,
+      batchType: item.entityType,
       items: [item]
     };
   },
@@ -45,27 +45,7 @@ var batchItemDefaults = {
   {
     return batch.items.push(item);
   },
-  run: function (items)
-  {
-    var batch, batches, item, _i, _len;
-    batches = [];
-    batch = null;
-    if (!items)
-      return batches;
-    for (_i = 0, _len = items.length; _i < _len; _i++)
-    {
-      item = items[_i];
-      if (this.startsNewBatch(item, batch))
-      {
-        batches.push(batch = this.createBatch(item));
-      }
-      else
-      {
-        this.addItem(item, batch);
-      }
-    }
-    return batches;
-  }
+  postProcessBatch: null
 };
 function batchItems(items, opts)
 {
@@ -83,5 +63,7 @@ function batchItems(items, opts)
     else
       opts.addItem(item, batch);
   }
-  return batches;
+  if (!opts.postProcessBatch)
+    return batches;
+  return batches.map(opts.postProcessBatch);
 }

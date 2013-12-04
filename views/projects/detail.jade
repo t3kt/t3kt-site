@@ -9,9 +9,3 @@ block content
     div.project-description
       != project.descriptionRendered || project.summaryRendered
     div#project-items
-block scripts
-  script(defer).
-    $(function()
-    {
-      tekt.initPage('projectDetail', {projectKey:'#{project.key}'});
-    });

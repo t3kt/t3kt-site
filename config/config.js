@@ -12,7 +12,9 @@ var config = {
   adminUser: null,
   adminPass: null,
   blogSharedCategories: null,
-  analyticsEnabled: true
+  analyticsEnabled: true,
+  siteTitle: 'tekt',
+  siteAuthor: 'tekt'
 };
 
 _.merge(config, {
