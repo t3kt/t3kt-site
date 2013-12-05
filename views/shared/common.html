@@ -7,70 +7,70 @@
   </style>
 {% endmacro %}
 
-{%- macro source_icon(item) -%}
-  <span class="item-type-icon {{ item.external.source|prefix('icon-') }}"
-      title="{{item.entityType}}{{ item.external.source|prefix(' from ') }}">
-    {{ item.entityType }}
+{%- macro source_icon(itemx) -%}
+  <span class="item-type-icon {{ itemx.external.source|prefix('icon-') }}"
+      title="{{itemx.entityType}}{{ itemx.external.source|prefix(' from ') }}">
+    {{ itemx.entityType }}
   </span>
 {%- endmacro -%}
 
-{%- macro time(item, field) -%}
-  {%- if item[field] -%}
-    <time>{{ item.renderDate(field) }}</time>
+{%- macro time(itemt, field) -%}
+  {%- if itemt[field] -%}
+    <time>{{ itemt.renderDate(field) }}</time>
   {%- endif -%}
 {%- endmacro -%}
 
-{%- macro video(item) -%}
-  <figure class="item item-video" data-key="{{ item.key }}">
-    {{ source_icon(item) }}
+{%- macro video(itemv) -%}
+  <figure class="item item-video" data-key="{{ itemv.key }}">
+    {{ source_icon(itemv) }}
     <a class="load-video" href="#" title="click to load video">
-      <img src="{{ item.small.url }}" alt="{{ item.title }}" width="{{ item.small.width }}" height="{{ item.small.height }}"/>
+      <img src="{{ itemv.small.url }}" alt="{{ itemv.title }}" width="{{ itemv.small.width }}" height="{{ itemv.small.height }}"/>
     </a>
-    {{ time(item, 'created') }}
+    {{ time(itemv, 'created') }}
   </figure>
 {%- endmacro -%}
 
-{%- macro commit(item) -%}
-  <div class="item item-commit" data-key="{{ item.key }}">
-    {{ source_icon(item) }}
-    <div class="item-content">{{ item.title }}</div>
-    <a href="{{ item.external.url }}" target="_blank">browse code</a>
-    {{ time(item, 'created') }}
+{%- macro commit(itemc) -%}
+  <div class="item item-commit" data-key="{{ itemc.key }}">
+    {{ source_icon(itemc) }}
+    <div class="item-content">{{ itemc.title }}</div>
+    <a href="{{ itemc.external.url }}" target="_blank">browse code</a>
+    {{ time(itemc, 'created') }}
   </div>
 {%- endmacro -%}
 
-{%- macro image(item) -%}
-  <figure class="item item-image" data-key="{{ item.key }}">
-    {{ source_icon(item) }}
-    <a class="image-grid-link" href="{{ item.full.url }}" rel="images" title="{{ item.title }}">
-      <img src="{{ item.small.url }}" alt="{{ item.title }}" width="{{ item.small.width }}" height="{{ item.small.height }}"/>
+{%- macro image(itemi) -%}
+  <figure class="item item-image" data-key="{{ itemi.key }}">
+    {{ source_icon(itemi) }}
+    <a class="image-grid-link" href="{{ itemi.full.url }}" rel="images" title="{{ itemi.title }}">
+      <img src="{{ itemi.small.url }}" alt="{{ itemi.title }}" width="{{ itemi.small.width }}" height="{{ itemi.small.height }}"/>
     </a>
-    {{ time(item, 'created') }}
+    {{ time(itemi, 'created') }}
   </figure>
 {%- endmacro -%}
 
-{%- macro blogentry(item) -%}
-  <article class="item item-blogentry" data-key="{{ item.key }}">
-    {{ source_icon(item) }}
-    <h3 class="item-title">{{ item.title }}</h3>
+{%- macro blogentry(itemb) -%}
+  <article class="item item-blogentry" data-key="{{ itemb.key }}">
+    {{ source_icon(itemb) }}
+    <h3 class="item-title">{{ itemb.title }}</h3>
     <div class="item-content">
       {%- autoescape false -%}
-        {{ item.content.data }}
+        {{ itemb.content.data }}
       {%- endautoescape -%}
     </div>
-    {{ time(item, 'created') }}
+    {{ time(itemb, 'created') }}
   </article>
 {%- endmacro -%}
 
-{%- macro batch(batch) -%}
-  <article class="item item-batch item-batch-{{ batch.batchType }}">
-    {%- for i in batch.items -%}
+{%- macro batch(b) -%}
+  <article class="item item-batch item-batch-{{ b.batchType }}">
+    {%- for i in b.items -%}
       {{ renderItem(i) }}
     {%- endfor -%}
   </article>
 {%- endmacro -%}
 
-{%- macro renderItem(i) -%}
+{%- macro renderItem(i)  -%}
   {%- if i.batchType -%}
     {{ batch(i) }}
   {%- elif i.entityType == 'video' -%}
@@ -111,3 +111,28 @@
     </ul>
   </nav>
 {% endmacro %}
+
+{%- macro analytics -%}
+{%- if analyticsEnabled -%}
+<script>
+  var _gas = _gas || [];
+  _gas.push(['_setAccount', {{analyticsSiteId|json}}]);
+  _gas.push(['_setDomainName', {{analyticsDomain|json}}]);
+  _gas.push(['_trackPageview']);
+  _gas.push(['_gasTrackForms']);
+  _gas.push(['_gasTrackOutboundLinks']);
+  _gas.push(['_gasTrackMaxScroll']);
+  _gas.push(['_gasTrackDownloads']);
+  _gas.push(['_gasTrackYoutube', {force: true}]);
+  _gas.push(['_gasTrackVimeo', {force: true}]);
+  (function() {
+    var ga = document.createElement('script');
+    ga.type = 'text/javascript';
+    ga.async = true;
+    ga.src = '//cdnjs.cloudflare.com/ajax/libs/gas/1.10.1/gas.min.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+{%- endif -%}
+{%- endmacro -%}

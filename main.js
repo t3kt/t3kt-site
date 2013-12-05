@@ -6,7 +6,6 @@ var express = require('express'),
   formage = require('formage'),
   config = require('./config/config'),
   models = require('./app/models'),
-//blade = require('blade'),
   swig = require('swig'),
   content = require('./app/content'),
   adminEnabled = !!config.adminUser;
@@ -29,13 +28,6 @@ app.configure(function ()
   app.use(express.static(path.join(__dirname, 'public')));
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
-//  app.use(blade.middleware(path.join(__dirname, 'views'),
-//    {
-//      compileOptions: {
-//        minify:false
-//      }
-//    }));
-//  app.set('view engine', 'blade');
   app.engine('html', swig.renderFile);
   app.set('view engine', 'html');
   app.set('view cache', false);

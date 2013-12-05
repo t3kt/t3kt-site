@@ -268,7 +268,7 @@ var routes =
     function (req, res)
     {
       req.data.isContentOnly = req.data.isAjax;
-      res.render('items/items.html', req.data);
+      res.render('items.html', req.data);
     }),
   projectItemBatches: route('get', '/projects/:projectkey/itembatches',
     [needs.settings, needs.projectList, needs.project, needs.projectItems],
@@ -285,7 +285,7 @@ var routes =
             return b;
           }
         });
-      res.render('items/items.html', req.data);
+      res.render('items.html', req.data);
     }),
   projectItemBatchesJson: route('get', '/projects/:projectkey/itembatches.json',
     [needs.projectItems],

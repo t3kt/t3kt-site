@@ -1,9 +1,0 @@
-extends ../layout
-
-block content
-  each project in projects
-    article.project-summary.item(style=project.bannerUrl?('background-image:url("'+project.bannerUrl+'")'):'', onclick="window.location='/projects/" + project.key+"'")
-      h3
-        a(href='/projects/'+project.key)=project.title
-      div.project-description
-        != project.summaryRendered || project.descriptionRendered

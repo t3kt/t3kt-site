@@ -47,9 +47,7 @@
   <script src="/js/script.js"></script>
 {%- endif -%}
 {%- if not isAjax -%}
-  {%- if analyticsEnabled -%}
-
-  {%- endif -%}
+  {{ analytics() }}
 </body>
 </html>
 {%- endif -%}
