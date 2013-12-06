@@ -333,23 +333,43 @@ ul, ol {
   min-height: 14em;
   background-repeat: no-repeat;
   background-size: cover;
-  cursor: pointer; }
-  .item.project-summary h3,
+  cursor: pointer;
+  position: relative; }
+  .item.project-summary .item-title {
+    padding: 0;
+    margin: 0;
+    margin-bottom: .25em;
+    letter-spacing: .25em;
+    font-size: 1.2em;
+    text-align: center; }
   .item.project-summary .project-description {
-    padding: 0.25em;
-    opacity: .2;
-    -moz-transition: opacity 1s;
-    -webkit-transition: opacity 1s;
-    -o-transition: opacity 1s;
-    transition: opacity 1s; }
-  .item.project-summary:hover h3,
-  .item.project-summary:hover .project-description {
+    text-align: justify; }
+  .item.project-summary .project-summary-content {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 2em;
+    padding: .25em;
     background-color: #a5b3cc;
-    opacity: .9;
-    -moz-transition: opacity 0.5s;
-    -webkit-transition: opacity 0.5s;
-    -o-transition: opacity 0.5s;
-    transition: opacity 0.5s; }
+    border-radius: 0.5em; }
+  @media (min-width: 800px) {
+    .item.project-summary .project-summary-content {
+      opacity: 0;
+      overflow: hidden;
+      -moz-transition: opacity 1s, margin 1s, padding 1s;
+      -webkit-transition: opacity 1s, margin 1s, padding 1s;
+      -o-transition: opacity 1s, margin 1s, padding 1s;
+      transition: opacity 1s, margin 1s, padding 1s; }
+    .item.project-summary:hover .project-summary-content {
+      opacity: .9;
+      margin: .25em;
+      padding: 1.75em;
+      -moz-transition: opacity 0.5s, margin 0.5s, padding 0.5s;
+      -webkit-transition: opacity 0.5s, margin 0.5s, padding 0.5s;
+      -o-transition: opacity 0.5s, margin 0.5s, padding 0.5s;
+      transition: opacity 0.5s, margin 0.5s, padding 0.5s; } }
 
 .item-title {
   padding: 0 0.25em;
