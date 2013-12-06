@@ -1,6 +1,0 @@
-extends ./layout
-block content
-  if page.project
-    mixin projectSubNav(page.project, [page], page.key, null)
-  article
-    != page.contentRendered

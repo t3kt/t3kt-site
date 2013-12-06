@@ -354,14 +354,14 @@ var routes =
 //      {
 //        entry.renderContent(['content'],next);
 //      }
-      res.render('news/index.html', req.data);
+      res.render('news.html', req.data);
     }),
   newsCategory: route('get', '/news/category/:category',
     [needs.settings, needs.newsItems],
     function (req, res)
     {
       req.data.title = 'news: ' + req.param('category');
-      res.render('news/index.html', req.data);
+      res.render('news.html', req.data);
     }),
   itemJson: route('get', '/item/:itemkey.json',
     [needs.item],

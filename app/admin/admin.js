@@ -78,7 +78,7 @@ var adminRoutes = exports.routes = {
       if (req.session.user)
         res.redirect('/admin');
       else
-        res.render('../views/admin/signup.jade');
+        res.render('admin/signup.html');
     }),
   signup: route('post', '/admin/signup',
     [adminNeeds.registrationAllowed, adminNeeds.userDoesNotExist],
@@ -115,7 +115,7 @@ var adminRoutes = exports.routes = {
   login_form: route('get', '/admin/login', [],
     function (req, res)
     {
-      res.render('../views/admin/login.jade');
+      res.render('admin/login.html');
     }),
   login: route('post', '/admin/login', [],
     function (req, res)
@@ -143,7 +143,7 @@ var adminRoutes = exports.routes = {
     [adminNeeds.authenticated], function (req, res)
     {
       req.data.title = 'admin';
-      res.render('../views/admin/index.jade', req.data);
+      res.render('admin/index.html', req.data);
     })
 };
 
