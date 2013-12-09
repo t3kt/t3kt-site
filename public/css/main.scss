@@ -449,12 +449,20 @@ ul, ol {
     text-align: justify;
   }
 
+  .project-summary-overlay,
   .project-summary-content {
     position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
+  }
+
+  .project-summary-content {
+    padding: 1em 2em;
+  }
+
+  .project-summary-overlay {
     margin: 2em;
     //      padding: $item-padding / 2;
     padding: .25em;
@@ -464,19 +472,33 @@ ul, ol {
   }
 
   @media (min-width: $window-width-tiny) {
-    .project-summary-content {
+    & {
+      overflow: hidden;
+    }
+    .project-summary-overlay {
       opacity: 0;
       overflow: hidden;
-      @include transition(opacity $fade-out-duration, margin $fade-out-duration, padding $fade-out-duration);
+      -webkit-transform: rotate(2deg);
+      transform: rotate(2deg);
+      @include transition(opacity $fade-out-duration, margin $fade-out-duration, -webkit-transform $fade-out-duration);
+    }
 
+    .project-summary-content {
+      opacity: 0;
+      @include transition(opacity $fade-out-duration);
     }
 
     &:hover {
-      .project-summary-content {
+      .project-summary-overlay {
         opacity: .9;
         margin: .25em;
-        padding: 1.75em;
-        @include transition(opacity $fade-in-duration, margin $fade-in-duration, padding $fade-in-duration);
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+        @include transition(opacity $fade-in-duration, margin $fade-in-duration, -webkit-transform $fade-in-duration);
+      }
+      .project-summary-content {
+        opacity: .9;
+        @include transition(opacity $fade-in-duration);
       }
     }
   }

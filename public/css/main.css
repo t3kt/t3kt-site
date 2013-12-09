@@ -344,32 +344,53 @@ ul, ol {
     text-align: center; }
   .item.project-summary .project-description {
     text-align: justify; }
+  .item.project-summary .project-summary-overlay,
   .item.project-summary .project-summary-content {
     position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
-    right: 0;
+    right: 0; }
+  .item.project-summary .project-summary-content {
+    padding: 1em 2em; }
+  .item.project-summary .project-summary-overlay {
     margin: 2em;
     padding: .25em;
     background-color: #a5b3cc;
     border-radius: 0.5em; }
   @media (min-width: 800px) {
-    .item.project-summary .project-summary-content {
+    .item.project-summary {
+      overflow: hidden; }
+    .item.project-summary .project-summary-overlay {
       opacity: 0;
       overflow: hidden;
-      -moz-transition: opacity 1s, margin 1s, padding 1s;
-      -webkit-transition: opacity 1s, margin 1s, padding 1s;
-      -o-transition: opacity 1s, margin 1s, padding 1s;
-      transition: opacity 1s, margin 1s, padding 1s; }
-    .item.project-summary:hover .project-summary-content {
+      -webkit-transform: rotate(2deg);
+      transform: rotate(2deg);
+      -moz-transition: opacity 1s, margin 1s, -webkit-transform 1s;
+      -webkit-transition: opacity 1s, margin 1s, -webkit-transform 1s;
+      -o-transition: opacity 1s, margin 1s, -webkit-transform 1s;
+      transition: opacity 1s, margin 1s, -webkit-transform 1s; }
+    .item.project-summary .project-summary-content {
+      opacity: 0;
+      -moz-transition: opacity 1s;
+      -webkit-transition: opacity 1s;
+      -o-transition: opacity 1s;
+      transition: opacity 1s; }
+    .item.project-summary:hover .project-summary-overlay {
       opacity: .9;
       margin: .25em;
-      padding: 1.75em;
-      -moz-transition: opacity 0.5s, margin 0.5s, padding 0.5s;
-      -webkit-transition: opacity 0.5s, margin 0.5s, padding 0.5s;
-      -o-transition: opacity 0.5s, margin 0.5s, padding 0.5s;
-      transition: opacity 0.5s, margin 0.5s, padding 0.5s; } }
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg);
+      -moz-transition: opacity 0.5s, margin 0.5s, -webkit-transform 0.5s;
+      -webkit-transition: opacity 0.5s, margin 0.5s, -webkit-transform 0.5s;
+      -o-transition: opacity 0.5s, margin 0.5s, -webkit-transform 0.5s;
+      transition: opacity 0.5s, margin 0.5s, -webkit-transform 0.5s; }
+    .item.project-summary:hover .project-summary-content {
+      opacity: .9;
+      -moz-transition: opacity 0.5s;
+      -webkit-transition: opacity 0.5s;
+      -o-transition: opacity 0.5s;
+      transition: opacity 0.5s; } }
 
 .item-title {
   padding: 0 0.25em;

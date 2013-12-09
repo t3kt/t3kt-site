@@ -7,6 +7,7 @@
 {% block content %}
   {% for project in projects %}
     <div class="item project-summary" style="background-image:url('{{project.bannerUrl}}');">
+      <div class="project-summary-overlay"> </div>
       <div class="project-summary-content">
         <h3 class="item-title">
           <a href="/projects/{{ project.key }}">{{ project.title }}</a>
