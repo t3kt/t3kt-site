@@ -113,7 +113,6 @@
 {% endmacro %}
 
 {%- macro analytics -%}
-{%- if analyticsEnabled -%}
 <script>
   var _gas = _gas || [];
   _gas.push(['_setAccount', {{analyticsSiteId|json}}]);
@@ -134,5 +133,4 @@
     s.parentNode.insertBefore(ga, s);
   })();
 </script>
-{%- endif -%}
 {%- endmacro -%}
