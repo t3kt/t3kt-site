@@ -115,8 +115,8 @@
 {%- macro analytics -%}
 <script>
   var _gas = _gas || [];
-  _gas.push(['_setAccount', {{analyticsSiteId|json}}]);
-  _gas.push(['_setDomainName', {{analyticsDomain|json}}]);
+  _gas.push(['_setAccount', {{analyticsSiteId|json|raw}}]);
+  _gas.push(['_setDomainName', {{analyticsDomain|json|raw}}]);
   _gas.push(['_trackPageview']);
   _gas.push(['_gasTrackForms']);
   _gas.push(['_gasTrackOutboundLinks']);
