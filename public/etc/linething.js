@@ -87,6 +87,7 @@ var LineThing = (function ()
   L.draw = function ()
   {
     updatePosition();
+    ctx.strokeStyle = 'rgba(47, 47, 47, 0.3)';
     ctx.beginPath();
     ctx.moveTo(pos.x, pos.y);
     ctx.lineTo(mouse.x, mouse.y);
