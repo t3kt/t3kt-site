@@ -13,24 +13,37 @@ var LineThing = (function ()
     ctx,
     mouse = {x: 0, y: 0},
     pos = {x: 0, y: 0},
-    side = TOP;
+    side = TOP,
+    active = true,
+    reqId;
 
-  L.init = function (area)
+  L.init = function (c)
   {
-    canvas = document.createElement('canvas');
-    canvas.width = L.width;
-    canvas.height = L.height;
-    area = area || document.body;
-    area.appendChild(canvas);
+    canvas = c;
+    L.width = c.width;
+    L.height = c.height;
     canvas.addEventListener('mousemove', function (e)
     {
-      //mouse.x = e.clientX;
-      //mouse.y = e.clientY;
       mouse.x = e.offsetX;
       mouse.y = e.offsetY;
     });
+    canvas.addEventListener('mouseover', function ()
+    {
+      active = true;
+      if (!reqId)
+      {
+        reqId = window.requestAnimationFrame(L.draw);
+      }
+    });
+    canvas.addEventListener('mouseout', function ()
+    {
+      active = false;
+      if (reqId)
+        window.cancelAnimationFrame(reqId);
+      reqId = null;
+    });
     ctx = canvas.getContext('2d');
-    window.requestAnimationFrame(L.draw);
+    reqId = window.requestAnimationFrame(L.draw);
   };
 
   function log()
@@ -89,6 +102,8 @@ var LineThing = (function ()
 
   L.draw = function ()
   {
+    if (!active)
+      return;
     updatePosition();
     ctx.strokeStyle = 'rgba(47, 47, 47, 0.3)';
     ctx.beginPath();
