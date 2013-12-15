@@ -15,16 +15,19 @@ var LineThing = (function ()
     pos = {x: 0, y: 0},
     side = TOP;
 
-  L.init = function ()
+  L.init = function (area)
   {
     canvas = document.createElement('canvas');
     canvas.width = L.width;
     canvas.height = L.height;
-    document.body.appendChild(canvas);
+    area = area || document.body;
+    area.appendChild(canvas);
     canvas.addEventListener('mousemove', function (e)
     {
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
+      //mouse.x = e.clientX;
+      //mouse.y = e.clientY;
+      mouse.x = e.offsetX;
+      mouse.y = e.offsetY;
     });
     ctx = canvas.getContext('2d');
     window.requestAnimationFrame(L.draw);
@@ -97,8 +100,3 @@ var LineThing = (function ()
   };
   return L;
 })();
-
-//document.onload = function ()
-//{
-LineThing.init();
-//};

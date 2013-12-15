@@ -11,6 +11,9 @@
   <link rel="shortcut icon" href="/images/favicon.png">
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Oxygen+Mono" type="text/css">
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.3/example1/colorbox.css">
+  {%- if not isAjax -%}
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+  {%- endif -%}
 </head>
 <body>
   <div id="banner"> </div>
@@ -41,7 +44,6 @@
   </footer>
   {{ common.banner_style(bannerUrl) }}
 {%- if not isAjax -%}
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.3/jquery.colorbox.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.pjax/1.7.0/jquery.pjax.min.js"></script>
   <script src="/js/script.js"></script>
