@@ -59,10 +59,79 @@ var LineThing = (function ()
   var canvas,
     ctx,
     mouse = {x: 0, y: 0},
-    pos = {x: 0, y: 0},
-    side = TOP,
+    pos1 = new Point(0, 0, TOP),
+    pos2 = new Point(0, 0, BOTTOM),
     active = true,
     reqId;
+
+  function Point(x, y, side)
+  {
+    this.x = x;
+    this.y = y;
+    this.side = side;
+  }
+
+  Point.prototype.move = function (step)
+  {
+    var x, y;
+    switch (this.side)
+    {
+      case TOP:
+        x = this.x + L.step;
+        if (x > L.width)
+        {
+          this.side = RIGHT;
+          log('on top, switching to right');
+        }
+        else
+          this.x = x;
+        break;
+      case BOTTOM:
+        x = this.x - L.step;
+        if (x < 0)
+        {
+          this.side = LEFT;
+          log('on bottom, switching to left');
+        }
+        else
+          this.x = x;
+        break;
+      case RIGHT:
+        y = this.y + L.step;
+        if (y > L.width)
+        {
+          this.side = BOTTOM;
+          log('on right, switching to bottom');
+        }
+        else
+          this.y = y;
+        break;
+      case LEFT:
+        y = this.y - L.step;
+        if (y < 0)
+        {
+          this.side = TOP;
+          log('on left, switching to top');
+        }
+        else
+          this.y = y;
+        break;
+    }
+  };
+  Point.prototype.draw = function (pt2)
+  {
+    ctx.save();
+    var gradient = ctx.createLinearGradient(this.x, this.y, pt2.x, pt2.y);
+    gradient.addColorStop(1, L.color1);
+    gradient.addColorStop(0.5, L.color2);
+    gradient.addColorStop(0, L.color3);
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(this.x, this.y);
+    ctx.lineTo(pt2.x, pt2.y);
+    ctx.stroke();
+    ctx.restore();
+  };
 
   function updateMousePosition(e)
   {
@@ -70,20 +139,20 @@ var LineThing = (function ()
     mouse.y = e.offsetY;
   }
 
-  function start()
+  L.start = function ()
   {
     active = true;
     if (!reqId)
       reqId = window.requestAnimationFrame(L.tick);
-  }
+  };
 
-  function stop()
+  L.stop = function ()
   {
     active = false;
     if (reqId)
       window.cancelAnimationFrame(reqId);
     reqId = null;
-  }
+  };
 
   L.init = function (c, opts)
   {
@@ -98,21 +167,23 @@ var LineThing = (function ()
       width: opts.width ? parseInt(opts.width) : c.width,
       height: opts.height ? parseInt(opts.height) : c.height
     });
-    stop();
+    L.stop();
     canvas.width = L.width;
     canvas.height = L.height;
     canvas.removeEventListener('mousemove', updateMousePosition);
-    canvas.removeEventListener('mouseover', start);
-    canvas.removeEventListener('mouseout', stop);
+    canvas.removeEventListener('mouseover', L.start);
+    canvas.removeEventListener('mouseout', L.stop);
     canvas.addEventListener('mousemove', updateMousePosition);
-    canvas.addEventListener('mouseover', start);
-    canvas.addEventListener('mouseout', stop);
+    canvas.addEventListener('mouseover', L.start);
+    canvas.addEventListener('mouseout', L.stop);
     L.ctx = ctx = canvas.getContext('2d');
     ctx.save();
     ctx.fillStyle = L.bgColor;
     ctx.fillRect(0, 0, L.width, L.height);
     ctx.restore();
-    start();
+    pos1 = new Point(0, 0, TOP);
+    pos2 = new Point(L.width, L.height, BOTTOM);
+    L.start();
   };
 
   function log()
@@ -120,75 +191,14 @@ var LineThing = (function ()
     //console.log.apply(console, arguments);
   }
 
-  L.move = function ()
-  {
-    var x, y;
-    switch (side)
-    {
-      case TOP:
-        x = pos.x + L.step;
-        if (x > L.width)
-        {
-          side = RIGHT;
-          log('on top, switching to right');
-        }
-        else
-          pos.x = x;
-        break;
-      case BOTTOM:
-        x = pos.x - L.step;
-        if (x < 0)
-        {
-          side = LEFT;
-          log('on bottom, switching to left');
-        }
-        else
-          pos.x = x;
-        break;
-      case RIGHT:
-        y = pos.y + L.step;
-        if (y > L.width)
-        {
-          side = BOTTOM;
-          log('on right, switching to bottom');
-        }
-        else
-          pos.y = y;
-        break;
-      case LEFT:
-        y = pos.y - L.step;
-        if (y < 0)
-        {
-          side = TOP;
-          log('on left, switching to top');
-        }
-        else
-          pos.y = y;
-        break;
-    }
-    //TODO
-  };
-
-  L.draw = function ()
-  {
-    //ctx.strokeStyle = L.color;
-    var gradient = ctx.createLinearGradient(pos.x, pos.y, mouse.x, mouse.y);
-    gradient.addColorStop(1, L.color1);
-    gradient.addColorStop(0.5, L.color2);
-    gradient.addColorStop(0, L.color3);
-    ctx.strokeStyle = gradient;
-    ctx.beginPath();
-    ctx.moveTo(pos.x, pos.y);
-    ctx.lineTo(mouse.x, mouse.y);
-    ctx.stroke();
-  };
-
   L.tick = function ()
   {
     if (!active)
       return;
-    L.move();
-    L.draw();
+    pos1.move(L.step);
+    pos2.move(L.step);
+    pos1.draw(mouse);
+    pos2.draw(mouse);
     reqId = window.requestAnimationFrame(L.tick);
   };
   return L;
