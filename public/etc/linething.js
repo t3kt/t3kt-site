@@ -86,7 +86,7 @@ var LineThing = (function ()
   L.init = function (c, opts)
   {
     opts = opts || {};
-    canvas = c;
+    L.canvas = canvas = c;
     extend(L, {
       step: opts.step ? parseInt(opts.step) : undefined,
       color: opts.color,
@@ -103,7 +103,7 @@ var LineThing = (function ()
     canvas.addEventListener('mousemove', updateMousePosition);
     canvas.addEventListener('mouseover', start);
     canvas.addEventListener('mouseout', stop);
-    ctx = canvas.getContext('2d');
+    L.ctx = ctx = canvas.getContext('2d');
     ctx.save();
     ctx.fillStyle = L.bgColor;
     ctx.fillRect(0, 0, L.width, L.height);
