@@ -47,7 +47,9 @@ var LineThing = (function ()
     width: 500,
     height: 500,
     step: 5,
-    color: 'rgba(47, 47, 47, 0.3)',
+    color1: 'rgba(47, 47, 47, 0)',
+    color2: 'rgba(47, 47, 47, 0.3)',
+    color3: 'rgba(47, 47, 47, 0)',
     bgColor: '#ccc'
   };
   var TOP = 0,
@@ -89,7 +91,9 @@ var LineThing = (function ()
     L.canvas = canvas = c;
     extend(L, {
       step: opts.step ? parseInt(opts.step) : undefined,
-      color: opts.color,
+      color1: opts.color1,
+      color2: opts.color2,
+      color3: opts.color3,
       bgColor: opts.bgColor,
       width: opts.width ? parseInt(opts.width) : c.width,
       height: opts.height ? parseInt(opts.height) : c.height
@@ -167,7 +171,12 @@ var LineThing = (function ()
 
   L.draw = function ()
   {
-    ctx.strokeStyle = L.color;
+    //ctx.strokeStyle = L.color;
+    var gradient = ctx.createLinearGradient(pos.x, pos.y, mouse.x, mouse.y);
+    gradient.addColorStop(1, L.color1);
+    gradient.addColorStop(0.5, L.color2);
+    gradient.addColorStop(0, L.color3);
+    ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.moveTo(pos.x, pos.y);
     ctx.lineTo(mouse.x, mouse.y);
