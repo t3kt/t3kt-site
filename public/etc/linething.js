@@ -1,9 +1,54 @@
+(function ()
+{
+  var lastTime = 0;
+  var vendors = ['webkit', 'moz'];
+  for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x)
+  {
+    window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+    window.cancelAnimationFrame =
+      window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
+  }
+
+  if (!window.requestAnimationFrame)
+    window.requestAnimationFrame = function (callback, element)
+    {
+      var currTime = new Date().getTime();
+      var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+      var id = window.setTimeout(function ()
+        {
+          callback(currTime + timeToCall);
+        },
+        timeToCall);
+      lastTime = currTime + timeToCall;
+      return id;
+    };
+
+  if (!window.cancelAnimationFrame)
+    window.cancelAnimationFrame = function (id)
+    {
+      clearTimeout(id);
+    };
+}());
+
 var LineThing = (function ()
 {
+  function extend(obj, ext)
+  {
+    for (var key in ext)
+    {
+      if (ext.hasOwnProperty(key) && ext[key] != null)
+        obj[key] = ext[key];
+    }
+    return obj;
+  }
+
+
   var L = {
     width: 500,
     height: 500,
-    step: 5
+    step: 5,
+    color: 'rgba(47, 47, 47, 0.3)',
+    bgColor: '#ccc'
   };
   var TOP = 0,
     LEFT = 1,
@@ -17,33 +62,53 @@ var LineThing = (function ()
     active = true,
     reqId;
 
-  L.init = function (c)
+  function updateMousePosition(e)
   {
+    mouse.x = e.offsetX;
+    mouse.y = e.offsetY;
+  }
+
+  function start()
+  {
+    active = true;
+    if (!reqId)
+      reqId = window.requestAnimationFrame(L.tick);
+  }
+
+  function stop()
+  {
+    active = false;
+    if (reqId)
+      window.cancelAnimationFrame(reqId);
+    reqId = null;
+  }
+
+  L.init = function (c, opts)
+  {
+    opts = opts || {};
     canvas = c;
-    L.width = c.width;
-    L.height = c.height;
-    canvas.addEventListener('mousemove', function (e)
-    {
-      mouse.x = e.offsetX;
-      mouse.y = e.offsetY;
+    extend(L, {
+      step: opts.step ? parseInt(opts.step) : undefined,
+      color: opts.color,
+      bgColor: opts.bgColor,
+      width: opts.width ? parseInt(opts.width) : c.width,
+      height: opts.height ? parseInt(opts.height) : c.height
     });
-    canvas.addEventListener('mouseover', function ()
-    {
-      active = true;
-      if (!reqId)
-      {
-        reqId = window.requestAnimationFrame(L.draw);
-      }
-    });
-    canvas.addEventListener('mouseout', function ()
-    {
-      active = false;
-      if (reqId)
-        window.cancelAnimationFrame(reqId);
-      reqId = null;
-    });
+    stop();
+    canvas.width = L.width;
+    canvas.height = L.height;
+    canvas.removeEventListener('mousemove', updateMousePosition);
+    canvas.removeEventListener('mouseover', start);
+    canvas.removeEventListener('mouseout', stop);
+    canvas.addEventListener('mousemove', updateMousePosition);
+    canvas.addEventListener('mouseover', start);
+    canvas.addEventListener('mouseout', stop);
     ctx = canvas.getContext('2d');
-    reqId = window.requestAnimationFrame(L.draw);
+    ctx.save();
+    ctx.fillStyle = L.bgColor;
+    ctx.fillRect(0, 0, L.width, L.height);
+    ctx.restore();
+    start();
   };
 
   function log()
@@ -51,7 +116,7 @@ var LineThing = (function ()
     //console.log.apply(console, arguments);
   }
 
-  function updatePosition()
+  L.move = function ()
   {
     var x, y;
     switch (side)
@@ -98,20 +163,24 @@ var LineThing = (function ()
         break;
     }
     //TODO
-  }
+  };
 
   L.draw = function ()
   {
-    if (!active)
-      return;
-    updatePosition();
-    ctx.strokeStyle = 'rgba(47, 47, 47, 0.3)';
+    ctx.strokeStyle = L.color;
     ctx.beginPath();
     ctx.moveTo(pos.x, pos.y);
     ctx.lineTo(mouse.x, mouse.y);
     ctx.stroke();
-    //...
-    window.requestAnimationFrame(L.draw);
+  };
+
+  L.tick = function ()
+  {
+    if (!active)
+      return;
+    L.move();
+    L.draw();
+    reqId = window.requestAnimationFrame(L.tick);
   };
   return L;
 })();
