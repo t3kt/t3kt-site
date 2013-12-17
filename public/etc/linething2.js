@@ -155,23 +155,42 @@ var LineThing2 = (function ()
   Point.prototype.lineTo = function (pt2)
   {
     ctx.save();
-    var gradient = ctx.createLinearGradient(this.x, this.y, pt2.x, pt2.y);
+    var gradient = ctx.createLinearGradient(0 | this.x, 0 | this.y, 0 | pt2.x, 0 | pt2.y);
     gradient.addColorStop(1, L.color1);
     gradient.addColorStop(0.5, L.color2);
     gradient.addColorStop(0, L.color3);
     ctx.strokeStyle = gradient;
     ctx.beginPath();
-    ctx.moveTo(this.x, this.y);
-    ctx.lineTo(pt2.x, pt2.y);
+    ctx.moveTo(0 | this.x, 0 | this.y);
+    ctx.lineTo(0 | pt2.x, 0 | pt2.y);
     ctx.stroke();
     ctx.restore();
     return this;
   };
-
+  function getAbsolutePosition(element)
+  {
+    var r = { x: element.offsetLeft, y: element.offsetTop };
+    if (element.offsetParent)
+    {
+      var tmp = getAbsolutePosition(element.offsetParent);
+      r.x += tmp.x;
+      r.y += tmp.y;
+    }
+    return r;
+  };
   function updateMousePosition(e)
   {
-    mouse.x = e.offsetX;
-    mouse.y = e.offsetY;
+    if ('offsetX' in e)
+    {
+      mouse.x = e.offsetX;
+      mouse.y = e.offsetY;
+    }
+    else
+    {
+      var cpos = getAbsolutePosition(this);
+      mouse.x = e.screenX - cpos.x;
+      mouse.y = e.screenY - cpos.y;
+    }
   }
 
   L.start = function ()
