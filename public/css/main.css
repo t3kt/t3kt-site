@@ -407,3 +407,21 @@ a:hover {
   /*outline: 2px solid #7b87cc;
   border: 1px solid #7b87cc;
   border-radius: .2em;*/ }
+
+button {
+  padding: 0.5em !important;
+  border-radius: 0.25em;
+  background-color: rgba(255, 255, 255, 0.5);
+  color: rgba(0, 0, 0, 0.5); }
+
+.control-panel {
+  border: 2px solid rgba(255, 255, 255, 0.5); }
+  .control-panel h4 {
+    background-color: rgba(255, 255, 255, 0.5);
+    color: rgba(0, 0, 0, 0.5);
+    padding: .25em .5em; }
+  .control-panel ul {
+    list-style: none; }
+  .control-panel li {
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.5);
+    padding: .25em; }

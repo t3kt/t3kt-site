@@ -30,7 +30,7 @@
     };
 }());
 
-var LineThing = (function ()
+var LineThing2 = (function ()
 {
   function extend(obj, ext)
   {
@@ -48,79 +48,111 @@ var LineThing = (function ()
   var L = {
     width: 500,
     height: 500,
-    step: 5,
+    step: 0.005,
     color1: 'rgba(47, 47, 47, 0)',
     color2: 'rgba(47, 47, 47, 0.3)',
     color3: 'rgba(47, 47, 47, 0)',
     bgColor: '#ccc'
   };
-  var TOP = 0,
-    LEFT = 1,
-    BOTTOM = 2,
-    RIGHT = 3;
   var canvas,
     ctx,
     mouse = {x: 0, y: 0},
-    pos1 = new Point(0, 0, TOP),
-    pos2 = new Point(0, 0, BOTTOM),
+    pos1,
+    pos2,
     active = true,
     reqId;
 
-  function Point(x, y, side)
+  function StateMachine()
+  {
+    this.states = {};
+  }
+
+  StateMachine.prototype = {
+    withState: function (id, update, opts)
+    {
+      if (id.id)
+        this.states[id.id] = id;
+      else
+        this.states[id] = new State(id, update, opts);
+      return this;
+    },
+    goTo: function (id)
+    {
+      var state = this.states[id];
+      if (!state)
+        throw new Error('state not found: ' + id);
+      this.current = state;
+      return this;
+    },
+    update: function (param)
+    {
+      return this.current && this.current.update(this, param);
+    }
+  };
+
+  function State(id, update, opts)
+  {
+    this.id = id;
+    this.update = function (machine, param)
+    {
+      var next = update.call(this, param);
+      if (next)
+        machine.goTo(next);
+    };
+    extend(this, opts);
+  }
+
+  L.StateMachine = StateMachine;
+
+  function makeSidesMachine_2(point)
+  {
+    return new StateMachine()
+      .withState('top', linearUpdate(point, [0, 0], [L.width, 0], 'right'))
+      .withState('right', linearUpdate(point, [L.width, 0], [L.width, L.height], 'bottom'))
+      .withState('bottom', linearUpdate(point, [L.width, L.height], [0, L.height], 'left'))
+      .withState('left', linearUpdate(point, [0, L.height], [0, 0], 'top'));
+  }
+
+  function makePathsMachine(point, paths)
+  {
+    var machine = new StateMachine();
+    paths.forEach(function (path)
+    {
+      machine.withState(path.id, linearUpdate(point, path.start, path.end, path.next));
+    });
+    return machine;
+  }
+
+  function linearUpdate(point, start, end, next)
+  {
+    var i = 0,
+      range = [end[0] - start[0], end[1] - start[1]];
+    return function (rate)
+    {
+      i += rate;
+      if (i > 1)
+      {
+        i = 0;
+        return next;
+      }
+      point.x = start[0] + range[0] * i;
+      point.y = start[1] + range[1] * i;
+      return null;
+    };
+  }
+
+  function Point(x, y)
   {
     this.x = x;
     this.y = y;
-    this.side = side;
   }
 
   Point.prototype.move = function (step)
   {
-    var x, y;
-    switch (this.side)
-    {
-      case TOP:
-        x = this.x + step;
-        if (x > L.width)
-        {
-          this.side = RIGHT;
-          log('on top, switching to right');
-        }
-        else
-          this.x = x;
-        break;
-      case BOTTOM:
-        x = this.x - step;
-        if (x < 0)
-        {
-          this.side = LEFT;
-          log('on bottom, switching to left');
-        }
-        else
-          this.x = x;
-        break;
-      case RIGHT:
-        y = this.y + step;
-        if (y > L.width)
-        {
-          this.side = BOTTOM;
-          log('on right, switching to bottom');
-        }
-        else
-          this.y = y;
-        break;
-      case LEFT:
-        y = this.y - step;
-        if (y < 0)
-        {
-          this.side = TOP;
-          log('on left, switching to top');
-        }
-        else
-          this.y = y;
-        break;
-    }
+    this.states.update(step);
+    return this;
   };
-  Point.prototype.draw = function (pt2)
+  Point.prototype.lineTo = function (pt2)
   {
     ctx.save();
     var gradient = ctx.createLinearGradient(this.x, this.y, pt2.x, pt2.y);
@@ -133,6 +165,7 @@ var LineThing = (function ()
     ctx.lineTo(pt2.x, pt2.y);
     ctx.stroke();
     ctx.restore();
+    return this;
   };
 
   function updateMousePosition(e)
@@ -162,7 +195,7 @@ var LineThing = (function ()
     opts = opts || {};
     L.canvas = canvas = c;
     extend(L, {
-      step: opts.step ? parseInt(opts.step) : undefined,
+      step: opts.step ? parseFloat(opts.step) : undefined,
       color1: opts.color1,
       color2: opts.color2,
       color3: opts.color3,
@@ -184,12 +217,19 @@ var LineThing = (function ()
     ctx.fillStyle = L.bgColor;
     ctx.fillRect(0, 0, L.width, L.height);
     ctx.restore();
-    pos1 = new Point(0, 0, TOP);
-    pos2 = new Point(L.width, L.height, BOTTOM);
+//    pos1 = new Point(0, 0);
+//    pos1.states = makeSidesMachine_2(this).goTo('top');
+//    pos2 = new Point(L.width, L.height);
+//    pos2.states = makeSidesMachine_2(this).goTo('bottom');
+
+    pos1 = new Point(0, 0);
+    pos1.states = makePathsMachine(pos1, opts.paths).goTo(opts.point1start);
+//    pos2 = new Point(L.width, L.height);
+//    pos2.states = makePathsMachine(pos2, opts.paths).goTo(opts.point2start);
     L.start();
   };
 
-  function log()
+  function log(msg)
   {
     //console.log.apply(console, arguments);
   }
@@ -198,12 +238,11 @@ var LineThing = (function ()
   {
     if (!active)
       return;
-    pos1.move(L.step);
-    pos2.move(L.step);
-    pos1.draw(mouse);
-    pos2.draw(mouse);
+    pos1.move(L.step).lineTo(mouse);
+//    pos2.move(L.step).lineTo(mouse);
     reqId = window.requestAnimationFrame(L.tick);
   };
+
 
   return L;
 })();

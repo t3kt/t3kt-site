@@ -1,0 +1,113 @@
+<p>line thing is a recreation of one of my very first experiments with programmatic visualization from when i was in
+  high school</p>
+<script src="/etc/linething.js">;</script>
+<div id="linething-container">
+  <canvas id="linething-canvas" width="500" height="500" style="display: inline-block;">your browser probably doesn't
+    support this if you can see this text
+  </canvas>
+  <style>
+    #linething-options label {
+      display: inline-block;
+      min-width: 8em;
+    }
+    #linething-container {
+      vertical-align: top;
+    }
+  </style>
+  <div style="display: inline-block;" class="control-panel">
+    <h4>options</h4>
+    <form id="linething-options">
+      <ul>
+        <li>
+          <label for="linething-width">width:</label>
+          <input type="number" id="linething-width" name="width" min="10" step="1" value="500"/>
+        </li>
+        <li>
+          <label for="linething-height">height:</label>
+          <input type="number" id="linething-height" name="height" min="10" step="1" value="500"/>
+        </li>
+        <li>
+          <label for="linething-step">step:</label>
+          <input type="number" id="linething-step" name="step" min="0" step="1" value="5"/>
+        </li>
+        <li>
+          <label for="linething-color1-rgb">color 1:</label>
+          <input type="color" id="linething-color1-rgb" name="color1-rgb" min="10" step="1" value="#666666"/>
+          <input type="number" id="linething-color1-alpha" name="color1-alpha" min="0" max="1" step="0.1" value="0.1"/>
+        </li>
+        <li>
+          <label for="linething-color2-rgb">color 2:</label>
+          <input type="color" id="linething-color2-rgb" name="color2-rgb" min="10" step="1" value="#666666"/>
+          <input type="number" id="linething-color2-alpha" name="color2-alpha" min="0" max="1" step="0.1" value="0.3"/>
+        </li>
+        <li>
+          <label for="linething-color3-rgb">color 3:</label>
+          <input type="color" id="linething-color3-rgb" name="color3-rgb" min="10" step="1" value="#666666"/>
+          <input type="number" id="linething-color3-alpha" name="color3-alpha" min="0" max="1" step="0.1" value="0.1"/>
+        </li>
+        <li>
+          <label for="linething-bgcolor-rgb">background:</label>
+          <input type="color" id="linething-bgcolor-rgb" name="bgcolor-rgb" min="10" step="1" value="#DDDDDD"/>
+          <input type="number" id="linething-bgcolor-alpha" name="bgcolor-alpha" min="0" max="1" step="0.1" value="1.0"/>
+        </li>
+      </ul>
+      <button type="submit">update</button>
+    </form>
+  </div>
+  <div>
+    <button type="button" id="linething-capture-button">capture</button>
+    <img id="linething-capture-image" width="500" height="500" style="display: none;"/>
+  </div>
+  <script>
+    $(function ()
+    {
+      function makeColor(rgb, alpha)
+      {
+        if (!rgb)
+          return null;
+        if (rgb.length == 7 && rgb.charAt(0) == '#')
+        {
+          return 'rgba(' + parseInt(rgb.substr(1, 2), 16) + ',' +
+              parseInt(rgb.substr(3, 2), 16) + ',' +
+              parseInt(rgb.substr(5, 2), 16) + ',' +
+              alpha + ')';
+        }
+        return rgb;
+      }
+
+      function updateOptions()
+      {
+        var vals = {};
+        $('#linething-options :input[name]').each(function ()
+        {
+          vals[this.name] = this.value;
+        });
+        var opts = {
+          width: vals.width,
+          height: vals.height,
+          step: vals.step,
+          color1: makeColor(vals['color1-rgb'], vals['color1-alpha']),
+          color2: makeColor(vals['color2-rgb'], vals['color2-alpha']),
+          color3: makeColor(vals['color3-rgb'], vals['color3-alpha']),
+          bgColor: makeColor(vals['bgcolor-rgb'], vals['bgcolor-alpha'])
+        };
+        LineThing.init($('#linething-canvas')[0], opts);
+        return false;
+      }
+
+      $('#linething-capture-button').click(function()
+      {
+        var dataurl = LineThing.canvas.toDataURL();
+        window.open(dataurl);
+        //$('#linething-capture-image').show().attr('src', dataurl);
+      });
+
+      $('#linething-options').submit(function ()
+      {
+        updateOptions();
+        return false;
+      });
+      updateOptions();
+    });
+  </script>
+</div>

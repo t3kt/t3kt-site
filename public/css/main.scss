@@ -522,3 +522,26 @@ a:hover {
   border: 1px solid #7b87cc;
   border-radius: .2em;*/
 }
+
+button {
+  padding: $item-padding !important;
+  border-radius: $item-padding/2;
+  background-color: $item-border-color;
+  color: desaturate(invert($item-border-color), .5);
+}
+
+.control-panel {
+  border: 2px solid $item-border-color;
+  h4 {
+    background-color: $item-border-color;
+    color: desaturate(invert($item-border-color), .5);
+    padding: .25em .5em;
+  }
+  ul {
+    list-style: none;
+  }
+  li {
+    border-bottom: 1px dashed $item-border-color;
+    padding: .25em;
+  }
+}
