@@ -24,16 +24,33 @@ var LineThing2 = (function ()
     return r;
   }
 
-  function rebind(elem, events)
+  function _bind(elem, events, rem, add)
   {
     for (var type in events)
     {
       if (events.hasOwnProperty(type))
       {
-        elem.removeEventListener(type, events[type]);
-        elem.addEventListener(type, events[type]);
+        if (rem)
+          elem.removeEventListener(type, events[type]);
+        if (add)
+          elem.addEventListener(type, events[type]);
       }
     }
+  }
+
+  function rebind(elem, events)
+  {
+    _bind(elem, events, true, true);
+  }
+
+  function bind(elem, events)
+  {
+    _bind(elem, events, false, true);
+  }
+
+  function unbind(elem, events)
+  {
+    _bind(elem, events, true, false);
   }
 
   var L = {
@@ -54,7 +71,7 @@ var LineThing2 = (function ()
     pos2,
     active = true,
     reqId,
-    paths;
+    pathPointRadius = 10;
 
   function StateMachine(states)
   {
@@ -112,23 +129,54 @@ var LineThing2 = (function ()
 
   function PathState(opts)
   {
-    var range = [opts.end[0] - opts.start[0], opts.end[1] - opts.start[1]];
+    var start, end, range, next;
+
+    this.init = function (opts)
+    {
+      start = opts.start;
+      end = opts.end;
+      range = [end[0] - start[0], end[1] - start[1]];
+      next = opts.next;
+    };
+
+    this.init(opts);
+
     State.call(this, opts.id,
       function (point, rate)
       {
         point.i += rate;
         if (point.i > 1)
         {
-          point.x = this.end[0];
-          point.y = this.end[1];
+          point.x = end[0];
+          point.y = end[1];
           point.i = 0;
-          return this.next;
+          return next;
         }
-        point.x = this.start[0] + range[0] * point.i;
-        point.y = this.start[1] + range[1] * point.i;
+        point.x = start[0] + range[0] * point.i;
+        point.y = start[1] + range[1] * point.i;
         return null;
-      },
-      opts);
+      });
+
+    this.draw = function (c)
+    {
+      c.save();
+      c.lineWidth = 2;
+      c.strokeStyle = 'rgba(0,20,90,0.3)';
+      c.beginPath();
+      c.arc(start[0], start[1], pathPointRadius, 0, Math.PI * 2);
+      c.stroke();
+      c.strokeStyle = 'rgba(0,90,20,0.3)';
+      c.beginPath();
+      c.arc(end[0], end[1], pathPointRadius / 2, 0, Math.PI * 2);
+      c.stroke();
+      c.lineWidth = 1;
+      c.strokeStyle = 'rgba(0,90,90,0.3)';
+      c.beginPath();
+      c.moveTo(start[0], start[1]);
+      c.lineTo(end[0], end[1]);
+      c.stroke();
+      c.restore();
+    };
   }
 
   function Point(states, start)
@@ -193,12 +241,22 @@ var LineThing2 = (function ()
 
   L.drawControlLayer = function ()
   {
-    
+    ctrlCtx.clearRect(0, 0, L.width, L.height);
+    L.paths.forEach(function (path)
+    {
+      path.draw(ctrlCtx);
+    });
+  };
+
+  var mouseEvents = {
+    mousemove: updateMousePosition,
+    mouseover: L.start,
+    mouseout: L.stop
   };
 
   L.init = function (opts)
   {
-    opts = opts || {};
+    L.container = opts.container;
     L.canvas = canvas = opts.canvas;
     L.ctrlCanvas = ctrlCanvas = opts.ctrlCanvas;
     extend(L, {
@@ -207,19 +265,16 @@ var LineThing2 = (function ()
       color2: opts.color2,
       color3: opts.color3,
       bgColor: opts.bgColor,
-      width: opts.width ? parseInt(opts.width) : c.width,
-      height: opts.height ? parseInt(opts.height) : c.height
+      width: parseInt(opts.width),
+      height: parseInt(opts.height)
     });
     L.stop();
     canvas.width = ctrlCanvas.width = L.width;
     canvas.height = ctrlCanvas.height = L.height;
-    opts.container.style.width = L.width + 'px';
-    opts.container.style.height = L.height + 'px';
-    rebind(canvas, {
-      mousemove: updateMousePosition,
-      mouseover: L.start,
-      mouseout: L.stop
-    });
+    L.container.style.width = L.width + 'px';
+    L.container.style.height = L.height + 'px';
+    L.container.style.backgroundColor = L.bgColor;
+    rebind(canvas, mouseEvents);
     L.ctx = ctx = canvas.getContext('2d');
     ctx.save();
     ctx.fillStyle = L.bgColor;
@@ -240,15 +295,32 @@ var LineThing2 = (function ()
     L.start();
   };
 
-  L.toggleControlLayer = function (show)
+  L.reinitPaths = function (pathOpts)
   {
-    //TODO
+    pathOpts.forEach(function (p, i)
+    {
+      L.paths[i].init(p);
+    });
+    L.drawControlLayer();
   };
 
-  function log(msg)
+  L.toggleControlLayer = function (show)
   {
-    //console.log.apply(console, arguments);
-  }
+    ctrlCanvas.style.display = show ? 'block' : 'none';
+    canvas.style.opacity = show ? '0.5' : '1';
+    if (show)
+      L.drawControlLayer();
+    if (show)
+    {
+      unbind(canvas, mouseEvents);
+      bind(ctrlCanvas, mouseEvents);
+    }
+    else
+    {
+      unbind(ctrlCanvas, mouseEvents);
+      bind(canvas, mouseEvents);
+    }
+  };
 
   L.tick = function ()
   {
@@ -279,7 +351,7 @@ $(function ()
     return rgb;
   }
 
-  function updateOptions()
+  function getFormValues()
   {
     var vals = {};
     $('#linething-options :input[name]').each(function ()
@@ -287,6 +359,12 @@ $(function ()
       if (this.type != 'radio' || this.checked)
         vals[this.name] = this.value;
     });
+    return vals;
+  }
+
+  function updateOptions()
+  {
+    var vals = getFormValues();
     var opts = {
       width: vals.width,
       height: vals.height,
@@ -297,12 +375,7 @@ $(function ()
       bgColor: makeColor(vals['bgcolor-rgb'], vals['bgcolor-alpha']),
       point1start: vals.point1start,
       point2start: vals.point2start,
-      paths: [
-        {id: vals.path1id, start: [vals.path1startx * vals.width, vals.path1starty * vals.height], end: [vals.path1endx * vals.width, vals.path1endy * vals.height], next: vals.path1next},
-        {id: vals.path2id, start: [vals.path2startx * vals.width, vals.path2starty * vals.height], end: [vals.path2endx * vals.width, vals.path2endy * vals.height], next: vals.path2next},
-        {id: vals.path3id, start: [vals.path3startx * vals.width, vals.path3starty * vals.height], end: [vals.path3endx * vals.width, vals.path3endy * vals.height], next: vals.path3next},
-        {id: vals.path4id, start: [vals.path4startx * vals.width, vals.path4starty * vals.height], end: [vals.path4endx * vals.width, vals.path4endy * vals.height], next: vals.path4next}
-      ],
+      paths: buildPathOpts(vals),
       container: $('#linething-canvas-container')[0],
       canvas: $('#linething-canvas')[0],
       ctrlCanvas: $('#linething-control-canvas')[0]
@@ -311,11 +384,35 @@ $(function ()
     return false;
   }
 
+  function buildPathOpts(vals)
+  {
+    return [
+      {id: vals.path1id, start: [vals.path1startx * vals.width, vals.path1starty * vals.height], end: [vals.path1endx * vals.width, vals.path1endy * vals.height], next: vals.path1next},
+      {id: vals.path2id, start: [vals.path2startx * vals.width, vals.path2starty * vals.height], end: [vals.path2endx * vals.width, vals.path2endy * vals.height], next: vals.path2next},
+      {id: vals.path3id, start: [vals.path3startx * vals.width, vals.path3starty * vals.height], end: [vals.path3endx * vals.width, vals.path3endy * vals.height], next: vals.path3next},
+      {id: vals.path4id, start: [vals.path4startx * vals.width, vals.path4starty * vals.height], end: [vals.path4endx * vals.width, vals.path4endy * vals.height], next: vals.path4next}
+    ];
+  }
+
+  $('#linething-options')
+    .find('input[name*=startx], input[name*=starty], input[name*=endx], input[name*=endy]')
+    .change(function ()
+    {
+      var vals = getFormValues(),
+        paths = buildPathOpts(vals);
+      LineThing2.reinitPaths(paths);
+    });
+
   $('#linething-capture-button').click(function ()
   {
     var dataurl = LineThing2.canvas.toDataURL();
     window.open(dataurl);
     //$('#linething-capture-image').show().attr('src', dataurl);
+  });
+
+  $('#linething-show-control-layer').change(function ()
+  {
+    LineThing2.toggleControlLayer(this.checked);
   });
 
   $('#linething-options').submit(function ()

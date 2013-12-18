@@ -92,36 +92,64 @@
             </tr>
           </thead>
           <tr>
-            <th><input type="text" name="path1id" value="path1"/></th>
+            <th><input type="text" name="path1id" value="path1" readonly/></th>
             <td><input type="range" name="path1startx" min="0" max="1" step="0.1" value="0.0"/></td>
             <td><input type="range" name="path1starty" min="0" max="1" step="0.1" value="0.0"/></td>
             <td><input type="range" name="path1endx" min="0" max="1" step="0.1" value="1.0"/></td>
             <td><input type="range" name="path1endy" min="0" max="1" step="0.1" value="0.0"/></td>
-            <td><input type="text" name="path1next" value="path2"/></td>
+            <td>
+              <select name="path1next">
+                <option>path1</option>
+                <option selected>path2</option>
+                <option>path3</option>
+                <option>path4</option>
+              </select>
+            </td>
           </tr>
           <tr>
-            <th><input type="text" name="path2id" value="path2"/></th>
+            <th><input type="text" name="path2id" value="path2" readonly/></th>
             <td><input type="range" name="path2startx" min="0" max="1" step="0.1" value="1.0"/></td>
             <td><input type="range" name="path2starty" min="0" max="1" step="0.1" value="0.0"/></td>
             <td><input type="range" name="path2endx" min="0" max="1" step="0.1" value="1.0"/></td>
             <td><input type="range" name="path2endy" min="0" max="1" step="0.1" value="1.0"/></td>
-            <td><input type="text" name="path2next" value="path3"/></td>
+            <td>
+              <select name="path2next">
+                <option>path1</option>
+                <option>path2</option>
+                <option selected>path3</option>
+                <option>path4</option>
+              </select>
+            </td>
           </tr>
           <tr>
-            <th><input type="text" name="path3id" value="path3"/></th>
+            <th><input type="text" name="path3id" value="path3" readonly/></th>
             <td><input type="range" name="path3startx" min="0" max="1" step="0.1" value="1.0"/></td>
             <td><input type="range" name="path3starty" min="0" max="1" step="0.1" value="1.0"/></td>
             <td><input type="range" name="path3endx" min="0" max="1" step="0.1" value="0.0"/></td>
             <td><input type="range" name="path3endy" min="0" max="1" step="0.1" value="1.0"/></td>
-            <td><input type="text" name="path3next" value="path4"/></td>
+            <td>
+              <select name="path3next">
+                <option>path1</option>
+                <option>path2</option>
+                <option>path3</option>
+                <option selected>path4</option>
+              </select>
+            </td>
           </tr>
           <tr>
-            <th><input type="text" name="path4id" value="path4"/></th>
+            <th><input type="text" name="path4id" value="path4" readonly/></th>
             <td><input type="range" name="path4startx" min="0" max="1" step="0.1" value="0.0"/></td>
             <td><input type="range" name="path4starty" min="0" max="1" step="0.1" value="1.0"/></td>
             <td><input type="range" name="path4endx" min="0" max="1" step="0.1" value="0.0"/></td>
             <td><input type="range" name="path4endy" min="0" max="1" step="0.1" value="0.0"/></td>
-            <td><input type="text" name="path4next" value="path1"/></td>
+            <td>
+              <select name="path4next">
+                <option selected>path1</option>
+                <option>path2</option>
+                <option>path3</option>
+                <option>path4</option>
+              </select>
+            </td>
           </tr>
         </table>
         <div>
