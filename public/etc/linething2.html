@@ -3,13 +3,15 @@
 <head>
   <title>line thing 2</title>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-  <script src="/etc/linething2.js">;</script>
 </head>
 <body>
 <h1>line thing 2</h1>
 
 <div id="linething-container">
-  <canvas id="linething-canvas" width="500" height="500" style="display: inline-block;">your browser probably doesn't support this if you can see this text</canvas>
+  <div id="linething-canvas-container" style="position: relative; display: inline-block; width: 500px; height: 500px;">
+    <canvas id="linething-control-canvas" width="500" height="500"></canvas>
+    <canvas id="linething-canvas" width="500" height="500">your browser probably doesn't support this if you can see this text</canvas>
+  </div>
   <style>
     #linething-options label {
       display: inline-block;
@@ -19,13 +21,27 @@
     #linething-container {
       vertical-align: top;
     }
+    #linething-canvas-container canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+    }
+    #linething-control-canvas {
+      z-index: 10;
+      display: none;
+    }
     #linething-opts-grid input[type=text]{
       width: 40px;
     }
   </style>
     <div style="display: inline-block;" class="control-panel">
     <h4>options</h4>
-
+    <div>
+      <label for="linething-show-control-layer">Show Control Layer:</label>
+      <input type="checkbox" id="linething-show-control-layer"/>
+    </div>
     <form id="linething-options">
       <div style="display: inline-block;">
         <ul>
@@ -126,71 +142,8 @@
   <div>
     <img id="linething-capture-image" width="500" height="500" style="display: none;"/>
   </div>
-  <script>
-    $(function ()
-    {
-      function makeColor(rgb, alpha)
-      {
-        if (!rgb)
-          return null;
-        if (rgb.length == 7 && rgb.charAt(0) == '#')
-        {
-          return 'rgba(' + parseInt(rgb.substr(1, 2), 16) + ',' +
-              parseInt(rgb.substr(3, 2), 16) + ',' +
-              parseInt(rgb.substr(5, 2), 16) + ',' +
-              alpha + ')';
-        }
-        return rgb;
-      }
-
-      function updateOptions()
-      {
-        var vals = {};
-        $('#linething-options :input[name]').each(function ()
-        {
-          if(this.type=='radio'&&!this.checked)
-            return;
-          vals[this.name] = this.value;
-        });
-        var opts = {
-          width: vals.width,
-          height: vals.height,
-          step: vals.step,
-          color1: makeColor(vals['color1-rgb'], vals['color1-alpha']),
-          color2: makeColor(vals['color2-rgb'], vals['color2-alpha']),
-          color3: makeColor(vals['color3-rgb'], vals['color3-alpha']),
-          bgColor: makeColor(vals['bgcolor-rgb'], vals['bgcolor-alpha']),
-          point1start: vals.point1start,
-          point2start: vals.point2start,
-          paths: [
-            {id:vals.path1id, start:[vals.path1startx*vals.width,vals.path1starty*vals.height],end:[vals.path1endx*vals.width,vals.path1endy*vals.height],next:vals.path1next},
-            {id:vals.path2id, start:[vals.path2startx*vals.width,vals.path2starty*vals.height],end:[vals.path2endx*vals.width,vals.path2endy*vals.height],next:vals.path2next},
-            {id:vals.path3id, start:[vals.path3startx*vals.width,vals.path3starty*vals.height],end:[vals.path3endx*vals.width,vals.path3endy*vals.height],next:vals.path3next},
-            {id:vals.path4id, start:[vals.path4startx*vals.width,vals.path4starty*vals.height],end:[vals.path4endx*vals.width,vals.path4endy*vals.height],next:vals.path4next}
-          ]
-        };
-        LineThing2.init($('#linething-canvas')[0], opts);
-        return false;
-      }
-
-      $('#linething-capture-button').click(function ()
-      {
-        var dataurl = LineThing2.canvas.toDataURL();
-        window.open(dataurl);
-        //$('#linething-capture-image').show().attr('src', dataurl);
-      });
-
-      $('#linething-options').submit(function ()
-      {
-        updateOptions();
-        return false;
-      });
-      $('#linething-canvas').one('mousemove', function ()
-      {
-        updateOptions();
-      });
-    });
-  </script>
+  <script src="/etc/requestAnimationFrame.js"></script>
+  <script src="/etc/linething2.js">;</script>
 </div>
 </body>
 </html>

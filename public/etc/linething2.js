@@ -1,35 +1,3 @@
-(function ()
-{
-  var lastTime = 0;
-  var vendors = ['webkit', 'moz'];
-  for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x)
-  {
-    window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
-    window.cancelAnimationFrame =
-      window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
-  }
-
-  if (!window.requestAnimationFrame)
-    window.requestAnimationFrame = function (callback, element)
-    {
-      var currTime = new Date().getTime();
-      var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-      var id = window.setTimeout(function ()
-        {
-          callback(currTime + timeToCall);
-        },
-        timeToCall);
-      lastTime = currTime + timeToCall;
-      return id;
-    };
-
-  if (!window.cancelAnimationFrame)
-    window.cancelAnimationFrame = function (id)
-    {
-      clearTimeout(id);
-    };
-}());
-
 var LineThing2 = (function ()
 {
   function extend(obj, ext)
@@ -44,6 +12,29 @@ var LineThing2 = (function ()
     return obj;
   }
 
+  function getAbsolutePosition(element)
+  {
+    var r = { x: element.offsetLeft, y: element.offsetTop };
+    if (element.offsetParent)
+    {
+      var tmp = getAbsolutePosition(element.offsetParent);
+      r.x += tmp.x;
+      r.y += tmp.y;
+    }
+    return r;
+  }
+
+  function rebind(elem, events)
+  {
+    for (var type in events)
+    {
+      if (events.hasOwnProperty(type))
+      {
+        elem.removeEventListener(type, events[type]);
+        elem.addEventListener(type, events[type]);
+      }
+    }
+  }
 
   var L = {
     width: 500,
@@ -55,20 +46,37 @@ var LineThing2 = (function ()
     bgColor: '#ccc'
   };
   var canvas,
+    ctrlCanvas,
     ctx,
+    ctrlCtx,
     mouse = {x: 0, y: 0},
     pos1,
     pos2,
     active = true,
-    reqId;
+    reqId,
+    paths;
 
-  function StateMachine()
+  function StateMachine(states)
   {
     this.states = {};
+    var self = this;
+    if (Array.isArray(states))
+    {
+      states.forEach(function (s)
+      {
+        self.addState(s);
+      });
+    }
+    else if (states)
+    {
+      extend(this.states, states);
+    }
   }
 
+  L.StateMachine = StateMachine;
+
   StateMachine.prototype = {
-    withState: function (id, update, opts)
+    addState: function (id, update, opts)
     {
       if (id.id)
         this.states[id.id] = id;
@@ -84,74 +92,60 @@ var LineThing2 = (function ()
       this.current = state;
       return this;
     },
-    update: function (param)
+    update: function (params)
     {
-      return this.current && this.current.update(this, param);
+      return this.current && this.current.update(this, params);
     }
   };
 
   function State(id, update, opts)
   {
     this.id = id;
-    this.update = function (machine, param)
+    this.update = function (machine, params)
     {
-      var next = update.call(this, param);
+      var next = update.apply(this, params);
       if (next)
         machine.goTo(next);
     };
     extend(this, opts);
   }
 
-  L.StateMachine = StateMachine;
-
-  function makeSidesMachine_2(point)
+  function PathState(opts)
   {
-    return new StateMachine()
-      .withState('top', linearUpdate(point, [0, 0], [L.width, 0], 'right'))
-      .withState('right', linearUpdate(point, [L.width, 0], [L.width, L.height], 'bottom'))
-      .withState('bottom', linearUpdate(point, [L.width, L.height], [0, L.height], 'left'))
-      .withState('left', linearUpdate(point, [0, L.height], [0, 0], 'top'));
-  }
-
-  function makePathsMachine(point, paths)
-  {
-    var machine = new StateMachine();
-    paths.forEach(function (path)
-    {
-      machine.withState(path.id, linearUpdate(point, path.start, path.end, path.next));
-    });
-    return machine;
-  }
-
-  function linearUpdate(point, start, end, next)
-  {
-    var i = 0,
-      range = [end[0] - start[0], end[1] - start[1]];
-    return function (rate)
-    {
-      i += rate;
-      if (i > 1)
+    var range = [opts.end[0] - opts.start[0], opts.end[1] - opts.start[1]];
+    State.call(this, opts.id,
+      function (point, rate)
       {
-        i = 0;
-        return next;
-      }
-      point.x = start[0] + range[0] * i;
-      point.y = start[1] + range[1] * i;
-      return null;
-    };
+        point.i += rate;
+        if (point.i > 1)
+        {
+          point.x = this.end[0];
+          point.y = this.end[1];
+          point.i = 0;
+          return this.next;
+        }
+        point.x = this.start[0] + range[0] * point.i;
+        point.y = this.start[1] + range[1] * point.i;
+        return null;
+      },
+      opts);
   }
 
-  function Point(x, y)
+  function Point(states, start)
   {
-    this.x = x;
-    this.y = y;
+    this.i = 0;
+    this.x = 0;
+    this.y = 0;
+    this.stateMachine = new StateMachine(states)
+      .goTo(start);
   }
 
-  Point.prototype.move = function (step)
+  Point.prototype.move = function (rate)
   {
-    this.states.update(step);
+    this.stateMachine.update([this, rate]);
     return this;
   };
+
   Point.prototype.lineTo = function (pt2)
   {
     ctx.save();
@@ -166,17 +160,6 @@ var LineThing2 = (function ()
     ctx.stroke();
     ctx.restore();
     return this;
-  };
-  function getAbsolutePosition(element)
-  {
-    var r = { x: element.offsetLeft, y: element.offsetTop };
-    if (element.offsetParent)
-    {
-      var tmp = getAbsolutePosition(element.offsetParent);
-      r.x += tmp.x;
-      r.y += tmp.y;
-    }
-    return r;
   };
   function updateMousePosition(e)
   {
@@ -208,11 +191,16 @@ var LineThing2 = (function ()
     reqId = null;
   };
 
+  L.drawControlLayer = function ()
+  {
+    
+  };
 
-  L.init = function (c, opts)
+  L.init = function (opts)
   {
     opts = opts || {};
-    L.canvas = canvas = c;
+    L.canvas = canvas = opts.canvas;
+    L.ctrlCanvas = ctrlCanvas = opts.ctrlCanvas;
     extend(L, {
       step: opts.step ? parseFloat(opts.step) : undefined,
       color1: opts.color1,
@@ -223,29 +211,38 @@ var LineThing2 = (function ()
       height: opts.height ? parseInt(opts.height) : c.height
     });
     L.stop();
-    canvas.width = L.width;
-    canvas.height = L.height;
-    canvas.removeEventListener('mousemove', updateMousePosition);
-    canvas.removeEventListener('mouseover', L.start);
-    canvas.removeEventListener('mouseout', L.stop);
-    canvas.addEventListener('mousemove', updateMousePosition);
-    canvas.addEventListener('mouseover', L.start);
-    canvas.addEventListener('mouseout', L.stop);
+    canvas.width = ctrlCanvas.width = L.width;
+    canvas.height = ctrlCanvas.height = L.height;
+    opts.container.style.width = L.width + 'px';
+    opts.container.style.height = L.height + 'px';
+    rebind(canvas, {
+      mousemove: updateMousePosition,
+      mouseover: L.start,
+      mouseout: L.stop
+    });
     L.ctx = ctx = canvas.getContext('2d');
     ctx.save();
     ctx.fillStyle = L.bgColor;
     ctx.fillRect(0, 0, L.width, L.height);
     ctx.restore();
+    L.ctrlCtx = ctrlCtx = ctrlCanvas.getContext('2d');
 //    pos1 = new Point(0, 0);
 //    pos1.states = makeSidesMachine_2(this).goTo('top');
 //    pos2 = new Point(L.width, L.height);
 //    pos2.states = makeSidesMachine_2(this).goTo('bottom');
 
-    pos1 = new Point(0, 0);
-    pos1.states = makePathsMachine(pos1, opts.paths).goTo(opts.point1start);
-//    pos2 = new Point(L.width, L.height);
-//    pos2.states = makePathsMachine(pos2, opts.paths).goTo(opts.point2start);
+    L.paths = opts.paths.map(function (p)
+    {
+      return new PathState(p);
+    });
+    pos1 = new Point(L.paths, opts.point1start);
+    pos2 = new Point(L.paths, opts.point2start);
     L.start();
+  };
+
+  L.toggleControlLayer = function (show)
+  {
+    //TODO
   };
 
   function log(msg)
@@ -258,10 +255,76 @@ var LineThing2 = (function ()
     if (!active)
       return;
     pos1.move(L.step).lineTo(mouse);
-//    pos2.move(L.step).lineTo(mouse);
+    pos2.move(L.step).lineTo(mouse);
     reqId = window.requestAnimationFrame(L.tick);
   };
 
 
   return L;
 })();
+
+$(function ()
+{
+  function makeColor(rgb, alpha)
+  {
+    if (!rgb)
+      return null;
+    if (rgb.length == 7 && rgb.charAt(0) == '#')
+    {
+      return 'rgba(' + parseInt(rgb.substr(1, 2), 16) + ',' +
+        parseInt(rgb.substr(3, 2), 16) + ',' +
+        parseInt(rgb.substr(5, 2), 16) + ',' +
+        alpha + ')';
+    }
+    return rgb;
+  }
+
+  function updateOptions()
+  {
+    var vals = {};
+    $('#linething-options :input[name]').each(function ()
+    {
+      if (this.type != 'radio' || this.checked)
+        vals[this.name] = this.value;
+    });
+    var opts = {
+      width: vals.width,
+      height: vals.height,
+      step: vals.step,
+      color1: makeColor(vals['color1-rgb'], vals['color1-alpha']),
+      color2: makeColor(vals['color2-rgb'], vals['color2-alpha']),
+      color3: makeColor(vals['color3-rgb'], vals['color3-alpha']),
+      bgColor: makeColor(vals['bgcolor-rgb'], vals['bgcolor-alpha']),
+      point1start: vals.point1start,
+      point2start: vals.point2start,
+      paths: [
+        {id: vals.path1id, start: [vals.path1startx * vals.width, vals.path1starty * vals.height], end: [vals.path1endx * vals.width, vals.path1endy * vals.height], next: vals.path1next},
+        {id: vals.path2id, start: [vals.path2startx * vals.width, vals.path2starty * vals.height], end: [vals.path2endx * vals.width, vals.path2endy * vals.height], next: vals.path2next},
+        {id: vals.path3id, start: [vals.path3startx * vals.width, vals.path3starty * vals.height], end: [vals.path3endx * vals.width, vals.path3endy * vals.height], next: vals.path3next},
+        {id: vals.path4id, start: [vals.path4startx * vals.width, vals.path4starty * vals.height], end: [vals.path4endx * vals.width, vals.path4endy * vals.height], next: vals.path4next}
+      ],
+      container: $('#linething-canvas-container')[0],
+      canvas: $('#linething-canvas')[0],
+      ctrlCanvas: $('#linething-control-canvas')[0]
+    };
+    LineThing2.init(opts);
+    return false;
+  }
+
+  $('#linething-capture-button').click(function ()
+  {
+    var dataurl = LineThing2.canvas.toDataURL();
+    window.open(dataurl);
+    //$('#linething-capture-image').show().attr('src', dataurl);
+  });
+
+  $('#linething-options').submit(function ()
+  {
+    updateOptions();
+    return false;
+  });
+  $('#linething-canvas').one('mousemove', function ()
+  {
+    updateOptions();
+  });
+});
