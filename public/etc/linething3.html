@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>line thing 2</title>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.min.js"></script>
+</head>
+<body>
+<h1>line thing 2</h1>
+
+<div id="linething-container">
+  <div id="linething-canvas-container" style="position: relative; display: inline-block; width: 500px; height: 500px;">
+    <canvas id="linething-control-canvas" width="500" height="500"></canvas>
+    <canvas id="linething-canvas" width="500" height="500">your browser probably doesn't support this if you can see this text</canvas>
+  </div>
+  <style>
+    #linething-options label {
+      display: inline-block;
+      min-width: 8em;
+    }
+
+    #linething-container {
+      vertical-align: top;
+    }
+    #linething-canvas-container canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+    }
+    #linething-control-canvas {
+      z-index: 10;
+      display: none;
+    }
+    #linething-opts-grid input[type=text]{
+      width: 40px;
+    }
+  </style>
+  <div style="display: inline-block;" class="control-panel">
+    <h4>options</h4>
+    <div>
+      <label for="linething-show-control-layer">Show Control Layer:</label>
+      <input type="checkbox" id="linething-show-control-layer"/>
+    </div>
+    <form id="linething-options">
+      <div style="display: inline-block;">
+        <ul>
+          <li>
+            <label for="linething-width">width:</label>
+            <input type="number" id="linething-width" name="width" min="10" step="1" value="500"/>
+          </li>
+          <li>
+            <label for="linething-height">height:</label>
+            <input type="number" id="linething-height" name="height" min="10" step="1" value="500"/>
+          </li>
+          <li>
+            <label for="linething-step">step:</label>
+            <input type="number" id="linething-step" name="step" min="0" max="1" step="0.001" value="0.005"/>
+          </li>
+          <li>
+            <label for="linething-color1-rgb">color 1:</label>
+            <input type="color" id="linething-color1-rgb" name="color1-rgb" min="10" step="1" value="#666666"/>
+            <input type="number" id="linething-color1-alpha" name="color1-alpha" min="0" max="1" step="0.1" value="0.1"/>
+          </li>
+          <li>
+            <label for="linething-color2-rgb">color 2:</label>
+            <input type="color" id="linething-color2-rgb" name="color2-rgb" min="10" step="1" value="#666666"/>
+            <input type="number" id="linething-color2-alpha" name="color2-alpha" min="0" max="1" step="0.1" value="0.3"/>
+          </li>
+          <li>
+            <label for="linething-color3-rgb">color 3:</label>
+            <input type="color" id="linething-color3-rgb" name="color3-rgb" min="10" step="1" value="#666666"/>
+            <input type="number" id="linething-color3-alpha" name="color3-alpha" min="0" max="1" step="0.1" value="0.1"/>
+          </li>
+          <li>
+            <label for="linething-bgcolor-rgb">background:</label>
+            <input type="color" id="linething-bgcolor-rgb" name="bgcolor-rgb" min="10" step="1" value="#DDDDDD"/>
+            <input type="number" id="linething-bgcolor-alpha" name="bgcolor-alpha" min="0" max="1" step="0.1" value="1.0"/>
+          </li>
+        </ul>
+      </div>
+      <div style="display: inline-block;">
+        <table style="border: 1px solid; border-collapse: collapse;" id="linething-opts-grid">
+          <thead>
+          <tr>
+            <th>id</th>
+            <th>start(x)</th>
+            <th>start(y)</th>
+            <th>end(x)</th>
+            <th>end(y)</th>
+            <th>next</th>
+          </tr>
+          </thead>
+          <tr>
+            <th><input type="text" name="path1id" value="path1" readonly/></th>
+            <td><input type="range" name="path1startx" min="0" max="1" step="0.1" value="0.0"/></td>
+            <td><input type="range" name="path1starty" min="0" max="1" step="0.1" value="0.0"/></td>
+            <td><input type="range" name="path1endx" min="0" max="1" step="0.1" value="1.0"/></td>
+            <td><input type="range" name="path1endy" min="0" max="1" step="0.1" value="0.0"/></td>
+            <td>
+              <select name="path1next">
+                <option>path1</option>
+                <option selected>path2</option>
+                <option>path3</option>
+                <option>path4</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <th><input type="text" name="path2id" value="path2" readonly/></th>
+            <td><input type="range" name="path2startx" min="0" max="1" step="0.1" value="1.0"/></td>
+            <td><input type="range" name="path2starty" min="0" max="1" step="0.1" value="0.0"/></td>
+            <td><input type="range" name="path2endx" min="0" max="1" step="0.1" value="1.0"/></td>
+            <td><input type="range" name="path2endy" min="0" max="1" step="0.1" value="1.0"/></td>
+            <td>
+              <select name="path2next">
+                <option>path1</option>
+                <option>path2</option>
+                <option selected>path3</option>
+                <option>path4</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <th><input type="text" name="path3id" value="path3" readonly/></th>
+            <td><input type="range" name="path3startx" min="0" max="1" step="0.1" value="1.0"/></td>
+            <td><input type="range" name="path3starty" min="0" max="1" step="0.1" value="1.0"/></td>
+            <td><input type="range" name="path3endx" min="0" max="1" step="0.1" value="0.0"/></td>
+            <td><input type="range" name="path3endy" min="0" max="1" step="0.1" value="1.0"/></td>
+            <td>
+              <select name="path3next">
+                <option>path1</option>
+                <option>path2</option>
+                <option>path3</option>
+                <option selected>path4</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <th><input type="text" name="path4id" value="path4" readonly/></th>
+            <td><input type="range" name="path4startx" min="0" max="1" step="0.1" value="0.0"/></td>
+            <td><input type="range" name="path4starty" min="0" max="1" step="0.1" value="1.0"/></td>
+            <td><input type="range" name="path4endx" min="0" max="1" step="0.1" value="0.0"/></td>
+            <td><input type="range" name="path4endy" min="0" max="1" step="0.1" value="0.0"/></td>
+            <td>
+              <select name="path4next">
+                <option selected>path1</option>
+                <option>path2</option>
+                <option>path3</option>
+                <option>path4</option>
+              </select>
+            </td>
+          </tr>
+        </table>
+        <div>
+          <label>Point 1 start:</label>
+          <input type="text" name="point1start" value="path1"/>
+        </div>
+        <div>
+          <label>Point 2 start:</label>
+          <input type="text" name="point2start" value="path3"/>
+        </div>
+      </div>
+      <div>
+        <button type="submit">update</button>
+        <button type="button" id="linething-capture-button">capture</button>
+      </div>
+    </form>
+  </div>
+
+  <div id="linething-control-panel" ng-app>
+    <h4>options</h4>
+    <div ng-controller="LineThingCtrl">
+
+    </div>
+  </div>
+
+  <div>
+    <img id="linething-capture-image" width="500" height="500" style="display: none;"/>
+  </div>
+  <script src="/etc/requestAnimationFrame.js"></script>
+  <script src="/etc/linething2.js">;</script>
+</div>
+</body>
+</html>
