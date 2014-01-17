@@ -92,7 +92,7 @@ function pullBloggerEntries(projects, opts, callback)
                   if (!opts.overwrite)
                   {
                     report.skipped++;
-                    opts.log('skipping entry (key:', key, ')');
+                    //opts.log('skipping entry (key:', key, ')');
                     nextEntry();
                   }
                   else

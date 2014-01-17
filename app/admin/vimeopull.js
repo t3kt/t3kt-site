@@ -90,7 +90,7 @@ function pullVimeoVideosForProject(project, opts, callback)
                       if (!overwrite)
                       {
                         report.skipped++;
-                        opts.log('skipping video (key:', key, ')');
+                        //opts.log('skipping video (key:', key, ')');
                         nextVideo();
                       }
                       else

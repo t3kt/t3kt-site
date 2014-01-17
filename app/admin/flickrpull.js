@@ -112,7 +112,7 @@ function pullFlickrImagesForProject(project, opts, callback)
                     if (!opts.overwrite)
                     {
                       report.skipped++;
-                      opts.log('skipping image (key:', key, ')');
+                      //opts.log('skipping image (key:', key, ')');
                       next();
                     }
                     else

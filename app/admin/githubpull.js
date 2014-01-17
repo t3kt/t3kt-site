@@ -69,7 +69,7 @@ function retrieveBatch(repoUrl, report, project, opts, next)
                   if (!opts.overwrite)
                   {
                     report.skipped++;
-                    opts.log('skipping commit (key:', key, ')');
+                    //opts.log('skipping commit (key:', key, ')');
                     nextCommit();
                   }
                   else
