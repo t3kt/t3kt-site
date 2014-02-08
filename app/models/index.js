@@ -49,7 +49,7 @@ exports.getProject = function (key, callback)
 };
 exports.getPage = function (key, callback)
 {
-  return Page.findOne({key: key, project: {$exists: false}}, callback);
+  return Page.findOne({key: key, $or: [{project: { $exists: false}}, {project:""}]}, callback);
 };
 exports.getProjectPage = function (projectKey, pageKey, callback)
 {
