@@ -19,18 +19,6 @@
     #}
     <li class="{{ navClass }}" rel="projects">
       <a href="/projects">projects</a>
-      {% if routeId != 'projects' && projects %}
-        <ul>
-          {% for p in projects %}
-            {#
-            {% set navClass = ((routeId=='projectDetail'||routeId=='projectPage')&&(projectKey==p.key||(project&&project.key==p.key)))?'current':'' %}
-            #}
-            <li class="{{ navClass }}">
-              <a href="/projects/{{ p.key }}">{{ p.title }}</a>
-            </li>
-          {% endfor %}
-        </ul>
-      {% endif %}
     </li>
     {#
     {% set navClass = inProjectScope?'out-of-scope':'' %}

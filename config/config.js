@@ -14,7 +14,8 @@ var config = {
   blogSharedCategories: null,
   analyticsEnabled: true,
   siteTitle: 'tekt',
-  siteAuthor: 'tekt'
+  siteAuthor: 'tekt',
+  dictionaryApiKey: ''
 };
 
 _.merge(config, {
@@ -24,7 +25,8 @@ _.merge(config, {
   analyticsSiteId: process.env.ANALYTICS_SITE_ID,
   analyticsDomain: process.env.ANALYTICS_DOMAIN,
   flickrApiKey: process.env.FLICKR_API_KEY,
-  blogFeedUrl: process.env.BLOG_FEED_URL
+  blogFeedUrl: process.env.BLOG_FEED_URL,
+  dictionaryApiKey: process.env.DICTIONARY_API_KEY
 })
 
 try
