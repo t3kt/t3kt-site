@@ -31,7 +31,7 @@ var needs = {
   },
   projectList: function (req, res, next)
   {
-    d.Project.find().sort('-posted').exec(
+    d.Project.find().sort('-created').exec(
       function (err, projects)
       {
         if (err)
