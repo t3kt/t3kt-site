@@ -354,7 +354,7 @@ ul, ol {
   .item.project-summary .project-summary-content {
     padding: 1em 2em; }
   .item.project-summary .project-summary-overlay {
-    margin: 2em;
+    margin: 1em;
     padding: .25em;
     background-color: #a5b3cc;
     border-radius: 0.5em; }
@@ -364,8 +364,6 @@ ul, ol {
     .item.project-summary .project-summary-overlay {
       opacity: 0;
       overflow: hidden;
-      -webkit-transform: rotate(2deg);
-      transform: rotate(2deg);
       -moz-transition: opacity 1s, margin 1s, -webkit-transform 1s;
       -webkit-transition: opacity 1s, margin 1s, -webkit-transform 1s;
       -o-transition: opacity 1s, margin 1s, -webkit-transform 1s;
@@ -379,8 +377,6 @@ ul, ol {
     .item.project-summary:hover .project-summary-overlay {
       opacity: .9;
       margin: .25em;
-      -webkit-transform: rotate(0deg);
-      transform: rotate(0deg);
       -moz-transition: opacity 0.5s, margin 0.5s, -webkit-transform 0.5s;
       -webkit-transition: opacity 0.5s, margin 0.5s, -webkit-transform 0.5s;
       -o-transition: opacity 0.5s, margin 0.5s, -webkit-transform 0.5s;

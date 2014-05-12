@@ -463,7 +463,7 @@ ul, ol {
   }
 
   .project-summary-overlay {
-    margin: 2em;
+    margin: 1em;
     //      padding: $item-padding / 2;
     padding: .25em;
     //@include safe-rgba-property(background-color, rgba($panel-background-color, 1));
@@ -478,8 +478,6 @@ ul, ol {
     .project-summary-overlay {
       opacity: 0;
       overflow: hidden;
-      -webkit-transform: rotate(2deg);
-      transform: rotate(2deg);
       @include transition(opacity $fade-out-duration, margin $fade-out-duration, -webkit-transform $fade-out-duration);
     }
 
@@ -492,8 +490,6 @@ ul, ol {
       .project-summary-overlay {
         opacity: .9;
         margin: .25em;
-        -webkit-transform: rotate(0deg);
-        transform: rotate(0deg);
         @include transition(opacity $fade-in-duration, margin $fade-in-duration, -webkit-transform $fade-in-duration);
       }
       .project-summary-content {
