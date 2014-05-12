@@ -18,4 +18,13 @@
       </div>
     </div>
   {% endfor %}
+    <script>
+      $(function(){
+        $('.project-summary').click(function()
+        {
+          window.location.href = $('a', this).attr('href');
+          return false;
+        });
+      })
+    </script>
 {% endblock %}
