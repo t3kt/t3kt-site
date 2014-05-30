@@ -82,7 +82,8 @@ body {
     max-width: 100%;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis; }
+    text-overflow: ellipsis;
+    margin: 0; }
   @media (max-width: 800px), (max-device-width: 800px) {
     #page-header {
       position: static;
@@ -90,7 +91,8 @@ body {
       max-width: inherit;
       display: block; }
       #page-header h2 {
-        max-width: inherit; } }
+        max-width: inherit;
+        margin: 0; } }
   @media (min-width: 800px) and (min-device-width: 800px) {
     #page-header {
       opacity: 1;

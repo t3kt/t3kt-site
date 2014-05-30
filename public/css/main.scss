@@ -138,6 +138,7 @@ body {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    margin: 0;
   }
 
   @media (max-width: $window-width-tiny), (max-device-width: $window-width-tiny) {
@@ -147,6 +148,7 @@ body {
     display: block;
     h2 {
       max-width: inherit;
+      margin: 0;
     }
   }
   @media (min-width: $window-width-tiny) and (min-device-width: $window-width-tiny) {
