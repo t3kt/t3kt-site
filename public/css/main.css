@@ -54,7 +54,8 @@ body {
   opacity: 1; }
   #site-header h1 {
     display: inline-block;
-    font-size: 1.5em; }
+    font-size: 1.5em;
+    margin: 0; }
   @media (max-width: 800px), (max-device-width: 800px) {
     #site-header {
       position: static;
