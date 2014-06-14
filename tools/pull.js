@@ -9,11 +9,17 @@ var pull = require('../app/admin/pull'),
     .option('o', { alias: 'overwrite', default: false, type: 'boolean' })
     .option('s', { alias: 'source', default: 'all', type: 'string' })
     .option('p', { alias: 'project', default: 'all', type: 'string' })
+    .option('v', { alias: 'verbose', default: false, type: 'boolean' })
     .argv;
   var opts = {
     log: function (message, etc)
     {
       console.log.apply(console, arguments);
+    },
+    logv: function(message, etc)
+    {
+      if(argv.v)
+        console.log.apply(console, arguments);
     },
     overwrite: argv.o
   };

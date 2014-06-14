@@ -53,7 +53,7 @@ function pullVimeoVideosForProject(project, opts, callback)
   }
   else
   {
-    opts.log('Pulling from source vimeo for project', project.key);
+    opts.logv('Pulling from source vimeo for project', project.key);
     var overwrite = opts.overwrite,
       report = {
         added: 0,
