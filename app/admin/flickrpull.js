@@ -6,7 +6,7 @@ var models = require('../models'),
   _ = require('lodash'),
   moment = require('moment');
 
-var apiUrl = 'http://api.flickr.com/services/rest/',
+var apiUrl = 'https://api.flickr.com/services/rest/',
   extras = 'date_upload,date_taken,last_update,tags,o_dims,path_alias,url_sq,url_t,url_s,url_m,url_o,owner_name';
 
 function prepareImage(key, project, photo)
