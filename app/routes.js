@@ -368,6 +368,11 @@ var routes =
     function (req, res)
     {
       res.json(req.data.item);
+    }),
+  timelineTest: route('get', '/timelinetest', null,
+    function(req, res)
+    {
+      res.render('timelinetest.html');
     })
 };
 
