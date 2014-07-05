@@ -36,9 +36,9 @@ body {
   font-family: 'Oxygen Mono', sans-serif;
   color: $main-text-color;
   line-height: normal;
-  @media (max-device-width: $window-width-tiny) {
+  @media (max-width: $window-width-tiny), (max-device-width: $window-width-tiny) {
     overflow-x: hidden;
-    font-size: 1.5em;
+    font-size: 1.1em;
   }
 }
 
