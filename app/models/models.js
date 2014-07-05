@@ -51,6 +51,7 @@ var ProjectSchema = Schema({
   created: dateField,
   updated: dateField,
   bannerUrl: String,
+  bannerFullUrl: String,
   navItems: [navItemField]
 });
 ProjectSchema.methods.renderContent = renderContentFields;

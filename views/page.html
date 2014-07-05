@@ -19,7 +19,7 @@
 {%- block content -%}
 {%- if not isAjax -%}
   {%- if project -%}
-    {{ common.project_sub_nav( project, [page], page.key ) }}
+    {{ common.project_sub_nav( project, projectPages, page.key ) }}
   {%- endif -%}
 {%- endif -%}
   <article>

@@ -171,6 +171,11 @@ body {
     position: static;
     width: auto;
     min-height: inherit;
+    display: none;
+
+    &.toggled-open {
+      display: block;
+    }
   }
   @media (min-width: $window-width-tiny) and (min-device-width: $window-width-tiny) {
     opacity: 1;
@@ -471,6 +476,7 @@ ul, ol {
       opacity: 0;
       overflow: hidden;
       @include transition(opacity $fade-out-duration, margin $fade-out-duration, -webkit-transform $fade-out-duration);
+      @include transition(opacity $fade-out-duration, margin $fade-out-duration, transform $fade-out-duration);
     }
 
     .project-summary-content {
@@ -483,6 +489,7 @@ ul, ol {
         opacity: .9;
         margin: .25em;
         @include transition(opacity $fade-in-duration, margin $fade-in-duration, -webkit-transform $fade-in-duration);
+        @include transition(opacity $fade-in-duration, margin $fade-in-duration, transform $fade-in-duration);
       }
       .project-summary-content {
         opacity: .9;

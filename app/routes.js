@@ -66,7 +66,7 @@ var needs = {
         {
           req.data.project = project;
           if (project.bannerUrl)
-            req.data.bannerUrl = project.bannerUrl;
+            req.data.bannerUrl = project.bannerFullUrl || project.bannerUrl;
           break;
         }
       }
@@ -322,7 +322,7 @@ var routes =
       });
     }),
   projectPage: route('get', '/projects/:projectkey/pages/:pagekey',
-    [needs.settings, needs.projectList, needs.project, needs.page],
+    [needs.settings, needs.projectList, needs.project, needs.page, needs.projectPages],
     function (req, res)
     {
       req.data.page.renderContent(['content'], function (err, page)

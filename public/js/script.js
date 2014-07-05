@@ -54,6 +54,11 @@ var tekt = (function ()
         $(document.body).toggleClass('scrolled-down', (document.body.scrollTop || document.documentElement.scrollTop) > 5);
       })
       .triggerHandler('scroll.updatestate');
+    $('#site-menu-toggle').click(function ()
+    {
+      $('#main-nav').toggleClass('toggled-open');
+      return false;
+    });
     var init = pageInitializers[pageId];
     if (init)
       init(o);

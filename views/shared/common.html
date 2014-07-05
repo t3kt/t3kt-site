@@ -1,8 +1,11 @@
 {% macro banner_style(imageUrl) %}
   <style id="banner-style">
-    {% raw %} #banner { {% endraw %}
+    {% raw %} body { {% endraw %}
       background-image: linear-gradient(to bottom, rgba(73, 80, 116, 0), rgba(73, 80, 116, .9) 60%, rgba(73, 80, 116, 1)),
       url('{{ imageUrl }}');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-attachment: fixed;
     {% raw %} } {% endraw %}
   </style>
 {% endmacro %}
