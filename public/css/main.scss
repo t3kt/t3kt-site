@@ -1,9 +1,11 @@
-$page-background-color: #495074;
-$main-text-color: #226;
-$panel-background-color: rgba(#a5b3cc, 0.5);
+@import 'bourbon/_bourbon.scss'; // http://bourbon.io/
+
+$page-background-color: #2f334a;
+$main-text-color: #CCF;
+$panel-background-color: rgba(#4e5460, 0.5);
 $selection-highlight-color: #a5b3cc;
 $item-border-color: lighten($panel-background-color, 50%);
-$link-color: #0010a3;
+$link-color: #FFF;
 $nav-width: 13em;
 $main-panel-margin: 1em;
 $main-panel-padding: 1em;
@@ -27,19 +29,6 @@ $window-width-large: 1600px;
 @mixin safe-rgba-property($property, $rgba-color) {
   #{$property}: rgb(red($rgba-color), green($rgba-color), blue($rgba-color));
   #{$property}: $rgba-color;
-}
-
-@mixin box-sizing($value) {
-  -webkit-box-sizing: $value;
-  -moz-box-sizing: $value;
-  box-sizing: $value;
-}
-
-@mixin transition($properties...) {
-  -moz-transition: $properties;
-  -webkit-transition: $properties;
-  -o-transition: $properties;
-  transition: $properties;
 }
 
 body {
@@ -77,7 +66,7 @@ body {
 
 %main-panel {
   @include safe-rgba-property(background-color, $panel-background-color);
-  border: 1px dashed $page-background-color;
+  border: 1px dashed $main-text-color;
   border-radius: .5em;
   padding: $main-panel-padding;
   margin: $main-panel-margin;
@@ -221,11 +210,11 @@ nav {
 
     a,
     &.out-of-scope > a:hover {
-      border: 1px solid $page-background-color;
+      border: 1px solid $item-border-color;
     }
 
     &.out-of-scope > a {
-      border-color: rgba($page-background-color, .2);
+      border-color: rgba($item-border-color, .2);
     }
     //&.out-of-scope:not([rel='projects']) > a {
     &.out-of-scope > a {
@@ -278,7 +267,7 @@ nav {
   nav & {
     margin-right: .1em;
     width: 24%;
-    width: calc(25% - .1em);
+    @include calc(width, "25% - .1em");
     background-position: 50% 0;
 
     &:last-child {
@@ -351,18 +340,18 @@ ul, ol {
   @include box-sizing(border-box);
   &:not(.video-loaded) {
     width: 22%;
-    width: calc(25% - #{$item-padding*4});
+    @include calc(width, "25% - #{$item-padding*4}");
     @media (max-width: $window-width-small) {
       width: 98%;
-      width: calc(100% - #{$item-padding*4});
+      @include calc(width, "100% - #{$item-padding*4}");
     }
     @media (min-width: $window-width-small) and (max-width: $window-width-medium) {
       width: 49%;
-      width: calc(50% - #{$item-padding*4});
+      @include calc(width, "50% - #{$item-padding*4}");
     }
     @media (min-width: $window-width-medium) and (max-width: $window-width-large) {
       width: 33.2%;
-      width: calc(33.2% - #{$item-padding*4});
+      @include calc(width, "33.2% - #{$item-padding*4}");
     }
   }
   @media (max-device-width: $window-width-tiny) {
@@ -376,7 +365,7 @@ ul, ol {
   &.item-blogentry,
   &.item-batch {
     width: 96%;
-    width: calc(100% - #{$item-padding});
+    @include calc(width, "100% - #{$item-padding}");
   }
 
   &.item-batch {
@@ -398,18 +387,18 @@ ul, ol {
       }
       &:not(.video-loaded) {
         width: 22%;
-        width: calc(25% - #{$item-padding*2});
+        @include calc(width, "25% - #{$item-padding*2}");
         @media (max-width: $window-width-small) {
           width: 98%;
-          width: calc(100% - #{$item-padding*2});
+          @include calc(width, "100% - #{$item-padding*2}");
         }
         @media (min-width: $window-width-small) and (max-width: $window-width-medium) {
           width: 49%;
-          width: calc(50% - #{$item-padding*2});
+          @include calc(width, "50% - #{$item-padding*2}");
         }
         @media (min-width: $window-width-medium) and (max-width: $window-width-large) {
           width: 33.2%;
-          width: calc(33.2% - #{$item-padding*2});
+          @include calc(width, "33.2% - #{$item-padding*2}");
         }
       }
     }
@@ -542,5 +531,18 @@ button {
   li {
     border-bottom: 1px dashed $item-border-color;
     padding: .25em;
+  }
+}
+
+#site-menu-toggle {
+  display: none;
+  @media (max-width: $window-width-tiny), (max-device-width: $window-width-tiny) {
+    display: block;
+    border: none;
+    background-image: url('../images/menu-icon.png');
+    width: 32px;
+    height: 32px;
+    float: right;
+    cursor: pointer;
   }
 }

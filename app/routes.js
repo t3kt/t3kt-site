@@ -101,10 +101,12 @@ var needs = {
       next();
     else
     {
-      var query = {project: key};
-      if (itemType)
-        query.entityType = itemType;
-      d.Item.find(query).sort('-created').exec(function (err, items)
+      var query = d.Item.find({project: key});
+      if (Array.isArray(itemType))
+        query = query.where('entityType').in(itemType);
+      else if(itemType)
+        query = query.where('entityType').equals(itemType);
+      query.sort('-created').exec(function (err, items)
       {
         if (err)
           next(err);
