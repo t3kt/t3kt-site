@@ -59,7 +59,9 @@ body {
   @media (max-width: 800px), (max-device-width: 800px) {
     #site-header {
       position: static;
-      width: inherit; } }
+      width: inherit; }
+      #site-header h1 {
+        font-size: 2.5em; } }
   @media (min-width: 800px) and (min-device-width: 800px) {
     #site-header {
       -webkit-transition: opacity 1s, width 0.5s;
@@ -88,10 +90,12 @@ body {
       position: static;
       width: inherit;
       max-width: inherit;
-      display: block; }
+      display: block;
+      overflow-x: hidden; }
       #page-header h2 {
         max-width: inherit;
-        margin: 0; } }
+        margin: 0;
+        font-size: 2em; } }
   @media (min-width: 800px) and (min-device-width: 800px) {
     #page-header {
       opacity: 1;
@@ -351,7 +355,8 @@ ul, ol {
     margin-bottom: .25em;
     letter-spacing: .25em;
     font-size: 1.2em;
-    text-align: center; }
+    text-align: center;
+    text-transform: lowercase; }
   .item.project-summary .project-description {
     text-align: justify; }
   .item.project-summary .project-summary-overlay,
@@ -362,17 +367,17 @@ ul, ol {
     left: 0;
     right: 0; }
   .item.project-summary .project-summary-content {
-    padding: 1em 2em; }
+    padding: 2em; }
   .item.project-summary .project-summary-overlay {
     margin: 1em;
     padding: .25em;
     background-color: #4e5460;
     border-radius: 0.5em; }
-  @media (min-width: 800px) {
+  @media (min-width: 1000px) {
     .item.project-summary {
       overflow: hidden; }
     .item.project-summary .project-summary-overlay {
-      opacity: 0;
+      opacity: 0.3;
       overflow: hidden;
       -webkit-transition: opacity 1s, margin 1s, -webkit-transform 1s;
       -moz-transition: opacity 1s, margin 1s, -webkit-transform 1s;
@@ -381,7 +386,7 @@ ul, ol {
       -moz-transition: opacity 1s, margin 1s, -moz-transform 1s;
       transition: opacity 1s, margin 1s, transform 1s; }
     .item.project-summary .project-summary-content {
-      opacity: 0;
+      opacity: 0.3;
       -webkit-transition: opacity 1s;
       -moz-transition: opacity 1s;
       transition: opacity 1s; }
@@ -440,8 +445,9 @@ button {
     #site-menu-toggle {
       display: block;
       border: none;
-      background-image: url("../images/menu-icon.png");
-      width: 32px;
-      height: 32px;
+      background: url("../images/menu-icon.png") no-repeat;
+      background-size: cover;
+      width: 4em;
+      height: 4em;
       float: right;
       cursor: pointer; } }

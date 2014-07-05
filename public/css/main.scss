@@ -105,6 +105,9 @@ body {
   @media (max-width: $window-width-tiny), (max-device-width: $window-width-tiny) {
     position: static;
     width: inherit;
+    h1 {
+      font-size: 2.5em;
+    }
   }
   @media (min-width: $window-width-tiny) and (min-device-width: $window-width-tiny) {
     @include transition(opacity $fade-out-duration, width $expand-duration);
@@ -136,9 +139,11 @@ body {
     width: inherit;
     max-width: inherit;
     display: block;
+    overflow-x: hidden;
     h2 {
       max-width: inherit;
       margin: 0;
+      font-size: 2em;
     }
   }
   @media (min-width: $window-width-tiny) and (min-device-width: $window-width-tiny) {
@@ -440,6 +445,7 @@ ul, ol {
     letter-spacing: .25em;
     font-size: 1.2em;
     text-align: center;
+    text-transform: lowercase;
   }
 
   .project-description {
@@ -456,7 +462,7 @@ ul, ol {
   }
 
   .project-summary-content {
-    padding: 1em 2em;
+    padding: 2em;
   }
 
   .project-summary-overlay {
@@ -468,19 +474,19 @@ ul, ol {
     border-radius: $item-padding;
   }
 
-  @media (min-width: $window-width-tiny) {
+  @media (min-width: $window-width-small) {
     & {
       overflow: hidden;
     }
     .project-summary-overlay {
-      opacity: 0;
+      opacity: 0.3;
       overflow: hidden;
       @include transition(opacity $fade-out-duration, margin $fade-out-duration, -webkit-transform $fade-out-duration);
       @include transition(opacity $fade-out-duration, margin $fade-out-duration, transform $fade-out-duration);
     }
 
     .project-summary-content {
-      opacity: 0;
+      opacity: 0.3;
       @include transition(opacity $fade-out-duration);
     }
 
@@ -546,9 +552,10 @@ button {
   @media (max-width: $window-width-tiny), (max-device-width: $window-width-tiny) {
     display: block;
     border: none;
-    background-image: url('../images/menu-icon.png');
-    width: 32px;
-    height: 32px;
+    background: url('../images/menu-icon.png') no-repeat;
+    background-size: cover;
+    width: 4em;
+    height: 4em;
     float: right;
     cursor: pointer;
   }
