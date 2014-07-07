@@ -48,7 +48,7 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.pjax/1.7.0/jquery.pjax.min.js"></script>
   <script src="/js/script.js"></script>
 {%- endif -%}
-{%- if not isAjax -%}
+{%- if not isAjax and analyticsSiteId -%}
   <script>
     var _gas = _gas || [];
     _gas.push(['_setAccount', {{analyticsSiteId|json|raw}}]);
