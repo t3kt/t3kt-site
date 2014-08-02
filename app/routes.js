@@ -4,7 +4,8 @@ var util = require("./util"),
   config = require('../config/config'),
   async = require('async'),
   getVimeoEmbed = require('./vimeoembed').getEmbed,
-  _ = require('lodash');
+  _ = require('lodash'),
+  content = require('./content');
 
 function route(verb, path, middleware, handler)
 {
@@ -24,7 +25,7 @@ var needs = {
       else
       {
         req.data.settings = settings;
-        req.data.bannerUrl = settings.defaultBannerUrl;
+        req.data.bannerUrl = content.prepareBannerUrl(settings.defaultBannerUrl);
         next();
       }
     });
@@ -66,7 +67,10 @@ var needs = {
         {
           req.data.project = project;
           if (project.bannerUrl)
+          {
+            project.prepareBannerFields();
             req.data.bannerUrl = project.bannerFullUrl || project.bannerUrl;
+          }
           break;
         }
       }
@@ -87,7 +91,10 @@ var needs = {
         {
           req.data.project = project;
           if (project.bannerUrl)
+          {
+            project.prepareBannerFields();
             req.data.bannerUrl = project.bannerUrl;
+          }
           next();
         }
       });

@@ -6,7 +6,8 @@ var jade = require('jade'),
   marked = require('marked'),
   swig = require('swig'),
   swigExtras = require('swig-extras'),
-  format = require('util').format;
+  format = require('util').format,
+  config = require('../config/config');
 
 function render(content, callback)
 {
@@ -124,4 +125,20 @@ exports.registerSwigFilters = function ()
       swig.setExtension(t.ext.name, t.ext.obj);
     }
   });
+};
+
+exports.prepareBannerUrl = function(url)
+{
+  if (url && !(/^https?:\/\//.test(url)))
+  {
+    var base = config.bannerImageBase;
+    if (!base)
+      return url;
+    if (!/.*\/$/.test(base))
+      base = base + '/';
+    if (url.indexOf('/') == 0)
+      url = url.substr(1);
+    return base + url;
+  }
+  return url;
 };

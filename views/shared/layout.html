@@ -38,10 +38,6 @@
     {%- endblock -%}
 {%- if not isContentOnly -%}
   </main>
-  <footer>
-    {% block footer %}
-    {% endblock %}
-  </footer>
   {{ common.banner_style(bannerUrl) }}
 {%- if not isAjax -%}
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.3/jquery.colorbox.js"></script>

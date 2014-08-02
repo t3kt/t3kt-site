@@ -3,8 +3,7 @@ var mongoose = require('mongoose'),
   _ = require('lodash'),
   formage = require('formage'),
   content = require('../content'),
-  moment = require('moment'),
-  config = require('../../config/config');
+  moment = require('moment');
 
 var tokenField = {type: String, lowercase: true, trim: true},
   dateField = {type: Date, default: Date.now, widget: formage.widgets.DateTimeWidget},
@@ -31,18 +30,7 @@ function renderDateField(field)
 
 function prepareBannerField(field)
 {
-  var url = this[field];
-  if (url && !(/^https?:\/\//.test(url)))
-  {
-    var base = config.bannerImageBase;
-    if (!base)
-      return;
-    if (!/.*\/$/.test(base))
-      base = base + '/';
-    if (url.indexOf('/') == 0)
-      url = url.substr(1);
-    this[field] = base + url;
-  }
+  this[field] = content.prepareBannerUrl(this[field]);
 }
 function prepareBannerFields()
 {
