@@ -1,3 +1,6 @@
+@font-face {
+  font-family: 'Oxygen Mono';
+  src: url("../zlocal/OxygenMono-Regular.ttf"); }
 body {
   background-color: #2f334a;
   font-family: 'Oxygen Mono', sans-serif;
