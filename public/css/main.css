@@ -351,7 +351,7 @@ ul, ol {
     text-align: center;
     text-transform: lowercase; }
   .item.project-summary .project-description {
-    text-align: justify; }
+    text-align: center; }
   .item.project-summary .project-summary-overlay,
   .item.project-summary .project-summary-content {
     position: absolute;
@@ -383,6 +383,11 @@ ul, ol {
       -webkit-transition: opacity 1s;
       -moz-transition: opacity 1s;
       transition: opacity 1s; }
+    .item.project-summary .project-description {
+      opacity: 0;
+      -webkit-transition: opacity 1s;
+      -moz-transition: opacity 1s;
+      transition: opacity 1s; }
     .item.project-summary:hover .project-summary-overlay {
       opacity: .9;
       margin: .25em;
@@ -394,6 +399,11 @@ ul, ol {
       transition: opacity 0.5s, margin 0.5s, transform 0.5s; }
     .item.project-summary:hover .project-summary-content {
       opacity: .9;
+      -webkit-transition: opacity 0.5s;
+      -moz-transition: opacity 0.5s;
+      transition: opacity 0.5s; }
+    .item.project-summary:hover .project-description {
+      opacity: 1;
       -webkit-transition: opacity 0.5s;
       -moz-transition: opacity 0.5s;
       transition: opacity 0.5s; } }

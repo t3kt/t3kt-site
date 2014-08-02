@@ -435,7 +435,7 @@ ul, ol {
   }
 
   .project-description {
-    text-align: justify;
+    text-align: center;
   }
 
   .project-summary-overlay,
@@ -475,6 +475,10 @@ ul, ol {
       opacity: 0.3;
       @include transition(opacity $fade-out-duration);
     }
+    .project-description {
+      opacity: 0;
+      @include transition(opacity $fade-out-duration);
+    }
 
     &:hover {
       .project-summary-overlay {
@@ -485,6 +489,10 @@ ul, ol {
       }
       .project-summary-content {
         opacity: .9;
+        @include transition(opacity $fade-in-duration);
+      }
+      .project-description {
+        opacity: 1;
         @include transition(opacity $fade-in-duration);
       }
     }
