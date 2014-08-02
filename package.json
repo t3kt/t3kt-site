@@ -3,6 +3,7 @@
   "description": "the tekt2 site",
   "author": "tekt <int3kt@gmail.com>",
   "version": "0.0.1",
+  "repository": "https://github.com/t3kt/t3kt-site.git",
   "dependencies": {
     "async": "0.8.0",
     "connect": "2.15.0",
