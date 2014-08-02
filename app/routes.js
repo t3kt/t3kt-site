@@ -104,7 +104,7 @@ var needs = {
       var query = d.Item.find({project: key});
       if (Array.isArray(itemType))
         query = query.where('entityType').in(itemType);
-      else if(itemType)
+      else if (itemType)
         query = query.where('entityType').equals(itemType);
       query.sort('-created').exec(function (err, items)
       {
@@ -225,6 +225,7 @@ var routes =
       async.map(req.data.projects,
         function (project, done)
         {
+          project.prepareBannerFields();
           project.renderContent(['summary', 'description'], done);
         },
         function (err, projects)
@@ -246,6 +247,7 @@ var routes =
     [needs.settings, needs.projectList, needs.project, needs.projectPages],
     function (req, res, next)
     {
+      req.data.project.prepareBannerFields();
       req.data.project.renderContent(['summary', 'description'], function (err, project)
       {
         if (err)
@@ -283,7 +285,10 @@ var routes =
           {
             if (b.items.length == 1)
               return b.items[0];
-            b.items = b.items.map(function(i){return i.toObject();});
+            b.items = b.items.map(function (i)
+            {
+              return i.toObject();
+            });
             return b;
           }
         });
@@ -372,7 +377,7 @@ var routes =
       res.json(req.data.item);
     }),
   timelineTest: route('get', '/timelinetest', null,
-    function(req, res)
+    function (req, res)
     {
       res.render('timelinetest.html');
     })
