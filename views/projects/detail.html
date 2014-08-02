@@ -2,7 +2,7 @@
 
 {% block doc_title %}project: {{ project.title }}{% endblock %}
 
-{% block page_title %}project: <a href="/projects/{{ project.key }}">{{ project.title }}</a>{% endblock %}
+{% block page_title %}{{ common.nav_path( navPathParts ) }}{% endblock %}
 
 {% block content %}
   {{ common.project_sub_nav( project, projectPages, null ) }}

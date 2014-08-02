@@ -114,3 +114,22 @@
     </ul>
   </nav>
 {% endmacro %}
+
+{%- macro nav_path(parts) -%}
+  {% if parts %}
+  <ul id="nav-path">
+    {% spaceless %}
+      {% for part in parts %}
+        <li>
+          {% if part.url %}
+            <a href="{{ part.url }}">{{ part.name }}</a>
+          {% endif %}
+          {% if not part.url %}
+            {{ part.name }}
+          {% endif %}
+        </li>
+      {% endfor %}
+    {% endspaceless %}
+  </ul>
+  {% endif %}
+{%- endmacro -%}

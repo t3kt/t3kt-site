@@ -175,6 +175,15 @@ nav {
         display: block;
         margin-bottom: .1em; } }
 
+#nav-path {
+  list-style: none; }
+  #nav-path li {
+    display: inline-block; }
+    #nav-path li:after {
+      content: "."; }
+    #nav-path li:last-child:after {
+      display: none; }
+
 .icon-link {
   overflow: hidden;
   -webkit-box-sizing: border-box;
