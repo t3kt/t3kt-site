@@ -3,7 +3,8 @@ var mongoose = require('mongoose'),
   _ = require('lodash'),
   formage = require('formage'),
   content = require('../content'),
-  moment = require('moment');
+  moment = require('moment'),
+  config = require('../config/config');
 
 var tokenField = {type: String, lowercase: true, trim: true},
   dateField = {type: Date, default: Date.now, widget: formage.widgets.DateTimeWidget},
@@ -26,6 +27,20 @@ function renderContentFields(fields, callback)
 function renderDateField(field)
 {
   return (this[field] && moment(this[field]).format('YYYY.MM.DD HH:mm:ss')) || '';
+}
+
+function prepareBannerUrl(field)
+{
+  var url = this[field];
+  if (url && !(/^https?:\/\//.test(url)))
+  {
+    var base = config.bannerImageBase;
+    if (base && !/.*\/$/.test(url) && url.indexOf('/') != 0)
+      return base + '/' + url;
+    else if (base)
+      return base + url;
+  }
+  return url;
 }
 
 var SettingsSchema = Schema({
@@ -56,6 +71,7 @@ var ProjectSchema = Schema({
 });
 ProjectSchema.methods.renderContent = renderContentFields;
 ProjectSchema.methods.renderDate = renderDateField;
+ProjectSchema.methods.prepareBannerUrl = prepareBannerUrl;
 
 var PageSchema = Schema({
   key: _.extend({}, tokenField, {index: true}),

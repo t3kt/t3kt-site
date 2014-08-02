@@ -15,7 +15,8 @@ var config = {
   analyticsEnabled: true,
   siteTitle: 'tekt',
   siteAuthor: 'tekt',
-  dictionaryApiKey: ''
+  dictionaryApiKey: '',
+  bannerImageBase: 'https://s3.amazonaws.com/tektimg/'
 };
 
 _.merge(config, {
@@ -27,7 +28,7 @@ _.merge(config, {
   flickrApiKey: process.env.FLICKR_API_KEY,
   blogFeedUrl: process.env.BLOG_FEED_URL,
   dictionaryApiKey: process.env.DICTIONARY_API_KEY
-})
+});
 
 try
 {

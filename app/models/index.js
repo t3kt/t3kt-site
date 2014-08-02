@@ -32,7 +32,7 @@ exports.userExists = function (username, callback)
 exports.getUser = function (username, callback)
 {
   return User.findOne({username: username}, callback);
-}
+};
 
 exports.getProjects = function (projectKeys, callback)
 {
