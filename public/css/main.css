@@ -379,7 +379,7 @@ ul, ol {
     background-color: #4e5460;
     border-radius: 0.5em;
     opacity: .3; }
-  @media (max-width: 800px) {
+  @media (max-width: 800px), (max-device-width: 800px) {
     .item.project-summary .project-summary-overlay {
       opacity: .7; } }
   @media (min-width: 1000px) {
@@ -388,12 +388,9 @@ ul, ol {
     .item.project-summary .project-summary-overlay {
       opacity: 0.1;
       overflow: hidden;
-      -webkit-transition: opacity 1s, margin 1s, -webkit-transform 1s;
-      -moz-transition: opacity 1s, margin 1s, -webkit-transform 1s;
-      transition: opacity 1s, margin 1s, -webkit-transform 1s;
-      -webkit-transition: opacity 1s, margin 1s, -webkit-transform 1s;
-      -moz-transition: opacity 1s, margin 1s, -moz-transform 1s;
-      transition: opacity 1s, margin 1s, transform 1s; }
+      -webkit-transition: opacity 1s, margin 1s;
+      -moz-transition: opacity 1s, margin 1s;
+      transition: opacity 1s, margin 1s; }
     .item.project-summary .project-summary-content {
       opacity: 0.6;
       -webkit-transition: opacity 1s;
@@ -407,12 +404,9 @@ ul, ol {
     .item.project-summary:hover .project-summary-overlay {
       opacity: .9;
       margin: .25em;
-      -webkit-transition: opacity 0.5s, margin 0.5s, -webkit-transform 0.5s;
-      -moz-transition: opacity 0.5s, margin 0.5s, -webkit-transform 0.5s;
-      transition: opacity 0.5s, margin 0.5s, -webkit-transform 0.5s;
-      -webkit-transition: opacity 0.5s, margin 0.5s, -webkit-transform 0.5s;
-      -moz-transition: opacity 0.5s, margin 0.5s, -moz-transform 0.5s;
-      transition: opacity 0.5s, margin 0.5s, transform 0.5s; }
+      -webkit-transition: opacity 0.5s, margin 0.5s;
+      -moz-transition: opacity 0.5s, margin 0.5s;
+      transition: opacity 0.5s, margin 0.5s; }
     .item.project-summary:hover .project-summary-content {
       opacity: .9;
       -webkit-transition: opacity 0.5s;

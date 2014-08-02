@@ -481,7 +481,7 @@ ul, ol {
     opacity: .3;
   }
 
-  @media (max-width: $window-width-tiny) {
+  @media (max-width: $window-width-tiny), (max-device-width: $window-width-tiny) {
     .project-summary-overlay {
       opacity: .7;
     }
@@ -494,8 +494,7 @@ ul, ol {
     .project-summary-overlay {
       opacity: 0.1;
       overflow: hidden;
-      @include transition(opacity $fade-out-duration, margin $fade-out-duration, -webkit-transform $fade-out-duration);
-      @include transition(opacity $fade-out-duration, margin $fade-out-duration, transform $fade-out-duration);
+      @include transition(opacity $fade-out-duration, margin $fade-out-duration);
     }
 
     .project-summary-content {
@@ -511,8 +510,7 @@ ul, ol {
       .project-summary-overlay {
         opacity: .9;
         margin: .25em;
-        @include transition(opacity $fade-in-duration, margin $fade-in-duration, -webkit-transform $fade-in-duration);
-        @include transition(opacity $fade-in-duration, margin $fade-in-duration, transform $fade-in-duration);
+        @include transition(opacity $fade-in-duration, margin $fade-in-duration);
       }
       .project-summary-content {
         opacity: .9;
