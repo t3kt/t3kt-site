@@ -377,12 +377,16 @@ ul, ol {
     margin: 1em;
     padding: .25em;
     background-color: #4e5460;
-    border-radius: 0.5em; }
+    border-radius: 0.5em;
+    opacity: .3; }
+  @media (max-width: 800px) {
+    .item.project-summary .project-summary-overlay {
+      opacity: .7; } }
   @media (min-width: 1000px) {
     .item.project-summary {
       overflow: hidden; }
     .item.project-summary .project-summary-overlay {
-      opacity: 0.3;
+      opacity: 0.1;
       overflow: hidden;
       -webkit-transition: opacity 1s, margin 1s, -webkit-transform 1s;
       -moz-transition: opacity 1s, margin 1s, -webkit-transform 1s;
@@ -391,7 +395,7 @@ ul, ol {
       -moz-transition: opacity 1s, margin 1s, -moz-transform 1s;
       transition: opacity 1s, margin 1s, transform 1s; }
     .item.project-summary .project-summary-content {
-      opacity: 0.3;
+      opacity: 0.6;
       -webkit-transition: opacity 1s;
       -moz-transition: opacity 1s;
       transition: opacity 1s; }
