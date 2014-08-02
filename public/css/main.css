@@ -457,3 +457,32 @@ button {
       height: 4em;
       float: right;
       cursor: pointer; } }
+
+#modal-overlay, #modal-overlay-message {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  -webkit-transition: opacity 1s;
+  -moz-transition: opacity 1s;
+  transition: opacity 1s; }
+  .shown#modal-overlay, .shown#modal-overlay-message {
+    display: block;
+    -webkit-transition: opacity 0.5s;
+    -moz-transition: opacity 0.5s;
+    transition: opacity 0.5s; }
+
+#modal-overlay {
+  z-index: 100;
+  background-color: #4e5460; }
+  #modal-overlay.shown {
+    opacity: .6; }
+
+#modal-overlay-message {
+  z-index: 101;
+  text-align: center; }
+  #modal-overlay-message.shown {
+    opacity: 1; }

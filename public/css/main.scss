@@ -561,3 +561,35 @@ button {
     cursor: pointer;
   }
 }
+
+%modal-overlay-base {
+  display: none;
+  @include position(fixed, 0 0 0 0);
+  opacity: 0;
+  @include transition(opacity $fade-out-duration);
+
+  &.shown {
+    display: block;
+    @include transition(opacity $fade-in-duration);
+  }
+}
+
+#modal-overlay {
+  @extend %modal-overlay-base;
+  z-index: 100;
+  background-color: rgba($panel-background-color, 1);
+
+  &.shown {
+    opacity: .6;
+  }
+}
+
+#modal-overlay-message {
+  @extend %modal-overlay-base;
+  z-index: 101;
+  text-align: center;
+
+  &.shown {
+    opacity: 1;
+  }
+}

@@ -4,6 +4,27 @@ var tekt = (function ()
     opts: null
   };
 
+  T.modalOverlay = function (message)
+  {
+    var overlay = $('#modal-overlay'),
+      msgOverlay = $('#modal-overlay-message');
+    if (!message)
+    {
+      overlay.removeClass('shown');
+      msgOverlay.removeClass('shown');
+    }
+    else
+    {
+      if (!overlay.length)
+        overlay = $('<div id="modal-overlay"/>').appendTo('body');
+      if (!msgOverlay.length)
+        msgOverlay = $('<div id="modal-overlay-message"/>').appendTo('body');
+      msgOverlay.empty().text(message);
+      overlay.addClass('shown');
+      msgOverlay.addClass('shown');
+    }
+  };
+
   var pageInitializers = {
     projectDetail: function (o)
     {
@@ -73,5 +94,9 @@ if (window.$)
   $(function ()
   {
     tekt.initPage();
+    window.onunload = function ()
+    {
+      tekt.modalOverlay('loading...');
+    };
   });
 }
