@@ -10,7 +10,7 @@
 
 {%- block page_title -%}
   {%- if project %}
-    {{ project.title }}: {{ page.title }}
+    {{ common.nav_path( navPathParts ) }}
   {%- else -%}
     {{ page.title }}
   {%- endif -%}

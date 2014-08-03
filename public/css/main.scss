@@ -251,6 +251,19 @@ nav {
   }
 }
 
+#nav-path {
+  list-style: none;
+  li {
+    display: inline-block;
+    &:after {
+      content: ".";
+    }
+    &:last-child:after {
+      display: none;
+    }
+  }
+}
+
 .icon-link {
   @include hide-text;
   @include box-sizing(border-box);
@@ -458,6 +471,13 @@ ul, ol {
     //@include safe-rgba-property(background-color, rgba($panel-background-color, 1));
     background-color: rgba($panel-background-color, 1);
     border-radius: $item-padding;
+    opacity: .3;
+  }
+
+  @media (max-width: $window-width-tiny), (max-device-width: $window-width-tiny) {
+    .project-summary-overlay {
+      opacity: .7;
+    }
   }
 
   @media (min-width: $window-width-small) {
@@ -465,14 +485,13 @@ ul, ol {
       overflow: hidden;
     }
     .project-summary-overlay {
-      opacity: 0.3;
+      opacity: 0.1;
       overflow: hidden;
-      @include transition(opacity $fade-out-duration, margin $fade-out-duration, -webkit-transform $fade-out-duration);
-      @include transition(opacity $fade-out-duration, margin $fade-out-duration, transform $fade-out-duration);
+      @include transition(opacity $fade-out-duration, margin $fade-out-duration);
     }
 
     .project-summary-content {
-      opacity: 0.3;
+      opacity: 0.6;
       @include transition(opacity $fade-out-duration);
     }
     .project-description {
@@ -484,8 +503,7 @@ ul, ol {
       .project-summary-overlay {
         opacity: .9;
         margin: .25em;
-        @include transition(opacity $fade-in-duration, margin $fade-in-duration, -webkit-transform $fade-in-duration);
-        @include transition(opacity $fade-in-duration, margin $fade-in-duration, transform $fade-in-duration);
+        @include transition(opacity $fade-in-duration, margin $fade-in-duration);
       }
       .project-summary-content {
         opacity: .9;
@@ -552,5 +570,37 @@ button {
     height: 4em;
     float: right;
     cursor: pointer;
+  }
+}
+
+%modal-overlay-base {
+  display: none;
+  @include position(fixed, 0 0 0 0);
+  opacity: 0;
+  @include transition(opacity $fade-out-duration);
+
+  &.shown {
+    display: block;
+    @include transition(opacity $fade-in-duration);
+  }
+}
+
+#modal-overlay {
+  @extend %modal-overlay-base;
+  z-index: 100;
+  background-color: rgba($panel-background-color, 1);
+
+  &.shown {
+    opacity: .6;
+  }
+}
+
+#modal-overlay-message {
+  @extend %modal-overlay-base;
+  z-index: 101;
+  text-align: center;
+
+  &.shown {
+    opacity: 1;
   }
 }

@@ -263,6 +263,10 @@ var routes =
         req.data.title = 'project: ' + req.data.project.title;
         req.data.pageParams = {projectKey: project.key};
         //req.data.pageParamsJson = JSON.stringify(req.data.pageParams);
+        req.data.navPathParts = [
+          {url: '/', name: 'projects'},
+          {name: project.title}
+        ];
         res.render('projects/detail.html', req.data);
       });
     }),
@@ -279,6 +283,13 @@ var routes =
     function (req, res)
     {
       req.data.isContentOnly = req.data.isAjax;
+      if(!req.data.isContentOnly)
+      {
+        req.data.navPathParts = [
+          {url: '/', name: 'projects'},
+          {name: req.data.project.title}
+        ];
+      }
       res.render('items.html', req.data);
     }),
   projectItemBatches: route('get', '/projects/:projectkey/itembatches',
@@ -286,6 +297,13 @@ var routes =
     function (req, res)
     {
       req.data.isContentOnly = req.data.isAjax;
+      if(!req.data.isContentOnly)
+      {
+        req.data.navPathParts = [
+          {url: '/', name: 'projects'},
+          {name: req.data.project.title}
+        ];
+      }
       req.data.items = util.batchItems(req.data.items,
         {
           postProcessBatch: function (b)
@@ -339,6 +357,14 @@ var routes =
     {
       req.data.page.renderContent(['content'], function (err, page)
       {
+        if(!req.data.isContentOnly)
+        {
+          req.data.navPathParts = [
+            {url: '/', name: 'projects'},
+            {url: '/projects/' + req.data.project.key, name: req.data.project.title},
+            {name: page.title}
+          ];
+        }
         req.data.page = page;
         res.render('page.html', req.data);
       });

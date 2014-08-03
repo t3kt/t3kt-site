@@ -172,6 +172,15 @@ nav {
         display: block;
         margin-bottom: .1em; } }
 
+#nav-path {
+  list-style: none; }
+  #nav-path li {
+    display: inline-block; }
+    #nav-path li:after {
+      content: "."; }
+    #nav-path li:last-child:after {
+      display: none; }
+
 .icon-link {
   overflow: hidden;
   -webkit-box-sizing: border-box;
@@ -365,21 +374,22 @@ ul, ol {
     margin: 1em;
     padding: .25em;
     background-color: #4e5460;
-    border-radius: 0.5em; }
+    border-radius: 0.5em;
+    opacity: .3; }
+  @media (max-width: 800px), (max-device-width: 800px) {
+    .item.project-summary .project-summary-overlay {
+      opacity: .7; } }
   @media (min-width: 1000px) {
     .item.project-summary {
       overflow: hidden; }
     .item.project-summary .project-summary-overlay {
-      opacity: 0.3;
+      opacity: 0.1;
       overflow: hidden;
-      -webkit-transition: opacity 1s, margin 1s, -webkit-transform 1s;
-      -moz-transition: opacity 1s, margin 1s, -webkit-transform 1s;
-      transition: opacity 1s, margin 1s, -webkit-transform 1s;
-      -webkit-transition: opacity 1s, margin 1s, -webkit-transform 1s;
-      -moz-transition: opacity 1s, margin 1s, -moz-transform 1s;
-      transition: opacity 1s, margin 1s, transform 1s; }
+      -webkit-transition: opacity 1s, margin 1s;
+      -moz-transition: opacity 1s, margin 1s;
+      transition: opacity 1s, margin 1s; }
     .item.project-summary .project-summary-content {
-      opacity: 0.3;
+      opacity: 0.6;
       -webkit-transition: opacity 1s;
       -moz-transition: opacity 1s;
       transition: opacity 1s; }
@@ -391,12 +401,9 @@ ul, ol {
     .item.project-summary:hover .project-summary-overlay {
       opacity: .9;
       margin: .25em;
-      -webkit-transition: opacity 0.5s, margin 0.5s, -webkit-transform 0.5s;
-      -moz-transition: opacity 0.5s, margin 0.5s, -webkit-transform 0.5s;
-      transition: opacity 0.5s, margin 0.5s, -webkit-transform 0.5s;
-      -webkit-transition: opacity 0.5s, margin 0.5s, -webkit-transform 0.5s;
-      -moz-transition: opacity 0.5s, margin 0.5s, -moz-transform 0.5s;
-      transition: opacity 0.5s, margin 0.5s, transform 0.5s; }
+      -webkit-transition: opacity 0.5s, margin 0.5s;
+      -moz-transition: opacity 0.5s, margin 0.5s;
+      transition: opacity 0.5s, margin 0.5s; }
     .item.project-summary:hover .project-summary-content {
       opacity: .9;
       -webkit-transition: opacity 0.5s;
@@ -454,3 +461,32 @@ button {
       height: 4em;
       float: right;
       cursor: pointer; } }
+
+#modal-overlay, #modal-overlay-message {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  -webkit-transition: opacity 1s;
+  -moz-transition: opacity 1s;
+  transition: opacity 1s; }
+  .shown#modal-overlay, .shown#modal-overlay-message {
+    display: block;
+    -webkit-transition: opacity 0.5s;
+    -moz-transition: opacity 0.5s;
+    transition: opacity 0.5s; }
+
+#modal-overlay {
+  z-index: 100;
+  background-color: #4e5460; }
+  #modal-overlay.shown {
+    opacity: .6; }
+
+#modal-overlay-message {
+  z-index: 101;
+  text-align: center; }
+  #modal-overlay-message.shown {
+    opacity: 1; }
