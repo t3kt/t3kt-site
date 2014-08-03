@@ -6,16 +6,13 @@
   <meta charset="utf-8"/>
   <meta name="author" content="{{ siteAuthor }}"/>
   <title>{{ siteTitle }}: {% block doc_title %}{{ pageTitle }}{% endblock %}</title>
-  <!--<link rel="stylesheet" href="//reset5.googlecode.com/hg/reset.min.css">-->
-    <link rel="stylesheet" href="/zlocal/reset.css">
+  <link rel="stylesheet" href="//reset5.googlecode.com/hg/reset.min.css">
   <link rel="stylesheet" href="/css/main.css">
   <link rel="shortcut icon" href="/images/favicon.png">
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Oxygen+Mono" type="text/css">
-  <!--<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.3/example1/colorbox.css">-->
-    <link rel="stylesheet" href="/zlocal/colorbox/colorbox.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.3/example1/colorbox.css">
   {%- if not isAjax -%}
-  <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script> -->
-    <script src="/zlocal/jquery.js"></script>
+   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
   {%- endif -%}
 </head>
 <body>
@@ -43,8 +40,7 @@
   </main>
   {{ common.banner_style(bannerUrl) }}
 {%- if not isAjax -%}
-  <!--<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.3/jquery.colorbox.js"></script>-->
-  <script src="/zlocal/jquery.colorbox.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.3/jquery.colorbox.js"></script>
   <script src="/js/script.js"></script>
 {%- endif -%}
 {%- if not isAjax and analyticsSiteId -%}

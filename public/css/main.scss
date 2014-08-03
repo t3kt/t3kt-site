@@ -30,13 +30,6 @@ $window-width-large: 1600px;
   #{$property}: $rgba-color;
 }
 
-
-
-@font-face {
-  font-family: 'Oxygen Mono';
-  src: url('../zlocal/OxygenMono-Regular.ttf');
-}
-
 body {
   background-color: $page-background-color;
   font-family: 'Oxygen Mono', sans-serif;
