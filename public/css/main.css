@@ -246,13 +246,25 @@ main {
   @media (max-width: 800px), (max-device-width: 800px) {
     main {
       position: static; } }
-
-hr {
-  border: none;
-  border-top: 1px solid #2f334a; }
-
-ul, ol {
-  list-style-position: inside; }
+  main ul, main ol {
+    list-style-position: inside; }
+    article main ul, article main ol {
+      text-indent: -1em;
+      padding-left: 1em; }
+  main hr {
+    border: none;
+    border-top: 1px solid #2f334a; }
+  main h3, main h4, main h5, main h6 {
+    font-weight: bold;
+    border-bottom: 1px solid #ccccff; }
+  main h3 {
+    font-size: 1.2em;
+    margin-top: 1em;
+    margin-bottom: .5em; }
+  main h4 {
+    font-size: 1.1em;
+    margin-top: .5em;
+    margin-bottom: .25em; }
 
 .item {
   display: inline-block;

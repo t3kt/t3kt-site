@@ -323,15 +323,43 @@ main {
   @media (max-width: $window-width-tiny), (max-device-width: $window-width-tiny) {
     position: static;
   }
-}
 
-hr {
-  border: none;
-  border-top: 1px solid $page-background-color;
-}
+  ul, ol {
+    list-style-position: inside;
 
-ul, ol {
-  list-style-position: inside;
+    article & {
+      text-indent: -1em;
+      padding-left: 1em;
+    }
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid $page-background-color;
+  }
+
+  %h {
+    font-weight: bold;
+    border-bottom: 1px solid $main-text-color;
+  }
+
+  h3 {
+    @extend %h;
+    font-size: 1.2em;
+    margin-top: 1em;
+    margin-bottom: .5em;
+  }
+
+  h4 {
+    @extend %h;
+    font-size: 1.1em;
+    margin-top: .5em;
+    margin-bottom: .25em;
+  }
+
+  h5, h6 {
+    @extend %h;
+  }
 }
 
 .item {
