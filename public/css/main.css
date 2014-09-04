@@ -248,9 +248,11 @@ main {
       position: static; } }
   main ul, main ol {
     list-style-position: inside; }
-    article main ul, article main ol {
-      text-indent: -1em;
-      padding-left: 1em; }
+  main article ul, main article ol {
+    text-indent: -1em;
+    padding-left: 1em; }
+    main article ul ul, main article ul ol, main article ol ul, main article ol ol {
+      text-indent: 0; }
   main hr {
     border: none;
     border-top: 1px solid #2f334a; }

@@ -326,10 +326,16 @@ main {
 
   ul, ol {
     list-style-position: inside;
+  }
 
-    article & {
+  article {
+    ul, ol {
       text-indent: -1em;
       padding-left: 1em;
+
+      ul, ol {
+        text-indent: 0;
+      }
     }
   }
 
