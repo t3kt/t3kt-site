@@ -173,7 +173,8 @@ nav {
         margin-bottom: .1em; } }
 
 #nav-path {
-  list-style: none; }
+  list-style: none;
+  margin: 0; }
   #nav-path li {
     display: inline-block; }
     #nav-path li:after {
