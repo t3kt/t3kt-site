@@ -80,6 +80,7 @@ PageSchema.index({key: 1, project: 1});
 PageSchema.methods.renderContent = renderContentFields;
 PageSchema.methods.renderDate = renderDateField;
 
+
 var imageField = {
   width: Number,
   height: Number,
@@ -90,7 +91,8 @@ var itemTypes = {
   video: 'video',
   image: 'image',
   commit: 'commit',
-  blogentry: 'blogentry'
+  blogentry: 'blogentry',
+  event: 'event'
 };
 var itemTypeAliases =
   _.merge({}, itemTypes, {
@@ -132,7 +134,10 @@ var ItemSchema = Schema({
   medium: imageField,
 
   // blog/news entry fields
-  content: contentField
+  content: contentField,
+
+  // event fields
+  date: dateField
 });
 ItemSchema.methods.renderContent = renderContentFields;
 ItemSchema.methods.renderDate = renderDateField;
@@ -155,6 +160,7 @@ module.exports = exports = {
   ProjectSchema: ProjectSchema,
   PageSchema: PageSchema,
   ItemSchema: ItemSchema,
+  EventSchema: EventSchema,
 
   Settings: Settings,
   User: User,
