@@ -5,19 +5,45 @@
 {% block page_title %}projects{% endblock %}
 
 {% block content %}
-  {% for project in projects %}
-    <div class="item project-summary" style="background-image:url('{{project.bannerUrl}}');">
-      <div class="project-summary-overlay"> </div>
-      <div class="project-summary-content">
-        <h3 class="item-title">
+<div class="jumbotron">
+<div id="projects-carousel" class="carousel slide" data-ride="carousel" data-interval="false">
+  <!-- Indicators -->
+  <ol class="carousel-indicators">
+    <li data-target="#projects-carousel" data-slide-to="0" class="active"></li>
+    <li data-target="#projects-carousel" data-slide-to="1"></li>
+    <li data-target="#projects-carousel" data-slide-to="2"></li>
+  </ol>
+
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner" role="listbox">
+    {% for i, project in projects %}
+    {% if i == 0 %}
+    <div class="item active">
+      {% else %}
+      <div class="item">
+    {% endif %}
+      <img src="{{project.bannerUrl}}" alt="{{project.title}}"/>
+      <div class="carousel-caption">
           <a href="/projects/{{ project.key }}">{{ project.title }}</a>
-        </h3>
         <div class="project-description">
           {{ project.summaryRendered | default(project.descriptionRendered) | safe }}
         </div>
       </div>
     </div>
-  {% endfor %}
+    {% endfor %}
+  </div>
+
+  <!-- Controls -->
+  <a class="left carousel-control" href="#projects-carousel" role="button" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="right carousel-control" href="#projects-carousel" role="button" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
+    </div>
     <script>
       $(function(){
         $('.project-summary').click(function()

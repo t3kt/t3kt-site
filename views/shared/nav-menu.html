@@ -1,36 +1,43 @@
 {%- set inProjectScope = routeId=='projectDetail'||routeId=='projectPage' -%}
 {%- set navClass = '' -%}
-<nav id="main-nav">
-  <ul>
+<div id="navbar" class="collapse navbar-collapse">
+  <ul class="nav navbar-nav">
     {#
-    {% set navClass = routeId=='page'&& page && page.key == 'about' ? 'current': (inProjectScope?'out-of-scope':'') %}
+    {% set navClass = routeId=='page'&& page && page.key == 'about' ? 'active' : (inProjectScope?'out-of-scope':'') %}
     #}
+    <li class="active"><a href="#">Home</a></li>
     <li class="{{ navClass }}">
-      <a href="/pages/about">about</a>
+      <a href="/pages/about">About</a>
     </li>
     {#
-    {% set navClass = routeId=='news'?'current': (inProjectScope?'out-of-scope':'') %}
+    {% set navClass = routeId=='news'?'active': (inProjectScope?'out-of-scope':'') %}
     #}
     <li class="{{ navClass }}">
-      <a href="/news">news</a>
+      <a href="/news">News</a>
     </li>
     {#
-    {% set navClass = routeId == 'projects'?'current':(inProjectScope?'out-of-scope':'') %}
+    {% set navClass = routeId == 'projects'?'active':(inProjectScope?'out-of-scope':'') %}
     #}
     <li class="{{ navClass }}" rel="projects">
       <a href="/projects">projects</a>
     </li>
-    {#
-    {% set navClass = inProjectScope?'out-of-scope':'' %}
-    #}
-    <li class="{{ navClass }}">
-      <a href="https://www.facebook.com/int3kt" target="_blank">facebook</a>
-    </li>
-    <li class="{{ navClass }}">
-      <a href="https://github.com/t3kt" target="_blank">github</a>
-    </li>
-    <li class="{{ navClass }}">
-      <a href="https://vimeo.com/tekt" target="_blank">vimeo</a>
+    <li><a href="#contact">Contact</a></li>
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown">Projects <span class="caret"></span></a>
+      <ul class="dropdown-menu" role="menu">
+        <li><a href="#">Action</a></li>
+        <li><a href="#">Another action</a></li>
+        <li><a href="#">Something else here</a></li>
+        <li class="divider"></li>
+        <li class="dropdown-header">Nav header</li>
+        <li><a href="#">Separated link</a></li>
+        <li><a href="#">One more separated link</a></li>
+      </ul>
     </li>
   </ul>
-</nav>
+  <ul class="nav navbar-nav navbar-right">
+    <li><a href="https://facebook.com/int3kt" target="_blank">Facebook</a></li>
+    <li><a href="https://github.com/t3kt" target="_blank">Github</a></li>
+    <li><a href="https://vimeo.com/tekt" target="_blank">Vimeo</a></li>
+  </ul>
+</div><!--/.nav-collapse -->
