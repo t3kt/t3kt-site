@@ -7,30 +7,37 @@ var tekt = (function ()
   T.modalOverlay = function (message)
   {
     var overlay = $('#modal-overlay'),
-      msgOverlay = $('#modal-overlay-message');
+      msgOverlay = $('#modal-overlay-message'),
+      background = $('#modal-overlay-background');
     if (!message)
     {
       overlay.removeClass('shown');
       msgOverlay.removeClass('shown');
+      background.removeClass('shown');
     }
     else
     {
       if (!overlay.length)
+      {
+        background = $('<div id="modal-overlay-background"/>').appendTo('body');
         overlay = $('<div id="modal-overlay"/>').appendTo('body');
-      if (!msgOverlay.length)
-        msgOverlay = $('<div id="modal-overlay-message"/>').appendTo('body');
-      msgOverlay.empty().text(message);
+        msgOverlay = $('<div id="modal-overlay-message"/>').appendTo(overlay);
+      }
+      msgOverlay.html(message);
       overlay.addClass('shown');
       msgOverlay.addClass('shown');
+      background.addClass('shown');
     }
   };
 
   var pageInitializers = {
     projectDetail: function (o)
     {
+      tekt.modalOverlay('loading project items...');
       $('#project-items').load('/projects/' + o.projectKey + '/itembatches?ajax=1', function ()
       {
         tekt.initItemViewers('#project-items');
+        tekt.modalOverlay();
       });
     }
   };

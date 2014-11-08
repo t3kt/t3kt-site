@@ -25,8 +25,12 @@ $window-width-small: 1000px;
 $window-width-medium: 1300px;
 $window-width-large: 1600px;
 
+@function remove-rgba-alpha($rgba-color) {
+  @return rgb(red($rgba-color), green($rgba-color), blue($rgba-color));
+}
+
 @mixin safe-rgba-property($property, $rgba-color) {
-  #{$property}: rgb(red($rgba-color), green($rgba-color), blue($rgba-color));
+  #{$property}: remove-rgba-alpha($rgba-color);
   #{$property}: $rgba-color;
 }
 
@@ -51,12 +55,16 @@ body {
   text-shadow: none;
 }
 
-%main-panel {
-  @include safe-rgba-property(background-color, $panel-background-color);
+%main-panel-base {
   border: 1px dashed $main-text-color;
   border-radius: .5em;
   padding: $main-panel-padding;
   margin: $main-panel-margin;
+}
+
+%main-panel {
+  @extend %main-panel-base;
+  @include safe-rgba-property(background-color, $panel-background-color);
 }
 
 %main-fixed-panel {
@@ -610,21 +618,31 @@ button {
 }
 
 %modal-overlay-base {
-  display: none;
-  @include position(fixed, 0 0 0 0);
+  //display: none;
   opacity: 0;
   @include transition(opacity $fade-out-duration);
 
   &.shown {
-    display: block;
+  //  display: block;
     @include transition(opacity $fade-in-duration);
   }
 }
 
 #modal-overlay {
   @extend %modal-overlay-base;
+  z-index: 101;
+  @include position(fixed, 0 0 0 0);
+  &.shown {
+    opacity: 1;
+  }
+}
+
+#modal-overlay-background {
+  @extend %modal-overlay-base;
   z-index: 100;
+  opacity: 0;
   background-color: rgba($panel-background-color, 1);
+  @include position(fixed, 0 0 0 0);
 
   &.shown {
     opacity: .6;
@@ -632,11 +650,12 @@ button {
 }
 
 #modal-overlay-message {
-  @extend %modal-overlay-base;
-  z-index: 101;
+  @extend %main-panel-base;
+  background-color: remove-rgba-alpha($panel-background-color);
   text-align: center;
-
-  &.shown {
-    opacity: 1;
-  }
+  font-size: 1.2em;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
