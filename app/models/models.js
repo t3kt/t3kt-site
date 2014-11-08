@@ -160,7 +160,6 @@ module.exports = exports = {
   ProjectSchema: ProjectSchema,
   PageSchema: PageSchema,
   ItemSchema: ItemSchema,
-  EventSchema: EventSchema,
 
   Settings: Settings,
   User: User,
