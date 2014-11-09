@@ -268,7 +268,8 @@ var routes =
           {url: '/', name: 'projects'},
           {name: project.title}
         ];
-        res.render('projects/detail.html', req.data);
+        res.render('projects/project-detail.jade', req.data);
+        //res.render('projects/detail.html', req.data);
       });
     }),
   projectItems: route('get',

@@ -1,0 +1,11 @@
+extends ../shared/layout2.jade
+block doc-title
+    |= 'project: ' + project.title // BROKEN!!!
+block page-header
+   span='Project: ' + project.title
+block content
+    div.container
+       //project-sub-nav
+       article
+         div.project-description!= project.descriptionRendered || project.summaryRendered
+         div#project-items

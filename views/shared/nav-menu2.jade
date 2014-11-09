@@ -1,13 +1,15 @@
 div#navbar.collapse.navbar-collapse
    ul.nav.navbar-nav
       li(class=routeId=='page' && page && page.key == 'about' ? 'active': '')
-         a(href='/')='About'
+         a(href='/pages/about')='About'
       li(class=routeId=='news' ? 'active': '')
          a(href='/news')='News'
       li.dropdown
-         a.dropdown-toggle(href='#' data-toggle='dropdown')='Projects'
+         a.dropdown-toggle(href='#' data-toggle='dropdown')!='Projects <span class="caret"></span>'
          ul.dropdown-menu(role='Menu')
-            li='...'
+            for project in projects
+               li
+                  a(href='/projects/'+project.key)=project.title
             li.divider
             li
                a(href='/projects')='More...'
