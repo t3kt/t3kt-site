@@ -1,0 +1,30 @@
+html
+   head
+      meta(charset='utf-8')
+      meta(name='viewport' content='width=device-width, initial-scale=1')
+      meta(name='author' content=siteAuthor)
+      title=siteTitle + ':' + pageTitle
+      link(rel='stylesheet', href='/bootstrap/css/bootstrap.min.css')
+      link(rel='stylesheet', href='/css/main2.css')
+      link(rel='shortcut icon' href='/images/favicon.png')
+      if !isAjax
+         script(src='//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js')
+   body
+      nav.navbar.navbar-default.navbar-fixed-top(role='navigation')
+         div.container
+            div.navbar-header
+               button.navbar-toggle.collapsed(type='button' data-toggle='collapse' data-target='#navbar' aria-expanded='false' aria-controls='navbar')
+                  span.sr-only='Toggle navigation'
+                  span.icon-bar
+                  span.icon-bar
+                  span.icon-bar
+               a.navbar-brand(href='#')=siteTitle
+            +nav-menu
+      header#page-header
+         h2
+            block page-header
+               | pageTitle
+      main(data-routeid=routeId, data-page-params=JSON.stringify(pageParams))
+         block content
+      script(src='/bootstrap/js/bootstrap.min.js')
+      //+analytics

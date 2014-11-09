@@ -490,6 +490,9 @@ button {
     -moz-transition: opacity 0.5s;
     transition: opacity 0.5s; }
 
+#fooo {
+  vertical-align: baseline; }
+
 #modal-overlay {
   z-index: 101;
   position: fixed;

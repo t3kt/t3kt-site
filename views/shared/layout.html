@@ -8,6 +8,7 @@
   <meta name="author" content="{{ siteAuthor }}"/>
   <title>{{ siteTitle }}: {% block doc_title %}{{ pageTitle }}{% endblock %}</title>
   <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="/css/main2.css"/>
   <link rel="shortcut icon" href="/images/favicon.png">
   {%- if not isAjax -%}
   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -16,7 +17,7 @@
 <body>
 {%- endif -%}
 {%- if not isContentOnly -%}
-<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">

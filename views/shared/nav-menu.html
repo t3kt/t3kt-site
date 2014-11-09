@@ -18,10 +18,6 @@
     {#
     {% set navClass = routeId == 'projects'?'active':(inProjectScope?'out-of-scope':'') %}
     #}
-    <li class="{{ navClass }}" rel="projects">
-      <a href="/projects">projects</a>
-    </li>
-    <li><a href="#contact">Contact</a></li>
     <li class="dropdown">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">Projects <span class="caret"></span></a>
       <ul class="dropdown-menu" role="menu">
@@ -29,9 +25,7 @@
         <li><a href="#">Another action</a></li>
         <li><a href="#">Something else here</a></li>
         <li class="divider"></li>
-        <li class="dropdown-header">Nav header</li>
-        <li><a href="#">Separated link</a></li>
-        <li><a href="#">One more separated link</a></li>
+        <li><a href="/projects">More...</a></li>
       </ul>
     </li>
   </ul>
@@ -39,5 +33,6 @@
     <li><a href="https://facebook.com/int3kt" target="_blank">Facebook</a></li>
     <li><a href="https://github.com/t3kt" target="_blank">Github</a></li>
     <li><a href="https://vimeo.com/tekt" target="_blank">Vimeo</a></li>
+    <li><a href="#contact">Contact</a></li>
   </ul>
 </div><!--/.nav-collapse -->

@@ -24,7 +24,7 @@
     {% endif %}
       <img src="{{project.bannerUrl}}" alt="{{project.title}}"/>
       <div class="carousel-caption">
-          <a href="/projects/{{ project.key }}">{{ project.title }}</a>
+        <h3><a href="/projects/{{ project.key }}">{{ project.title }}</a></h3>
         <div class="project-description">
           {{ project.summaryRendered | default(project.descriptionRendered) | safe }}
         </div>
