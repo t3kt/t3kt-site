@@ -1,0 +1,26 @@
+extends ../shared/layout2.jade
+block doc-title
+   | projects
+
+block content
+   div.jumbotron
+      div#projects-carousel.carousel.slide(data-ride='carousel' data-interval='false')
+         ol.carousel-indicators
+            for project, index in projects
+               li(data-target='#projects-carousel' data-slide-to=index class=index==0?'active':'')
+         div.carousel-inner(role='listbox')
+            for project, index in projects
+               div(class='item'+(index==0?' active':''))
+                  img(src=project.bannerFullUrl alt=project.title)
+                  div.carousel-caption
+                     h3
+                        a(href='/projects/'+project.key)=project.title
+                     div.project-description
+                        != project.summaryRendered || project.descriptionRendered
+
+         a.left.carousel-control(href='#projects-carousel' role='button' data-slide='prev')
+            span.glyphicon.glyphicon-chevron-left
+            span.sr-only='Previous'
+         a.right.carousel-control(href='#projects-carousel' role='button' data-slide='next')
+            span.glyphicon.glyphicon-chevron-right
+            span.sr-only='Next'

@@ -1,0 +1,13 @@
+div#navbar.collapse.navbar-collapse
+   ul.nav.navbar-nav
+      li(class=routeId=='page' && page && page.key == 'about' ? 'active': '')
+         a(href='/')='About'
+      li(class=routeId=='news' ? 'active': '')
+         a(href='/news')='News'
+      li.dropdown
+         a.dropdown-toggle(href='#' data-toggle='dropdown')='Projects'
+         ul.dropdown-menu(role='Menu')
+            li='...'
+            li.divider
+            li
+               a(href='/projects')='More...'

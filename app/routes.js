@@ -241,7 +241,8 @@ var routes =
             return next(err);
           req.data.projects = projects;
           req.data.title = 'projects';
-          res.render('projects/index.html', req.data);
+          res.render('projects/project-list.jade', req.data)
+          //res.render('projects/index.html', req.data);
         });
     }),
   projectsJson: route('get', '/projects.json',
