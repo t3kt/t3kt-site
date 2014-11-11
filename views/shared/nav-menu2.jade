@@ -7,9 +7,17 @@ div#navbar.collapse.navbar-collapse
       li.dropdown
          a.dropdown-toggle(href='#' data-toggle='dropdown')!='Projects <span class="caret"></span>'
          ul.dropdown-menu(role='Menu')
-            for project in projects
+            for project, i in projects
+               - if (i>=6) break;
                li
                   a(href='/projects/'+project.key)=project.title
             li.divider
             li
                a(href='/projects')='More...'
+   ul.nav.navbar-nav.navbar-right
+      li
+         a(href='https://facebook.com/int3kt' target='_blank') Facebook
+      li
+         a(href='https://github.com/t3kt' target='_blank') Github
+      li
+         a(href='https://vimeo.com/tekt' target='_blank') Vimeo

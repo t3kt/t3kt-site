@@ -4,12 +4,12 @@ html
       meta(charset='utf-8')
       meta(name='viewport' content='width=device-width, initial-scale=1')
       meta(name='author' content=siteAuthor)
-      title=siteTitle + ': ' + pageTitle
-      link(rel='stylesheet', href='/bootstrap/css/bootstrap-darkly.min.css')
+      title #{siteTitle}: #{pageTitle}
+      //if !isAjax
+      link(rel='stylesheet', href='/bootstrap/css/bootstrap-slate.min.css')
       link(rel='stylesheet', href='/css/main2.css')
       link(rel='shortcut icon' href='/images/favicon.png')
-      if !isAjax
-         script(src='//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js')
+      script(src='//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js')
    body
       nav.navbar.navbar-default.navbar-static-top(role='navigation')
          div.container
