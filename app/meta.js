@@ -4,6 +4,7 @@ var _ = require('lodash'),
   config = require('../config/config'),
   async = require('async'),
   d = require('./models'),
+  models = require('./models/models'),
   moment = require('moment');
 
 function createEntry(path, date)
@@ -21,22 +22,71 @@ function formatDate(date)
 
 function buildProjectEntries(callback)
 {
-  NOT_IMPLEMENTED();
+  d.getProjects(null, function (err, projects)
+  {
+    if (err)
+      return callback(err);
+    async.map(projects,
+      function (project, next)
+      {
+        d.getProjectLatestItem(project.key, null, function (err, item)
+        {
+          if (err)
+            return next(err);
+          next(null, createEntry('/projects/' + project.key, item && item.updated));
+        });
+      },
+      callback);
+  });
 }
 
 function buildPageEntries(callback)
 {
-  NOT_IMPLEMENTED();
+  d.getAllPages(function (err, pages)
+  {
+    if (err)
+      return callback(err);
+    var entries = _.map(pages, function (page)
+    {
+      return createEntry(page.project ?
+          ('/projects/' + page.project + '/pages/' + page.key) :
+          ('/pages/' + page.key),
+        page.updated);
+    });
+    callback(null, entries);
+  });
 }
 
 function buildMainEntries(callback)
 {
-  var entries = [
-    createEntry('/'),
-    createEntry('/projects'),
-    createEntry('/news')
-  ];
-  NOT_IMPLEMENTED();
+  async.concat([
+      function (next)
+      {
+        d.getLatestItem(null, 'blogentry', function (err, item)
+        {
+          if (err)
+            return next(err);
+          next(null, [createEntry('/news', item && item.updated)]);
+        });
+      },
+      function (next)
+      {
+        d.getLatestItem(true, null, function (err, item)
+        {
+          if (err)
+            return next(err);
+          next(null, [
+            createEntry('/', item && item.updated),
+            createEntry('/projects', item && item.updated)
+          ]);
+        });
+      }
+    ],
+    function (fn, next)
+    {
+      fn(next);
+    },
+    callback);
 }
 
 function buildEntries(callback)
