@@ -17,7 +17,7 @@ function createEntry(path, date)
 
 function formatDate(date)
 {
-  return date && moment(date).format('YYYY-MM-DDThh:mmTZD');
+  return date && moment(date).format('YYYY-MM-DD');
 }
 
 function buildProjectEntries(callback)
