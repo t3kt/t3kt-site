@@ -16,7 +16,8 @@ var config = {
   siteTitle: 'tekt',
   siteAuthor: 'tekt',
   dictionaryApiKey: '',
-  bannerImageBase: 'https://s3.amazonaws.com/tektimg/'
+  bannerImageBase: 'https://s3.amazonaws.com/tektimg/',
+  appRootUrl: 'http://t3kt.net'
 };
 
 _.merge(config, {

@@ -5,7 +5,8 @@ var util = require("./util"),
   async = require('async'),
   getVimeoEmbed = require('./vimeoembed').getEmbed,
   _ = require('lodash'),
-  content = require('./content');
+  content = require('./content'),
+  meta = require('./meta');
 
 function route(verb, path, middleware, handler)
 {
@@ -285,7 +286,7 @@ var routes =
     function (req, res)
     {
       req.data.isContentOnly = req.data.isAjax;
-      if(!req.data.isContentOnly)
+      if (!req.data.isContentOnly)
       {
         req.data.navPathParts = [
           {url: '/', name: 'projects'},
@@ -299,7 +300,7 @@ var routes =
     function (req, res)
     {
       req.data.isContentOnly = req.data.isAjax;
-      if(!req.data.isContentOnly)
+      if (!req.data.isContentOnly)
       {
         req.data.navPathParts = [
           {url: '/', name: 'projects'},
@@ -359,7 +360,7 @@ var routes =
     {
       req.data.page.renderContent(['content'], function (err, page)
       {
-        if(!req.data.isContentOnly)
+        if (!req.data.isContentOnly)
         {
           req.data.navPathParts = [
             {url: '/', name: 'projects'},
@@ -415,6 +416,12 @@ var routes =
     function (req, res)
     {
       res.render('timelinetest.html');
+    }),
+  sitemap: route('get', '/sitemap',
+    [needs.projectList],
+    function (req, res, next)
+    {
+      meta.outputSitemap(req, res, next);
     })
 };
 
@@ -430,7 +437,8 @@ function sharedInit(req, res, next)
     analyticsDomain: config.analyticsDomain,
     analyticsEnabled: config.analyticsEnabled,
     siteTitle: config.siteTitle,
-    siteAuthor: config.siteAuthor
+    siteAuthor: config.siteAuthor,
+    appRootUrl: config.appRootUrl
   }, req.data || {});
   next();
 }

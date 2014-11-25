@@ -29,6 +29,7 @@ app.configure(function ()
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
   app.engine('html', swig.renderFile);
+  app.engine('xml', swig.renderFile);
   app.set('view engine', 'html');
   app.set('view cache', false);
   routes.register(app);

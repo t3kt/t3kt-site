@@ -20,7 +20,7 @@ exports.models = {
 
 exports.userExists = function (username, callback)
 {
-  return User.count({ username: username }, function (err, count)
+  return User.count({username: username}, function (err, count)
   {
     if (err)
       callback(err);
@@ -49,11 +49,43 @@ exports.getProject = function (key, callback)
 };
 exports.getPage = function (key, callback)
 {
-  return Page.findOne({key: key, $or: [{project: { $exists: false}}, {project:""}]}, callback);
+  return Page.findOne({key: key, $or: [{project: {$exists: false}}, {project: ""}]}, callback);
 };
 exports.getProjectPage = function (projectKey, pageKey, callback)
 {
   return Page.findOne({key: pageKey, project: projectKey}, callback);
+};
+exports.getAllPages = function (callback)
+{
+  return Page.find({}).exec(callback);
+};
+exports.getProjectLatestItem = function (projectKey, itemType, callback)
+{
+  var query = {project: projectKey};
+  if (itemType)
+    query.entityType = Item.resolveType(itemType);
+  Item.where(query)
+    .sort({updated: 'desc'})
+    .findOne(callback);
+};
+exports.getLatestItem = function (projectKey, itemType, callback)
+{
+  var query = {};
+  if (projectKey === true)
+    query.project = {$exists: true};
+  else if (projectKey)
+    query.project = projectKey;
+  if (itemType)
+    query.entityType = Item.resolveType(itemType);
+  Item.where(query)
+    .sort({updated: 'desc'})
+    .findOne(callback);
+};
+exports.getLatestProject = function (callback)
+{
+  Project.where({})
+    .sort({updated: 'desc'})
+    .findOne(callback);
 };
 
 exports.getProjectItems = function (projectKey, itemType, callback)
