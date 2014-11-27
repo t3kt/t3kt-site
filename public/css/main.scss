@@ -618,7 +618,7 @@ button {
 }
 
 %modal-overlay-base {
-  //display: none;
+  display: none;
   opacity: 0;
   @include transition(opacity $fade-out-duration);
 
