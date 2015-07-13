@@ -45,7 +45,7 @@
 {%- macro image(itemi) -%}
   <figure class="item item-image" data-key="{{ itemi.key }}">
     {{ source_icon(itemi) }}
-    <a class="image-grid-link" href="{{ itemi.full.url }}" rel="images" title="{{ itemi.title }}">
+    <a class="fancybox" href="{{ itemi.full.url }}" rel="group" title="{{ itemi.title }}">
       <img src="{{ itemi.small.url }}" alt="{{ itemi.title }}" width="{{ itemi.small.width }}" height="{{ itemi.small.height }}"/>
     </a>
     {{ time(itemi, 'created') }}

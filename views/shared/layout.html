@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="/css/main.css">
   <link rel="shortcut icon" href="/images/favicon.png">
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Oxygen+Mono" type="text/css">
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.3/example1/colorbox.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css">
   {%- if not isAjax -%}
    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
   {%- endif -%}
@@ -40,7 +40,7 @@
   </main>
   {{ common.banner_style(bannerUrl) }}
 {%- if not isAjax -%}
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.3/jquery.colorbox.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
   <script src="/js/script.js"></script>
 {%- endif -%}
 {%- if not isAjax and analyticsSiteId -%}

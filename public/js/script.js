@@ -44,9 +44,9 @@ var tekt = (function ()
 
   T.initItemViewers = function (area)
   {
-    if ($.fn.colorbox)
+    if ($.fancybox)
     {
-      $('.item-image a', area).colorbox({rel: 'box-group-' + ($(area).attr('id') || 'main')});
+      $('.fancybox').fancybox();
     }
 
     $(area).off('click.loadvideo')
