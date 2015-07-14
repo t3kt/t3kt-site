@@ -96,6 +96,11 @@ var tekt = (function ()
 })();
 
 
+// ugly https security hack... this needs to be fixed by fixing the vimeo thumbnail urls
+if (location.protocol == 'https') {
+  location.href = location.href.replace('https:', 'http:');
+}
+
 if (window.$)
 {
   $(function ()
