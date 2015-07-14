@@ -34,7 +34,7 @@ var tekt = (function ()
     projectDetail: function (o)
     {
       tekt.modalOverlay('loading project items...');
-      $('#project-items').load('/projects/' + o.projectKey + '/itembatches?ajax=1', function ()
+      $('#project-items').load('/projects/' + o.projectKey + '/itembatches?ajax=1&itemtype=video&itemtype=image&itemtype=blogentry&itemtype=event', function ()
       {
         tekt.initItemViewers('#project-items');
         tekt.modalOverlay();
