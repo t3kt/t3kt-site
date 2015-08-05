@@ -66,10 +66,10 @@ var adminNeeds = exports.needs = {
         res.redirect("/admin/signup");
       }
       else
-        next();
+        next(err);
     });
   }
-}
+};
 
 
 var adminRoutes = exports.routes = {
@@ -143,7 +143,7 @@ var adminRoutes = exports.routes = {
           req.session.error = 'Authentication failed, please check your ' + ' username and password.';
           res.redirect('/admin/login');
         }
-      })
+      });
     }),
   dashboard: route('get', '/admin',
     [adminNeeds.authenticated], function (req, res)
