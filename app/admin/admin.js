@@ -6,7 +6,9 @@ var util = require("../util"),
   User = models.User,
   routes = require('../routes'),
   route = routes.route,
-  needs = routes.needs;
+  needs = routes.needs,
+  pull = require('./pull'),
+  async = require('async');
 
 
 function authenticate(name, pass, callback)
@@ -99,6 +101,8 @@ var adminRoutes = exports.routes = {
             if (err) throw err;
             authenticate(newUser.username, password, function (err, user)
             {
+              if (!err)
+                throw err;
               if (user)
               {
                 req.session.regenerate(function ()
@@ -122,6 +126,8 @@ var adminRoutes = exports.routes = {
     {
       authenticate(req.body.username, req.body.password, function (err, user)
       {
+        if (!err)
+          throw err;
         if (user)
         {
           req.session.regenerate(function ()
@@ -144,6 +150,59 @@ var adminRoutes = exports.routes = {
     {
       req.data.title = 'admin';
       res.render('admin/index.html', req.data);
+    }),
+  pullForm: route('get', '/admin/pull',
+    [adminNeeds.authenticated, needs.projectList], function(req, res) {
+        req.data.title = 'pull';
+        var sources = Object.keys(pull.sources);
+        sources.sort();
+        req.data.sources = sources;
+        res.render('admin/pull.html', req.data);
+    }),
+  doPull: route('post', '/admin/pull',
+    [adminNeeds.authenticated], function(req, res, next) {
+        req.data.title = 'pull results';
+        var sources = req.body.source;
+        if (sources == 'all' || !sources) {
+          sources = Object.keys(pull.sources);
+        } else if (!Array.isArray(sources)) {
+          sources = [sources];
+        }
+        var projectKeys = req.body.projects;
+        if (projectKeys == 'all' || !projectKeys) {
+          projectKeys = null;
+        } else if (!Array.isArray(projectKeys)) {
+          projectKeys = [projectKeys];
+        }
+        models.getProjects(projectKeys,
+          function (err, projects) {
+            if (err) {
+              return next(err);
+            }
+            var results = [];
+            async.eachSeries(sources,
+              function (source, nextSource) {
+                pull(source, projects, {},
+                  function (err, report) {
+                    if (err) {
+                      results.push_back({type:'error', error: err});
+                      return nextSource(err);
+                    }
+                    if (report) {
+                      results.push_back({type:'report', report:report});
+                    }
+                    nextSource();
+                  });
+              },
+              function (err) {
+                if (err) {
+                  // return next(err);
+                  req.data.error = err;
+                }
+                req.data.results = results;
+                req.render('admin/pull-results.html');
+              });
+          });
     })
 };
 

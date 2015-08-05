@@ -1,0 +1,27 @@
+{% extends "../shared/layout.html" %}
+
+{% block doc_title %}admin{% endblock %}
+
+{% block page_title %}admin{% endblock %}
+
+{% block content %}
+    <form method="post" action="/admin/pull">
+        <label for="source">Source</label>
+        <select id="source" name="source" multiple>
+            <option value="">all</option>
+            {% for source in sources %}
+                <option>{{ source }}</option>
+            {% endfor %}
+        </select>
+        <label for="project">Project</label>
+        <select id="project" name="project" multiple>
+            <option value="">all</option>
+            {% for project in projects %}
+                <option value="{{project.key}}">
+                    {{ project.title }}
+                </option>
+            {% endfor %}
+        </select>
+        <button type="submit" name="action" value="pull">Pull</button>
+    </form>
+{% endblock %}
