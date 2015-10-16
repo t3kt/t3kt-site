@@ -160,6 +160,12 @@ body {
   }
 }
 
+@each $icon in facebook, github, vimeo, flickr, blogger {
+  .icon-#{$icon} {
+    background-image: url('../images/#{$icon}-32.png');
+  }
+}
+
 #main-nav {
   @extend %main-fixed-panel;
   top: $main-header-height + 3 * $main-panel-margin;
@@ -207,6 +213,26 @@ nav {
       border-top-right-radius: $item-padding;
       overflow-x: hidden;
       text-overflow: ellipsis;
+    }
+    &.has-icon a::before {
+      text-indent: -99999px;
+      overflow: hidden;
+      display: inline-block;
+      background-repeat: no-repeat;
+      background-size: cover;
+      content: "";
+      width: 1.4em;
+      height: 1.4em;
+      float: left;
+    }
+    &.nav-item-vimeo a::before {
+      @extend .icon-vimeo;
+    }
+    &.nav-item-github a::before {
+      @extend .icon-github;
+    }
+    &.nav-item-facebook a::before {
+      @extend .icon-facebook;
     }
 
     &.current[rel='projects'] > a {
@@ -293,12 +319,6 @@ nav {
       margin-right: 0;
       width: 25%;
     }
-  }
-}
-
-@each $icon in facebook, github, vimeo, flickr, blogger {
-  .icon-#{$icon} {
-    background-image: url('../images/#{$icon}-32.png');
   }
 }
 

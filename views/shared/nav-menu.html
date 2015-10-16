@@ -23,14 +23,17 @@
     {#
     {% set navClass = inProjectScope?'out-of-scope':'' %}
     #}
-    <li class="{{ navClass }}">
+    <li class="{{ navClass }} nav-item-facebook has-icon">
       <a href="https://www.facebook.com/int3kt" target="_blank">facebook</a>
     </li>
-    <li class="{{ navClass }}">
+    <li class="{{ navClass }} nav-item-github has-icon">
       <a href="https://github.com/t3kt" target="_blank">github</a>
     </li>
     <li class="{{ navClass }}">
       <a href="https://vimeo.com/tekt" target="_blank">vimeo</a>
+    </li>
+    <li class="{{ navClass }}">
+      <a href="https://twitter.com/intekt" target="_blank">twitter</a>
     </li>
   </ul>
 </nav>

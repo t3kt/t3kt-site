@@ -104,6 +104,21 @@ body {
         box-shadow: 0 0 1em 0.5em rgba(47, 51, 74, 0.2);
         max-width: 9em; } }
 
+.icon-facebook, nav li.nav-item-facebook a::before {
+  background-image: url("../images/facebook-32.png"); }
+
+.icon-github, nav li.nav-item-github a::before {
+  background-image: url("../images/github-32.png"); }
+
+.icon-vimeo, nav li.nav-item-vimeo a::before {
+  background-image: url("../images/vimeo-32.png"); }
+
+.icon-flickr {
+  background-image: url("../images/flickr-32.png"); }
+
+.icon-blogger {
+  background-image: url("../images/blogger-32.png"); }
+
 #main-nav {
   top: 5.2em;
   left: 0;
@@ -144,6 +159,16 @@ nav {
       border-top-right-radius: 0.5em;
       overflow-x: hidden;
       text-overflow: ellipsis; }
+    nav li.has-icon a::before {
+      text-indent: -99999px;
+      overflow: hidden;
+      display: inline-block;
+      background-repeat: no-repeat;
+      background-size: cover;
+      content: "";
+      width: 1.4em;
+      height: 1.4em;
+      float: left; }
     nav li.current[rel='projects'] > a {
       border-bottom-left-radius: 0.5em; }
     nav li a, nav li.out-of-scope > a:hover {
@@ -209,21 +234,6 @@ nav {
     nav .icon-link:last-child {
       margin-right: 0;
       width: 25%; }
-
-.icon-facebook {
-  background-image: url("../images/facebook-32.png"); }
-
-.icon-github {
-  background-image: url("../images/github-32.png"); }
-
-.icon-vimeo {
-  background-image: url("../images/vimeo-32.png"); }
-
-.icon-flickr {
-  background-image: url("../images/flickr-32.png"); }
-
-.icon-blogger {
-  background-image: url("../images/blogger-32.png"); }
 
 .item-type-icon {
   text-indent: -99999px;
