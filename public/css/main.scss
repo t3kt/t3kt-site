@@ -226,13 +226,16 @@ nav {
       float: left;
     }
     &.nav-item-vimeo a::before {
-      @extend .icon-vimeo;
+      background-image: url('../images/vimeo-24.png');
     }
     &.nav-item-github a::before {
-      @extend .icon-github;
+      background-image: url('../images/github-24.png');
     }
     &.nav-item-facebook a::before {
-      @extend .icon-facebook;
+      background-image: url('../images/facebook-24-x.png');
+    }
+    &.nav-item-twitter a::before {
+      background-image: url('../images/twitter-24.png');
     }
 
     &.current[rel='projects'] > a {
