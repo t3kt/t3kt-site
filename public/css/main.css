@@ -104,13 +104,13 @@ body {
         box-shadow: 0 0 1em 0.5em rgba(47, 51, 74, 0.2);
         max-width: 9em; } }
 
-.icon-facebook, nav li.nav-item-facebook a::before {
+.icon-facebook {
   background-image: url("../images/facebook-32.png"); }
 
-.icon-github, nav li.nav-item-github a::before {
+.icon-github {
   background-image: url("../images/github-32.png"); }
 
-.icon-vimeo, nav li.nav-item-vimeo a::before {
+.icon-vimeo {
   background-image: url("../images/vimeo-32.png"); }
 
 .icon-flickr {
@@ -169,6 +169,14 @@ nav {
       width: 1.4em;
       height: 1.4em;
       float: left; }
+    nav li.nav-item-vimeo a::before {
+      background-image: url("../images/vimeo-24.png"); }
+    nav li.nav-item-github a::before {
+      background-image: url("../images/github-24.png"); }
+    nav li.nav-item-facebook a::before {
+      background-image: url("../images/facebook-24-x.png"); }
+    nav li.nav-item-twitter a::before {
+      background-image: url("../images/twitter-24.png"); }
     nav li.current[rel='projects'] > a {
       border-bottom-left-radius: 0.5em; }
     nav li a, nav li.out-of-scope > a:hover {
