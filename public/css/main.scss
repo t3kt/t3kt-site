@@ -214,7 +214,7 @@ nav {
       overflow-x: hidden;
       text-overflow: ellipsis;
     }
-    &.has-icon a::before {
+    /*&.has-icon a::before {
       text-indent: -99999px;
       overflow: hidden;
       display: inline-block;
@@ -236,7 +236,7 @@ nav {
     }
     &.nav-item-twitter a::before {
       background-image: url('../images/twitter-24.png');
-    }
+    }*/
 
     &.current[rel='projects'] > a {
       border-bottom-left-radius: $item-padding;
