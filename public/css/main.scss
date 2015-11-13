@@ -596,11 +596,13 @@ a {
   border: 1px solid #a5b3cc;*/
 }
 
-a:hover {
-  background-color: #7b87cc;
-  /*outline: 2px solid #7b87cc;
-  border: 1px solid #7b87cc;
-  border-radius: .2em;*/
+nav, main, header {
+  a:hover {
+    background-color: #7b87cc;
+    /*outline: 2px solid #7b87cc;
+    border: 1px solid #7b87cc;
+    border-radius: .2em;*/
+  }
 }
 
 button {

@@ -443,7 +443,7 @@ a {
   /*background-color: #a5b3cc;
   border: 1px solid #a5b3cc;*/ }
 
-a:hover {
+nav a:hover, main a:hover, header a:hover {
   background-color: #7b87cc;
   /*outline: 2px solid #7b87cc;
   border: 1px solid #7b87cc;
