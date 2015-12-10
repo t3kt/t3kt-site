@@ -51,7 +51,7 @@ var pull = require('../app/admin/pull'),
             function (err, report)
             {
               if (err)
-                nextSource(err);
+                return nextSource(err);
               if (report)
                 console.log('pull completed (added:%d,updated:%d,skipped:%d)', report.added, report.updated, report.replaced);
               nextSource();
