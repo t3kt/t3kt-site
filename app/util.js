@@ -32,7 +32,7 @@ module.exports = exports = {
 var batchItemDefaults = {
   startsNewBatch: function (item, batch)
   {
-    return batch == null || batch.batchType !== item.entityType;
+    return batch == null || batch.batchType !== item.entityType || batch.items.length > 4;
   },
   createBatch: function (item)
   {
