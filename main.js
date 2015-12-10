@@ -10,6 +10,8 @@ var express = require('express'),
   content = require('./app/content'),
   adminEnabled = !!config.adminUser;
 
+console.log("hi. adminEnabled: " + adminEnabled);
+
 var app = express();
 app.set('port', port);
 app.set('mongo', config.mongoUri);
@@ -33,7 +35,7 @@ app.configure(function ()
   app.set('view engine', 'html');
   app.set('view cache', false);
   routes.register(app);
-//  admin.register(app);
+  admin.register(app);
   if (adminEnabled)
     formage.serve_static(app, express);
   app.use(app.router);

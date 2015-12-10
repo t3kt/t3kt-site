@@ -46,14 +46,14 @@ var adminNeeds = exports.needs = {
     else
     {
       req.session.error = 'Access denied!';
-      res.redirect('/admin/login');
+      res.redirect('/admin-x/login');
     }
   },
   registrationAllowed: function (req, res, next)
   {
-    if (!config.registrationAllowed)
-      next(new Error('registration not allowed'));
-    else
+    // if (!config.registrationAllowed)
+    //   next(new Error('registration not allowed'));
+    // else
       next();
   },
   userDoesNotExist: function (req, res, next)
@@ -63,7 +63,7 @@ var adminNeeds = exports.needs = {
       if (exists)
       {
         req.session.error = "User Exist";
-        res.redirect("/admin/signup");
+        res.redirect("/admin-x/signup");
       }
       else
         next(err);
@@ -73,18 +73,18 @@ var adminNeeds = exports.needs = {
 
 
 var adminRoutes = exports.routes = {
-  signup_form: route('get', '/admin/signup',
+  signup_form: route('get', '/admin-x/signup',
     [adminNeeds.registrationAllowed],
     function (req, res)
     {
       if (req.session.user)
-        res.redirect('/admin');
+        res.redirect('/admin-x');
       else
         res.render('admin/signup.html');
     }),
-  signup: route('post', '/admin/signup',
+  signup: route('post', '/admin-x/signup',
     [adminNeeds.registrationAllowed, adminNeeds.userDoesNotExist],
-    function (req, res)
+    function (req, res, next)
     {
       var password = req.body.password;
       var username = req.body.username;
@@ -98,68 +98,73 @@ var adminRoutes = exports.routes = {
           hash: hash,
         }).save(function (err, newUser)
           {
-            if (err) throw err;
+              if (!err)
+                return next(err);
             authenticate(newUser.username, password, function (err, user)
             {
               if (!err)
-                throw err;
+                return next(err);
               if (user)
               {
                 req.session.regenerate(function ()
                 {
                   req.session.user = user;
-                  req.session.success = 'Authenticated as ' + user.username + ' click to <a href="/admin/logout">logout</a>. ' + ' You may now access <a href="/admin">/restricted</a>.';
-                  res.redirect('/admin');
+                  req.session.success = 'Authenticated as ' + user.username + ' click to <a href="/admin-x/logout">logout</a>. ' + ' You may now access <a href="/admin">/restricted</a>.';
+                  res.redirect('/admin-x');
                 });
               }
             });
           });
       });
     }),
-  login_form: route('get', '/admin/login', [],
+  login_form: route('get', '/admin-x/login', [],
     function (req, res)
     {
       res.render('admin/login.html');
     }),
-  login: route('post', '/admin/login', [],
-    function (req, res)
+  login: route('post', '/admin-x/login', [],
+    function (req, res, next)
     {
       authenticate(req.body.username, req.body.password, function (err, user)
       {
-        if (!err)
-          throw err;
+              if (!err)
+                return next(err);
         if (user)
         {
           req.session.regenerate(function ()
           {
 
             req.session.user = user;
-            req.session.success = 'Authenticated as ' + user.username + ' click to <a href="/admin/logout">logout</a>. ' + ' You may now access <a href="/admin">/restricted</a>.';
-            res.redirect('/admin');
+            req.session.success = 'Authenticated as ' + user.username + ' click to <a href="/admin-x/logout">logout</a>. ' + ' You may now access <a href="/admin">/restricted</a>.';
+            res.redirect('/admin-x');
           });
         }
         else
         {
           req.session.error = 'Authentication failed, please check your ' + ' username and password.';
-          res.redirect('/admin/login');
+          res.redirect('/admin-x/login');
         }
       });
     }),
-  dashboard: route('get', '/admin',
+  dashboard: route('get', '/admin-x',
     [adminNeeds.authenticated], function (req, res)
     {
       req.data.title = 'admin';
       res.render('admin/index.html', req.data);
     }),
-  pullForm: route('get', '/admin/pull',
-    [adminNeeds.authenticated, needs.projectList], function(req, res) {
+  pullForm: route('get', '/admin-x/pull',
+    [
+      // adminNeeds.authenticated,
+      needs.projectList
+      ],
+    function(req, res) {
         req.data.title = 'pull';
         var sources = Object.keys(pull.sources);
         sources.sort();
         req.data.sources = sources;
         res.render('admin/pull.html', req.data);
     }),
-  doPull: route('post', '/admin/pull',
+  doPull: route('post', '/admin-x/pull',
     [adminNeeds.authenticated], function(req, res, next) {
         req.data.title = 'pull results';
         var sources = req.body.source;
