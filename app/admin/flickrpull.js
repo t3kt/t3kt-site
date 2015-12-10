@@ -22,7 +22,7 @@ function prepareImage(key, project, photo)
     external: {
       source: 'flickr',
       id: photo.id,
-      url: 'http://www.flickr.com/photos/' + (photo.path_alias || photo.ownername) + '/' + photo.id + '/',
+      url: 'https://www.flickr.com/photos/' + (photo.path_alias || photo.ownername) + '/' + photo.id + '/',
       pulled: new Date(),
       data: photo
     },

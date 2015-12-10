@@ -7,7 +7,7 @@ var models = require('../models'),
   moment = require('moment'),
   format = require('util').format;
 
-var albumUrlFormat = 'http://vimeo.com/api/v2/album/%s/videos.json?page=%d';
+var albumUrlFormat = 'https://vimeo.com/api/v2/album/%s/videos.json?page=%d';
 
 function prepareVideo(key, video, project)
 {

@@ -2,7 +2,7 @@ var request = require('request'),
   url = require('url'),
   _ = require('lodash');
 
-var oembedUrl = 'http://vimeo.com/api/oembed.json';
+var oembedUrl = 'https://vimeo.com/api/oembed.json';
 
 function getVimeoEmbed(video, params, callback)
 {
