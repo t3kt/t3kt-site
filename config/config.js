@@ -17,7 +17,9 @@ var config = {
   siteAuthor: 'tekt',
   dictionaryApiKey: '',
   bannerImageBase: 'https://s3.amazonaws.com/tektimg/',
-  appRootUrl: 'http://t3kt.net'
+  appRootUrl: 'http://t3kt.net',
+  maxVideoWidth: 600,
+  maxVideoHeight: 400
 };
 
 _.merge(config, {

@@ -1,6 +1,7 @@
 var request = require('request'),
   url = require('url'),
-  _ = require('lodash');
+  _ = require('lodash'),
+  config = require('../config/config');
 
 var oembedUrl = 'https://vimeo.com/api/oembed.json';
 
@@ -18,7 +19,9 @@ function getVimeoEmbed(video, params, callback)
       loop: false,
       autopause: true,
       autoplay: false,
-      player_id: ''
+      player_id: '',
+      maxwidth: config.maxVideoWidth,
+      maxheight: config.maxVideoHeight
     }, params);
     var reqUrl = url.format(_.merge(url.parse(oembedUrl), { query: params }));
     request(reqUrl, function (err, response, body)
